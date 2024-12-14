@@ -1,42 +1,111 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-from API.models import Prompt, Answer
-from API.serializers import PromptSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from API.models import Prompt, Answer, LLM
+from API.serializers import PromptSerializer, AnswerSerializer, LLMSerializer
 
 
 @csrf_exempt
-def prompt_text_list(request):
+# PROMPT
+@api_view(['GET', 'POST'])
+def prompt_list(request):
     if request.method == "GET":
         prompt_texts = Prompt.objects.all()
         serializer = PromptSerializer(prompt_texts, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
     elif request.method == "POST":
-        data = JSONParser().parse(request)
+        data = request.data
         serializer = PromptSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def prompt_text_detail(request, pk):
+@api_view(['GET', 'PUT', 'DELETE'])
+def prompt_detail(request, pk):
     try:
         prompt_text = Prompt.objects.get(pk=pk)
     except Prompt.DoesNotExist:
-        return HttpResponse(status=404)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
         serializer = PromptSerializer(prompt_text)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
     elif request.method == 'PUT':
-        data = JSONParser().parse(request)
+        data = request.data
         serializer = PromptSerializer(prompt_text, data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method=='DELETE':
         prompt_text.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# ANSWER
+@api_view(['GET', 'POST'])
+def answer_list(request):
+    if request.method == "GET":
+        answer_texts = Answer.objects.all()
+        serializer = AnswerSerializer(answer_texts, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        data = request.data
+        serializer = AnswerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE'])
+def answer_detail(request, pk):
+    try:
+        answer = Answer.objects.get(pk=pk)
+    except Answer.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "GET":
+        serializer = AnswerSerializer(answer)
+        return Response(serializer.data)
+    elif request.method == "DELETE":
+        answer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#LLM
+@api_view(['GET', 'POST'])
+def llm_list(request):
+    if request.method == "GET":
+        llm_all = LLM.objects.all()
+        serializer = LLMSerializer(llm_all, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        data = request.data
+        serializer = LLMSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def llm_detail(request, pk):
+    try:
+        llm = LLM.objects.get(pk=pk)
+    except LLM.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "GET":
+        serializer = LLMSerializer(llm)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        data = request.data
+        serializer = LLMSerializer(llm, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        llm.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
