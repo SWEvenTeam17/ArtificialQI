@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from API.models import Question, Answer
+from API.models import Prompt, Answer
 
-class QuestionSerializer(serializers.ModelSerializer):
+class PromptSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Question
-        fields = ['id', 'question', 'expected_answer']
+        model = Prompt
+        fields = ['id', 'prompt_text', 'expected_answer', 'timestamp']
+
 

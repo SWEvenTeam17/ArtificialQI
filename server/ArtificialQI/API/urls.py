@@ -2,6 +2,6 @@ from django.urls import path
 from API import views
 
 urlpatterns=[
-    path('questions/', views.question_list),
-    path('questions/<int:pk>/',views.question_detail),
+    path('prompt_texts/', views.prompt_text_list),
+    path('prompt_texts/<int:pk>/',views.prompt_text_detail),
 ]
