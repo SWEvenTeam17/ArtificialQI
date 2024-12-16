@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from API.models import Prompt, Answer, LLM
 from API.serializers import PromptSerializer, AnswerSerializer, LLMSerializer
-
+from API.classes.LLMController import LLMController
 
 @csrf_exempt
 # PROMPT
@@ -109,3 +109,12 @@ def llm_detail(request, pk):
     elif request.method == "DELETE":
         llm.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+@api_view(['GET'])
+def test(request):
+    llm = LLMController("llama3.2")
+    output = llm.getAnswer("Ciao come stai?")
+    return Response(output)
+
