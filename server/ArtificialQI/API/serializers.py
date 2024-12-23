@@ -19,4 +19,4 @@ class AnswerSerializer(serializers.ModelSerializer):
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
-        fields = ['name', 'created_at', 'updated_at']
+        fields = ['id','title','description','created_at', 'updated_at']

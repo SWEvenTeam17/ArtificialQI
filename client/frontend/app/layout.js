@@ -1,13 +1,17 @@
 
-import "bootstrap/dist/css/bootstrap.min.css"
 import Link from 'next/link'
+import Script from 'next/script'
+import './bootstrap.css'
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-bs-theme="dark">
       <body>
         <header>
-          <nav className="navbar navbar-expand-lg bg-body-tertiary">
+          <Script src="/scripts/bootstrap.bundle.js"></Script>
+        </header>
+        <main>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
               <Link className="navbar-brand" href="/">ArtificialQi</Link>
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,8 +26,6 @@ export default function RootLayout({ children }) {
               </div>
             </div>
           </nav>
-        </header>
-        <main>
           {children}
         </main>
       </body>
