@@ -2,8 +2,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from API.models import Prompt, Answer, LLM
-from API.serializers import PromptSerializer, AnswerSerializer, LLMSerializer
+from API.models import Prompt, Answer, LLM, Session
+from API.serializers import PromptSerializer, AnswerSerializer, LLMSerializer, SessionSerializer
 from API.classes.LLMController import LLMController
 
 @csrf_exempt
@@ -115,4 +115,42 @@ def test(request):
     llm = LLMController("llama3.2")
     output = llm.getAnswer("Ciao come stai?")
     return Response(output)
+
+#Sessions
+@api_view(['GET', 'POST'])
+def session_list(request):
+    if request.method == "GET":
+        sessions = Session.objects.all()
+        serializer = SessionSerializer(sessions, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        data = request.data
+        serializer = SessionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def session_detail(request, pk):
+    try:
+        session = Session.objects.get(pk=pk)
+    except Session.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = SessionSerializer(session)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        data = request.data
+        serializer = SessionSerializer(session, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=='DELETE':
+        session.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 

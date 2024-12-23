@@ -2,6 +2,8 @@ from django.urls import path
 from API import views
 
 urlpatterns=[
+    path('session_list/', views.session_list),
+    path('session_list/<int:pk>/', views.session_detail),
     path('prompt_list/', views.prompt_list),
     path('prompt_list/<int:pk>/', views.prompt_detail),
     path('answer_list/', views.answer_list),

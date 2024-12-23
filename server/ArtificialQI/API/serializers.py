@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from API.models import Prompt, LLM, Answer
+from API.models import Prompt, LLM, Answer, Session
 
 class PromptSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,8 @@ class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ['id', 'prompt', 'LLM', 'LLM_answer', 'timestamp']
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = ['name', 'created_at', 'updated_at']
