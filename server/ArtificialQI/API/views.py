@@ -115,7 +115,6 @@ def test(request):
     llm = LLMController("llama3.2")
     output = llm.getAnswer("Ciao come stai?")
     return Response(output)
-
 #Sessions
 @api_view(['GET', 'POST'])
 def session_list(request):

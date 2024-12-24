@@ -12055,3 +12055,11 @@ textarea.form-control-lg {
 }
 
 /*# sourceMappingURL=bootstrap.css.map */
+
+.hover-grow{
+  transition: all ease 0.4s;
+}
+
+.hover-grow:hover{
+  transform: scale(1.02);
+}
