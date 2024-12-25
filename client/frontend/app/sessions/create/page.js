@@ -1,29 +1,23 @@
-'use client'; // This directive marks this component as a Client Component.
-
+import Form from 'next/form'
 
 export default function Page() {
-    async function onSubmit(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            title: formData.get('title'),
-            description: formData.get('description')
-        };
+    async function onSubmit(form)
+    {
+        'use server';
+        const formData = {
+            title: form.get('title'),
+            description: form.get('description')
+        }
 
-        const response = await fetch('http://localhost:8000/session_list/', {
+        const JSONData = JSON.stringify(formData);
+
+        const request = await fetch('http://localhost:8000/session_list/', {
             method: 'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(data),
+            headers:{"Content-type":"application/json"},
+            body: JSONData
         });
 
-        if(response.ok)
-        {
-            event.target.reset();
-        }
     }
-
     return (
         <div className="container align-items-center">
             <div className="card rounded-5 text-center">
@@ -31,7 +25,7 @@ export default function Page() {
                 <div className="card-body">
                     Inserisci i dati richiesti qui sotto
                     <div className="mt-3">
-                        <form onSubmit={onSubmit}>
+                        <Form action={onSubmit}>
                             <div className="form-floating mb-3">
                                 <input type="text" className="form-control rounded-5" id="title" name="title" placeholder="Titolo" />
                                 <label htmlFor="title">Titolo</label>
@@ -43,7 +37,7 @@ export default function Page() {
                             <div className="text-center align-items-center col-12">
                                 <button type="submit" className="btn btn-primary w-50 rounded-5">Crea</button>
                             </div>
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </div>

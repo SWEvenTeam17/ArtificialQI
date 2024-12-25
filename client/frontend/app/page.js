@@ -8,10 +8,10 @@ export default async function Home() {
         <h1 className="fw-light fs-1 fw-bold">ArtificialQi</h1>
         <p className="fw-light">Seleziona una sessione per cominciare.</p>
       </div>
-      <div key="menu" className="row row-cols-2 row-cols-md-4 g-2 mt-5">
+      <div className="row row-cols-2 row-cols-md-4 g-2 mt-5">
         {sessions.map((session) => (
-          <div className="col">
-            <a className="card text-bg-light hover-grow text-decoration-none rounded-5 shadow h-100 w-100 text-center" key={session.id} id={session.id}>
+          <div key={session.id} className="col">
+            <a className="card text-bg-light hover-grow text-decoration-none rounded-5 shadow h-100 w-100 text-center"  id={session.id}>
               <div className="card-body">
                 <div className="card-title">{session.title}</div>
                 <div className="card-text">{session.description}</div>
