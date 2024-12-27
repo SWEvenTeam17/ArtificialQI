@@ -1,11 +1,14 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SessionContext } from './components/contexts/SessionContext';
 import Link from 'next/link';
 import Form from 'next/form'
 import Script from 'next/script';
 import './bootstrap.css';
 
 export default function RootLayout({ children }) {
+
+
   const [sessions, setSessions] = useState([]);
   useEffect(() => {
     fetchSessions();
@@ -44,6 +47,7 @@ export default function RootLayout({ children }) {
       console.error("Error submitting form:", error);
     }
   }
+
 
   return (
     <html lang="en">
@@ -106,7 +110,8 @@ export default function RootLayout({ children }) {
               </div>
             </div>
           </nav>
-          {children(sessions={sessions})}
+          <SessionContext.Provider value={sessions}>{children}</SessionContext.Provider>
+
         </main>
       </body>
     </html>

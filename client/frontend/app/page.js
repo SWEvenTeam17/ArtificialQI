@@ -1,8 +1,11 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { SessionContext } from './components/contexts/SessionContext';
 import Link from 'next/link';
 
-export default function Home({sessions}) {
+export default function Home() {
+  const sessions = useContext(SessionContext);
+
   return (
   <div className="container">
     <h1 className="text-center display-1 fw-medium mt-5 p-5">ArtificialQI</h1>
