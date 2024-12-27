@@ -50,18 +50,18 @@ export default function RootLayout({ children }) {
       <body>
         <header>
           <Script src="/scripts/bootstrap.bundle.js"></Script>
-          <title>ArtificialQi</title>
+          <title>ArtificialQI</title>
         </header>
         <main>
-          <nav className="navbar bg-body-tertiary fixed-top">
+          <nav className="navbar bg-body-tertiary">
             <div className="container-fluid justify-content-start">
               <button className="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
-              <a className="navbar-brand" href="#">ArtificialQi</a>
+              <a className="navbar-brand" href="#">ArtificialQI</a>
               <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div className="offcanvas-header">
-                  <h1 className="offcanvas-title" id="offcanvasNavbarLabel">ArtificialQi</h1>
+                  <h1 className="offcanvas-title" id="offcanvasNavbarLabel">ArtificialQI</h1>
                   <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div className="offcanvas-body">
