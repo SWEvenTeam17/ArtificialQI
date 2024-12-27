@@ -2,23 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-export default function Home() {
-
-  const [sessions, setSessions] = useState([]);
-    useEffect(() => {
-      fetchSessions();
-    }, []);
-  
-  const fetchSessions = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/session_list");
-      const data = await response.json();
-      setSessions(data);
-    } catch (error) {
-      console.error("Error fetching sessions:", error);
-    }
-  };
-
+export default function Home({sessions}) {
   return (
   <div className="container">
     <h1 className="text-center display-1 fw-medium mt-5 p-5">ArtificialQI</h1>

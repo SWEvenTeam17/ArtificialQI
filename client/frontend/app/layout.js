@@ -106,7 +106,7 @@ export default function RootLayout({ children }) {
               </div>
             </div>
           </nav>
-          {children}
+          {children(sessions={sessions})}
         </main>
       </body>
     </html>
