@@ -2,9 +2,11 @@
 import { useContext } from 'react';
 import { SessionContext } from './components/contexts/SessionContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const sessions = useContext(SessionContext);
+  const router = useRouter();
 
   return (
   <div className="container">
@@ -16,6 +18,7 @@ export default function Home() {
           <Link
           key={index}
           href={`/sessions/${session.id}`}
+          onClick={() => router.push(`/sessions/${session.id}`)}
           className="card text-decoration-none text-center"
           >
             <h4 className="card-title p-1">{session.title}</h4>
