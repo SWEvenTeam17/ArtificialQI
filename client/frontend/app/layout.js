@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
               <button className="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
-              <a className="navbar-brand" href="#">ArtificialQI</a>
+              <a className="navbar-brand" href="/#">ArtificialQI</a>
               <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div className="offcanvas-header">
                   <h1 className="offcanvas-title" id="offcanvasNavbarLabel">ArtificialQI</h1>
