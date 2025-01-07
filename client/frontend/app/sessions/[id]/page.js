@@ -5,11 +5,9 @@ import { use, useContext } from "react"
 export default function SessionPage({ params }) {
     const { id } = use(params);
     const sessions = useContext(SessionContext);
-    console.log(sessions);
     const sessionData = sessions.find((data) => {
         return data.id == id;
     });
-    console.log(sessionData);
 
     return (
         <div className="container">
