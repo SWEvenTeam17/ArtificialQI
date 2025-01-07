@@ -18,6 +18,7 @@ source <directory>/bin/activate
 While inside the venv, navigate to the `server/ArtificialQI` folder and migrate
 Django models to the database (both if it's your first time running it and whenever models are changed).
 ```
+python manage.py makemigrations
 python manage.py migrate
 ```
 Finally, you can run the server (in the same folder):
