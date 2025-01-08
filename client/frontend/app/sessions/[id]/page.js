@@ -7,11 +7,10 @@ export default function SessionPage({ params }) {
     const { id } = use(params);
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
-    const [loading, setLoading] = useState(false);  // Define loading state
+    const [loading, setLoading] = useState(false);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [responseData, setResponseData] = useState(null);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         let data = sessions.find((data) => data.id == id);
@@ -82,7 +81,7 @@ export default function SessionPage({ params }) {
                 ))}
             </div>
             <div className="text-center justify-content-center">
-                <form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <div className="form-floating mb-3">
                         <input
                             type="text"
@@ -120,12 +119,12 @@ export default function SessionPage({ params }) {
                             )}
                         </button>
                     </div>
-                </form>
+                </Form>
 
                 {responseData && (
                     <div className="mt-4 alert alert-success">
                         <h5>Risposta:</h5>
-                        <p>{responseData.answer}</p> {/* Assuming the response has 'answer' */}
+                        <p>{responseData.answer}</p>
                     </div>
                 )}
             </div>
