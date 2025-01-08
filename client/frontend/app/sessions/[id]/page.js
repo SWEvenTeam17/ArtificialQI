@@ -1,12 +1,17 @@
 'use client'
-import { SessionContext } from "@/app/components/contexts/SessionContext";
 import { use, useState, useEffect, useContext } from "react";
+import { SessionContext } from "@/app/components/contexts/SessionContext";
 import Form from 'next/form';
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
+    const [loading, setLoading] = useState(false);  // Define loading state
+    const [question, setQuestion] = useState("");
+    const [answer, setAnswer] = useState("");
+    const [responseData, setResponseData] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         let data = sessions.find((data) => data.id == id);
@@ -14,13 +19,38 @@ export default function SessionPage({ params }) {
             setSessionData(data);
         }
         else {
-            fetch(`http://localhost:8000/session_list/${id}`).then((response) => response.json()).then((data) => setSessionData(data)).catch((error) => {
-                console.error("Error fetching session data:", error);
-                setSessionData(null);
-            });
+            fetch(`http://localhost:8000/session_list/${id}`)
+                .then((response) => response.json())
+                .then((data) => setSessionData(data))
+                .catch((error) => {
+                    console.error("Error fetching session data:", error);
+                    setSessionData(null);
+                });
         }
-
     }, [id, sessions]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const response = await fetch("http://localhost:8000/runtest", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ question: question, answer: answer }),
+            });
+
+            const data = await response.json();
+            setResponseData(data);
+            console.log(data);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (sessionData === null) {
         return (
@@ -35,11 +65,11 @@ export default function SessionPage({ params }) {
     return (
         <div className="container">
             <div className="text-center mb-5">
-                <h1 className="display-4">Benvenuto alla sessione {sessionData.title}</h1>
-                <p className="lead text-muted">{sessionData.description}</p>
-                <h3 className="text-secondary mt-5 mb-4">Large Language Models connessi</h3>
+                <h1>Benvenuto alla sessione {sessionData.title}</h1>
+                <p>{sessionData.description}</p>
             </div>
-            <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+            <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
+            <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                 {sessionData.llm.map((llm, index) => (
                     <div className="col" key={index}>
                         <div className="card shadow-sm border-light rounded-lg">
@@ -51,25 +81,53 @@ export default function SessionPage({ params }) {
                     </div>
                 ))}
             </div>
-            <div className="mt-5">
-                <h3 className="text-center text-secondary mb-4">Fai una domanda</h3>
-                <div className="row justify-content-center">
-                    <div className="col-md-8">
-                        <Form>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control rounded-5" id="question" name="question" placeholder="Titolo" />
-                                <label htmlFor="question">Domanda</label>
-                            </div>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control rounded-5" id="answer" name="answer" placeholder="Descrizione" />
-                                <label htmlFor="answer">Risposta attesa</label>
-                            </div>
-                            <div className="text-center">
-                                <button type="submit" className="btn btn-primary w-50 rounded-5">Invia</button>
-                            </div>
-                        </Form>
+            <div className="text-center justify-content-center">
+                <form onSubmit={handleSubmit}>
+                    <div className="form-floating mb-3">
+                        <input
+                            type="text"
+                            className="form-control rounded-5"
+                            id="question"
+                            name="question"
+                            placeholder="Domanda"
+                            value={question}
+                            onChange={(e) => setQuestion(e.target.value)}
+                        />
+                        <label htmlFor="question">Domanda</label>
                     </div>
-                </div>
+                    <div className="form-floating mb-3">
+                        <input
+                            type="text"
+                            className="form-control rounded-5"
+                            id="answer"
+                            name="answer"
+                            placeholder="Risposta attesa"
+                            value={answer}
+                            onChange={(e) => setAnswer(e.target.value)}
+                        />
+                        <label htmlFor="answer">Risposta attesa</label>
+                    </div>
+                    <div className="text-center align-items-center col-12">
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-50 rounded-5"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                "Invia"
+                            )}
+                        </button>
+                    </div>
+                </form>
+
+                {responseData && (
+                    <div className="mt-4 alert alert-success">
+                        <h5>Risposta:</h5>
+                        <p>{responseData.answer}</p> {/* Assuming the response has 'answer' */}
+                    </div>
+                )}
             </div>
         </div>
     );
