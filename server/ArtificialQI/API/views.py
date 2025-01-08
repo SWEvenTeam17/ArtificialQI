@@ -109,12 +109,6 @@ def llm_detail(request, pk):
     elif request.method == "DELETE":
         llm.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-@api_view(['GET'])
-def test(request):
-    llm = LLMController("llama3.2")
-    output = llm.getAnswer("Ciao come stai?")
-    return Response(output)
 #Sessions
 @api_view(['GET', 'POST'])
 def session_list(request):
@@ -150,6 +144,22 @@ def session_detail(request, pk):
     elif request.method=='DELETE':
         session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def test(request):
+    llm = LLMController("llama3.2")
+    output = llm.getAnswer("Ciao come stai?")
+    return Response(output)
+
+@api_view(['POST'])
+def runtest(request):
+    question = request.data.get('question', None)
+    if not question:
+        return Response({"error": "Question is required"}, status=status.HTTP_400_BAD_REQUEST)
+    llm = LLMController("llama3.2")
+    output = llm.getAnswer(question)
+    return Response({"answer": output}, status=status.HTTP_200_OK)
 
 
 
