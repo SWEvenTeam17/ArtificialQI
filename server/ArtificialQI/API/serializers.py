@@ -17,7 +17,7 @@ class AnswerSerializer(serializers.ModelSerializer):
         fields = ['id', 'prompt', 'LLM', 'LLM_answer', 'timestamp']
 
 class SessionSerializer(serializers.ModelSerializer):
-    llm = LLMSerializer(many=True)
+    llm = LLMSerializer(many=True, required=False)
 
     class Meta:
         model = Session
