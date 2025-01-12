@@ -1,16 +1,19 @@
 'use client'
 import { use, useState, useEffect, useContext } from "react";
 import { SessionContext } from "@/app/components/contexts/SessionContext";
+import { useResponse } from "@/app/components/contexts/ResponseContext";
+import { useRouter } from "next/navigation";
 import Form from 'next/form';
 
 export default function SessionPage({ params }) {
+    const router = useRouter();
     const { id } = use(params);
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
-    const [responseData, setResponseData] = useState(null);
+    const { setResponseData } = useResponse();
 
     useEffect(() => {
         let data = sessions.find((data) => data.id == id);
@@ -38,12 +41,14 @@ export default function SessionPage({ params }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ question: question, answer: answer }),
+                body: JSON.stringify({ question: question, answer: answer, sessionId: sessionData.id }),
             });
 
             const data = await response.json();
-            setResponseData(data);
             console.log(data);
+            setResponseData(data.responses);
+            router.push(`/sessions/${id}/results`);
+
         } catch (error) {
             console.error("Error submitting form:", error);
         } finally {
@@ -120,13 +125,6 @@ export default function SessionPage({ params }) {
                         </button>
                     </div>
                 </Form>
-
-                {responseData && (
-                    <div className="mt-4 alert alert-success">
-                        <h5>Risposta:</h5>
-                        <p>{responseData.answer}</p>
-                    </div>
-                )}
             </div>
         </div>
     );

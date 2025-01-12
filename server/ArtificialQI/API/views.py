@@ -157,9 +157,17 @@ def runtest(request):
     question = request.data.get('question', None)
     if not question:
         return Response({"error": "Question is required"}, status=status.HTTP_400_BAD_REQUEST)
-    llm = LLMController("llama3.2")
-    output = llm.getAnswer(question)
-    return Response({"answer": output}, status=status.HTTP_200_OK)
+    session = Session.objects.get(id = request.data.get('sessionId'))
+    llms = session.llm.all()
+    responses = []
+    for llm in llms:
+        llmObj = LLMController(llm.name)
+        output = llmObj.getAnswer(question)
+        responses.append({
+            "llm_name": llm.name,
+            "answer": output
+        })
+    return Response({"responses": responses}, status=status.HTTP_200_OK)
 
 
 
