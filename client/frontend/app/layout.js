@@ -1,14 +1,15 @@
 'use client'
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { SessionContext } from './components/contexts/SessionContext';
 import Link from 'next/link';
-import Form from 'next/form'
+import Form from 'next/form';
 import Script from 'next/script';
 import './bootstrap.css';
 
 export default function RootLayout({ children }) {
 
-
+  const router = useRouter();
   const [sessions, setSessions] = useState([]);
   useEffect(() => {
     fetchSessions();
@@ -102,7 +103,8 @@ export default function RootLayout({ children }) {
                   <div className="mt-4">
                     <ul className="list-group">
                       {sessions.map((session, index) => (
-                        <a key={index} className='btn mt-2 btn-light rounded-5 border'>{session.title}</a>
+                        <Link href={`/sessions/${session.id}`}
+                        onClick={() => router.push(`/sessions/${session.id}`)} data-bs-dismiss="offcanvas" key={index} className='btn mt-2 btn-light rounded-5 border' >{session.title}</Link>
                       ))}
                     </ul>
                   </div>
