@@ -189,3 +189,18 @@ def add_llm_session(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def get_llm_session(request, pk):
+    try:
+        result = LLM.objects.exclude(session__id=pk).all()
+        print(result)
+        serializer = LLMSerializer(result, many=True)
+        content = serializer.data;
+        return Response(content, status=status.HTTP_200_OK)
+    except Session.DoesNotExist:
+        return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+    except LLM.DoesNotExist:
+        return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
