@@ -170,4 +170,17 @@ def runtest(request):
     return Response({"responses": responses}, status=status.HTTP_200_OK)
 
 
+# ADD LLM TO SESSION
+@api_view(['POST'])
+def add_llm_session(request):
+    try:
+        session = Session.objects.get(id = request.data.get('sessionId'))
+        llm = LLM.objects.get(id = request.data.get('llmId'))
+        session.llm.add(llm)
+    except Session.DoesNotExist:
+        return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+    except LLM.DoesNotExist:
+        return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
