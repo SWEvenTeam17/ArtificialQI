@@ -31,7 +31,7 @@ export default function SessionPage({ params }) {
         //         });
         // }
         fetchSessionData();
-    }, [id, sessions]);
+    }, []);
 
     useEffect(() => {
         fetch(`http://localhost:8000/llm_list/`)
@@ -69,7 +69,7 @@ export default function SessionPage({ params }) {
     };
 
     const handleSubmitLLM = (llm) => {
-        sessionData.llm = [... llm];
+        sessionData.llm = [...llm];
     };
 
     const submitLLM = async (e) => {
@@ -81,20 +81,20 @@ export default function SessionPage({ params }) {
         }
         const JSONData = JSON.stringify(data);
 
-        try {
-            const response = await fetch("http://localhost:8000/llm_add/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSONData
-            });
-            const result = await response.json();
-            console.log(result);
-            fetchSessionData();
-        } catch (error) {
-            console.error("Error adding LLM:", error);
-        }
+        const response = await fetch("http://localhost:8000/llm_add/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSONData
+        });
+        const result = await response.json();
+        console.log(result);
+        setSessionData((prevSessionData) => ({
+            ...prevSessionData,
+            llm: [...prevSessionData.llm, result]
+        }));
+        console.log(sessionData);
     };
 
     const fetchSessionData = async () => {
@@ -131,12 +131,12 @@ export default function SessionPage({ params }) {
             </div>
             <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
             <Form onSubmit={submitLLM}>
-                <select 
-                className="form-select"
-                name="selectllm"
-                id="selectllm"
-                defaultValue=""
-                required
+                <select
+                    className="form-select"
+                    name="selectllm"
+                    id="selectllm"
+                    defaultValue=""
+                    required
                 >
                     <option value="" disabled>
                         Seleziona un LLM...
