@@ -49,10 +49,6 @@ export default function SessionPage({ params }) {
         }
     };
 
-    const handleSubmitLLM = (llm) => {
-        sessionData.llm = [...llm];
-    };
-
     const submitLLM = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
