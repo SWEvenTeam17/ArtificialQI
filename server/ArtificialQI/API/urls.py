@@ -10,5 +10,6 @@ urlpatterns=[
     path('answer_list/<int:pk>/', views.answer_detail),
     path('llm_list/', views.llm_list),
     path('llm_list/<int:pk>/', views.llm_detail),
-    path('runtest',views.runtest)
+    path('llm_add/', views.add_llm_session),
+    path('runtest', views.runtest)
 ]
