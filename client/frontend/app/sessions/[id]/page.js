@@ -139,7 +139,8 @@ export default function SessionPage({ params }) {
                 </button>
             </Form>
             <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
-                {sessionData.llm.map((llm, index) => (
+                {sessionData.llm.length > 0 ? (sessionData.llm.map((llm, index) => (
+                <div>
                     <div className="col" key={index}>
                         <div className="card shadow-sm border-light rounded-lg">
                             <div className="card-body">
@@ -148,7 +149,12 @@ export default function SessionPage({ params }) {
                             </div>
                         </div>
                     </div>
-                ))}
+                </div>
+                ))) : (
+                    <div className="text-center">
+                        <p>Nessun LLM attivo, aggiungi un LLM per cominciare.</p>
+                    </div>
+                )}
             </div>
             <div className="text-center justify-content-center">
                 <Form onSubmit={handleSubmit}>
