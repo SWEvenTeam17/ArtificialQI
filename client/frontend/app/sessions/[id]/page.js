@@ -10,6 +10,8 @@ export default function SessionPage({ params }) {
     const { id } = use(params);
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
+    const [LLMData, setLLMData] = useState([]);
+    const [selectedLLM, setSelectedLLM] = useState(null);
     const [loading, setLoading] = useState(false);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
@@ -30,6 +32,16 @@ export default function SessionPage({ params }) {
                 });
         }
     }, [id, sessions]);
+
+    useEffect(() => {
+        fetch(`http://localhost:8000/llm_list/`)
+            .then((response) => response.json())
+            .then((data) => setLLMData(data))
+            .catch((error) => {
+                console.error("Error fetching LLM data:", error);
+                setLLMData([]);
+            });
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,6 +68,28 @@ export default function SessionPage({ params }) {
         }
     };
 
+    const handleLLMSelection = (llm) => {
+        setSelectedLLM(llm);
+    };
+
+    const submitLLM = async () => {
+        if(selectedLLM) {
+            try {
+                const response = await fetch("http://localhost:8000/llm_add/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ sessionId: sessionData.id, llmId: selectedLLM.id })
+                });
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error("Error adding LLM:", error);
+            }
+        }
+    };
+
     if (sessionData === null) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#f8f9fa" }}>
@@ -73,6 +107,19 @@ export default function SessionPage({ params }) {
                 <p>{sessionData.description}</p>
             </div>
             <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
+            <Form onSubmit={submitLLM}>
+                <select className="form-select" defaultValue="" required>
+                    <option value="" disabled>
+                        Seleziona un LLM...
+                    </option>
+                    {LLMData.map((llm, index) => (
+                        <option key={llm.id} value={index}>{llm.name}</option>
+                    ))}
+                </select>
+                <button className="btn btn-primary" type="submit">
+                    Aggiungi
+                </button>
+            </Form>
             <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                 {sessionData.llm.map((llm, index) => (
                     <div className="col" key={index}>
