@@ -11,26 +11,26 @@ export default function SessionPage({ params }) {
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState([]);
-    const [selectedLLM, setSelectedLLM] = useState(null);
     const [loading, setLoading] = useState(false);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const { setResponseData } = useResponse();
 
     useEffect(() => {
-        let data = sessions.find((data) => data.id == id);
-        if (data) {
-            setSessionData(data);
-        }
-        else {
-            fetch(`http://localhost:8000/session_list/${id}`)
-                .then((response) => response.json())
-                .then((data) => setSessionData(data))
-                .catch((error) => {
-                    console.error("Error fetching session data:", error);
-                    setSessionData(null);
-                });
-        }
+        // let data = sessions.find((data) => data.id == id);
+        // if (data) {
+        //     setSessionData(data);
+        // }
+        // else {
+        //     fetch(`http://localhost:8000/session_list/${id}`)
+        //         .then((response) => response.json())
+        //         .then((data) => setSessionData(data))
+        //         .catch((error) => {
+        //             console.error("Error fetching session data:", error);
+        //             setSessionData(null);
+        //         });
+        // }
+        fetchSessionData();
     }, [id, sessions]);
 
     useEffect(() => {
@@ -68,25 +68,48 @@ export default function SessionPage({ params }) {
         }
     };
 
-    const handleLLMSelection = (llm) => {
-        setSelectedLLM(llm);
+    const handleSubmitLLM = (llm) => {
+        sessionData.llm = [... llm];
     };
 
-    const submitLLM = async () => {
-        if(selectedLLM) {
-            try {
-                const response = await fetch("http://localhost:8000/llm_add/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ sessionId: sessionData.id, llmId: selectedLLM.id })
+    const submitLLM = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            sessionId: sessionData.id,
+            llmId: formData.get('selectllm')
+        }
+        const JSONData = JSON.stringify(data);
+
+        try {
+            const response = await fetch("http://localhost:8000/llm_add/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSONData
+            });
+            const result = await response.json();
+            console.log(result);
+            fetchSessionData();
+        } catch (error) {
+            console.error("Error adding LLM:", error);
+        }
+    };
+
+    const fetchSessionData = async () => {
+        let data = sessions.find((data) => data.id == id);
+        if (data) {
+            setSessionData(data);
+        }
+        else {
+            fetch(`http://localhost:8000/session_list/${id}`)
+                .then((response) => response.json())
+                .then((data) => setSessionData(data))
+                .catch((error) => {
+                    console.error("Error fetching session data:", error);
+                    setSessionData(null);
                 });
-                const data = await response.json();
-                console.log(data);
-            } catch (error) {
-                console.error("Error adding LLM:", error);
-            }
         }
     };
 
@@ -108,12 +131,18 @@ export default function SessionPage({ params }) {
             </div>
             <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
             <Form onSubmit={submitLLM}>
-                <select className="form-select" defaultValue="" required>
+                <select 
+                className="form-select"
+                name="selectllm"
+                id="selectllm"
+                defaultValue=""
+                required
+                >
                     <option value="" disabled>
                         Seleziona un LLM...
                     </option>
                     {LLMData.map((llm, index) => (
-                        <option key={llm.id} value={index}>{llm.name}</option>
+                        <option key={index} value={llm.id}>{llm.name}</option>
                     ))}
                 </select>
                 <button className="btn btn-primary" type="submit">
