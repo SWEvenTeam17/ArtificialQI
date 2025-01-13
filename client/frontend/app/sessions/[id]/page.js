@@ -17,30 +17,11 @@ export default function SessionPage({ params }) {
     const { setResponseData } = useResponse();
 
     useEffect(() => {
-        // let data = sessions.find((data) => data.id == id);
-        // if (data) {
-        //     setSessionData(data);
-        // }
-        // else {
-        //     fetch(`http://localhost:8000/session_list/${id}`)
-        //         .then((response) => response.json())
-        //         .then((data) => setSessionData(data))
-        //         .catch((error) => {
-        //             console.error("Error fetching session data:", error);
-        //             setSessionData(null);
-        //         });
-        // }
         fetchSessionData();
     }, []);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/llm_list/`)
-            .then((response) => response.json())
-            .then((data) => setLLMData(data))
-            .catch((error) => {
-                console.error("Error fetching LLM data:", error);
-                setLLMData([]);
-            });
+        fetchLLMData();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -94,7 +75,7 @@ export default function SessionPage({ params }) {
             ...prevSessionData,
             llm: [...prevSessionData.llm, result]
         }));
-        console.log(sessionData);
+        fetchLLMData();
     };
 
     const fetchSessionData = async () => {
@@ -112,6 +93,18 @@ export default function SessionPage({ params }) {
                 });
         }
     };
+
+    const fetchLLMData = async () => {
+        fetch(`http://localhost:8000/llm_remaining/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setLLMData(Array.isArray(data) ? data : []);
+            })
+            .catch((error) => {
+                console.error("Error fetching LLM data:", error);
+                setLLMData([]);
+            });
+    }
 
     if (sessionData === null) {
         return (
@@ -141,9 +134,9 @@ export default function SessionPage({ params }) {
                     <option value="" disabled>
                         Seleziona un LLM...
                     </option>
-                    {LLMData.map((llm, index) => (
+                    {LLMData ? LLMData.map((llm, index) => (
                         <option key={index} value={llm.id}>{llm.name}</option>
-                    ))}
+                    )) : "ciao"}
                 </select>
                 <button className="btn btn-primary" type="submit">
                     Aggiungi
