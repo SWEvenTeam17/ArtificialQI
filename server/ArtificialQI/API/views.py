@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from API.models import Prompt, Answer, LLM, Session
 from API.serializers import PromptSerializer, AnswerSerializer, LLMSerializer, SessionSerializer
@@ -177,6 +178,9 @@ def add_llm_session(request):
         session = Session.objects.get(id = request.data.get('sessionId'))
         llm = LLM.objects.get(id = request.data.get('llmId'))
         session.llm.add(llm)
+        serializer = LLMSerializer(llm)
+        content = JSONRenderer().render(serializer.data);
+        return Response(content, status=status.HTTP_201_CREATED)
     except Session.DoesNotExist:
         return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
     except LLM.DoesNotExist:
