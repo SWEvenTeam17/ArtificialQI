@@ -178,8 +178,9 @@ def add_llm_session(request):
         session = Session.objects.get(id = request.data.get('sessionId'))
         llm = LLM.objects.get(id = request.data.get('llmId'))
         session.llm.add(llm)
+        session.save()
         serializer = LLMSerializer(llm)
-        content = JSONRenderer().render(serializer.data);
+        content = serializer.data;
         return Response(content, status=status.HTTP_201_CREATED)
     except Session.DoesNotExist:
         return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
