@@ -209,7 +209,7 @@ def delete_llm_session(request, session_id, llm_id):
     try:
         session = Session.objects.get(id=session_id)
         llm = LLM.objects.get(id=llm_id)
-        session.llm.delete()
+        session.llm.remove(llm)
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Session.DoesNotExist:
         return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
