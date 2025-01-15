@@ -10,7 +10,7 @@ export default function SessionPage({ params }) {
     const { id } = use(params);
     const sessions = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
-    const [LLMData, setLLMData] = useState([]);
+    const [LLMData, setLLMData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
@@ -74,21 +74,21 @@ export default function SessionPage({ params }) {
     };
 
     const deleteLLM = async (llmId) => {
-        try {
-            const response = await fetch(`http://localhost:8000/llm_delete/${id}/${llmId}`, {
-                method: 'DELETE',
-            });
-            if(!response.ok) {
-                throw new Error(response.statusText);
-            }
-            if(response.status !== 204) {
-                await response.json();
-            }
-            setLLMData((prev) => prev.filter((llm) => llm.id !== llmId));
-            fetchLLMData();
-        } catch (error) {
-            console.error("Error deleting LLM:", error);
+        const response = await fetch(`http://localhost:8000/llm_delete/${id}/${llmId}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error(response.statusText);
         }
+        if (response.status !== 204) {
+            await response.json();
+        }
+        setSessionData((prevSessionData) => ({
+            ...prevSessionData,
+            llm: prevSessionData.llm.filter((llm) => llm.id !== llmId),
+        }));
+        fetchLLMData();
+
     };
 
     const fetchSessionData = async () => {
@@ -165,8 +165,8 @@ export default function SessionPage({ params }) {
                                     <h5 className="card-title text-primary">{llm.name}</h5>
                                     <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
                                     <button
-                                    className="btn btn-danger"
-                                    onClick={() => deleteLLM(llm.id)}
+                                        className="btn btn-danger"
+                                        onClick={() => deleteLLM(llm.id)}
                                     >
                                         Rimuovi
                                     </button>
@@ -177,7 +177,7 @@ export default function SessionPage({ params }) {
                 </div>
             ) : (
                 <div className="p-5 text-center">
-                    <p>Nessun LLM selezionato, aggiungi un LLM per cominciare.</p> 
+                    <p>Nessun LLM selezionato, aggiungi un LLM per cominciare.</p>
                 </div>
             )}
             <div className="text-center justify-content-center">
