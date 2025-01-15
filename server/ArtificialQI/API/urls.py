@@ -12,5 +12,6 @@ urlpatterns=[
     path('llm_list/<int:pk>/', views.llm_detail),
     path('llm_add/', views.add_llm_session),
     path('llm_remaining/<int:pk>', views.get_llm_session),
+    path('llm_delete/<int:session_id>/<int:llm_id>', views.delete_llm_session),
     path('runtest', views.runtest)
 ]

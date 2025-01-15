@@ -203,4 +203,17 @@ def get_llm_session(request, pk):
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+@api_view(['DELETE'])
+def delete_llm_session(request, session_id, llm_id):
+    try:
+        session = Session.objects.get(id=session_id)
+        llm = LLM.objects.get(id=llm_id)
+        session.llm.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Session.DoesNotExist:
+        return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+    except LLM.DoesNotExist:
+        return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
