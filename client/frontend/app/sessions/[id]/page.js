@@ -138,24 +138,24 @@ export default function SessionPage({ params }) {
                     Aggiungi
                 </button>
             </Form>
-            <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
-                {sessionData.llm.length > 0 ? (sessionData.llm.map((llm, index) => (
-                <div>
-                    <div className="col" key={index}>
-                        <div className="card shadow-sm border-light rounded-lg">
-                            <div className="card-body">
-                                <h5 className="card-title text-primary">{llm.name}</h5>
-                                <p className="card-text text-muted">Number of Parameters: {llm.n_parameters}</p>
+            {sessionData.llm.length > 0 ? (
+                <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
+                    {sessionData.llm.map((llm, index) => (
+                        <div className="col" key={index}>
+                            <div className="card shadow-sm border-light rounded-lg">
+                                <div className="card-body">
+                                    <h5 className="card-title text-primary">{llm.name}</h5>
+                                    <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
-                ))) : (
-                    <div className="text-center">
-                        <p>Nessun LLM attivo, aggiungi un LLM per cominciare.</p>
-                    </div>
-                )}
-            </div>
+            ) : (
+                <div className="p-5 text-center">
+                    <p>Nessun LLM selezionato, aggiungi un LLM per cominciare.</p> 
+                </div>
+            )}
             <div className="text-center justify-content-center">
                 <Form onSubmit={handleSubmit}>
                     <div className="form-floating mb-3">
