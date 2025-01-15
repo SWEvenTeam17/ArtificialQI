@@ -66,12 +66,29 @@ export default function SessionPage({ params }) {
             body: JSONData
         });
         const result = await response.json();
-        console.log(result);
         setSessionData((prevSessionData) => ({
             ...prevSessionData,
             llm: [...prevSessionData.llm, result]
         }));
         fetchLLMData();
+    };
+
+    const deleteLLM = async (llmId) => {
+        try {
+            const response = await fetch(`http://localhost:8000/llm_delete/${id}/${llmId}`, {
+                method: 'DELETE',
+            });
+            if(!response.ok) {
+                throw new Error(response.statusText);
+            }
+            if(response.status !== 204) {
+                await response.json();
+            }
+            setLLMData((prev) => prev.filter((llm) => llm.id !== llmId));
+            fetchLLMData();
+        } catch (error) {
+            console.error("Error deleting LLM:", error);
+        }
     };
 
     const fetchSessionData = async () => {
@@ -94,6 +111,7 @@ export default function SessionPage({ params }) {
         fetch(`http://localhost:8000/llm_remaining/${id}`)
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 setLLMData(Array.isArray(data) ? data : []);
             })
             .catch((error) => {
@@ -146,6 +164,12 @@ export default function SessionPage({ params }) {
                                 <div className="card-body">
                                     <h5 className="card-title text-primary">{llm.name}</h5>
                                     <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
+                                    <button
+                                    className="btn btn-danger"
+                                    onClick={() => deleteLLM(llm.id)}
+                                    >
+                                        Rimuovi
+                                    </button>
                                 </div>
                             </div>
                         </div>
