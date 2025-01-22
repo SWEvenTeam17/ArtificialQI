@@ -4,6 +4,7 @@ import { SessionContext } from "@/app/components/contexts/SessionContext";
 import { useResponse } from "@/app/components/contexts/ResponseContext";
 import { useRouter } from "next/navigation";
 import Form from 'next/form';
+import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 
 export default function SessionPage({ params }) {
     const router = useRouter();
@@ -137,25 +138,7 @@ export default function SessionPage({ params }) {
                 <p>{sessionData.description}</p>
             </div>
             <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
-            <Form onSubmit={submitLLM}>
-                <select
-                    className="form-select"
-                    name="selectllm"
-                    id="selectllm"
-                    defaultValue=""
-                    required
-                >
-                    <option value="" disabled>
-                        Seleziona un LLM...
-                    </option>
-                    {LLMData ? LLMData.map((llm, index) => (
-                        <option key={index} value={llm.id}>{llm.name}</option>
-                    )) : "ciao"}
-                </select>
-                <button className="btn btn-primary" type="submit">
-                    Aggiungi
-                </button>
-            </Form>
+            <AddLLMForm submitLLM={submitLLM} LLMData={LLMData}></AddLLMForm>
             {sessionData.llm.length > 0 ? (
                 <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                     {sessionData.llm.map((llm, index) => (
