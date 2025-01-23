@@ -11,7 +11,7 @@ export default function Navbar({ sessions, onFormSubmit }) {
                 <button className="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <a className="navbar-brand" href="/#">ArtificialQI</a>
+                <a className="navbar-brand" href="/">ArtificialQI</a>
                 <ul className="navbar-nav flex-row me-auto mb-2 mb-lg-0">
                     <li className="nav-item me-3">
                         <a className="nav-link" href="/">Home</a>

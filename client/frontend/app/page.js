@@ -1,27 +1,10 @@
 'use client'
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { SessionContext } from './components/contexts/SessionContext';
 import SessionCard from './components/sessions/SessionCard';
-import EditLLMForm from './components/LLM/EditLLMForm';
+
 export default function Home() {
   const sessions = useContext(SessionContext);
-  const [LLMList, setLLMList] = useState(null);
-
-  useEffect(() => {
-    fetchLLMList();
-  }, []);
-
-  const fetchLLMList = async () => {
-    fetch(`http://localhost:8000/llm_list`, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => setLLMList(data))
-      .catch((error) => {
-        console.error("Error fetching LLM list:", error);
-        setLLMList(null);
-      });
-  };
 
   return (
     <div className="container">
@@ -32,7 +15,6 @@ export default function Home() {
           <SessionCard session={session} key={index} />
         ))}
       </div>
-      <EditLLMForm LLMList={LLMList} fetchLLMList={fetchLLMList} />
     </div>
   );
 }

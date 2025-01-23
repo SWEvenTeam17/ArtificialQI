@@ -1,9 +1,14 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditLLMForm from "../components/LLM/EditLLMForm";
+import CreateLLMForm from "../components/LLM/CreateLLMForm";
 
 export default function ManageLLM() {
     const [LLMList, setLLMList] = useState(null);
+
+    useEffect(() => {
+        fetchLLMList();
+    }, []);
 
     const fetchLLMList = async () => {
         fetch(`http://localhost:8000/llm_list`, {
@@ -20,6 +25,7 @@ export default function ManageLLM() {
     return (
         <div className="container">
             <EditLLMForm LLMList={LLMList} fetchLLMList={fetchLLMList} />
+            <CreateLLMForm fetchLLMList={fetchLLMList} />
         </div>
     );
 }
