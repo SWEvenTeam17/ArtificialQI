@@ -32,7 +32,7 @@ export default function Home() {
           <SessionCard session={session} key={index} />
         ))}
       </div>
-
+      <EditLLMForm LLMList={LLMList} fetchLLMList={fetchLLMList} />
     </div>
   );
 }
