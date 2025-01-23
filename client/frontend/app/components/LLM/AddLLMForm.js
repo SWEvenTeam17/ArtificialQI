@@ -1,6 +1,31 @@
 import Form from 'next/form';
 
-const AddLLMForm = ({submitLLM, LLMData}) => {
+const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
+
+    const submitLLM = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            sessionId: sessionData.id,
+            llmId: formData.get('selectllm')
+        }
+        const JSONData = JSON.stringify(data);
+
+        const response = await fetch("http://localhost:8000/llm_add/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSONData
+        });
+        const result = await response.json();
+        setSessionData((prevSessionData) => ({
+            ...prevSessionData,
+            llm: [...prevSessionData.llm, result]
+        }));
+        fetchLLMData();
+    };
+
     return (
     <Form onSubmit={submitLLM}>
         <select

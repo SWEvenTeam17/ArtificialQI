@@ -19,30 +19,6 @@ export default function SessionPage({ params }) {
         fetchLLMData();
     }, []);
 
-    const submitLLM = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = {
-            sessionId: sessionData.id,
-            llmId: formData.get('selectllm')
-        }
-        const JSONData = JSON.stringify(data);
-
-        const response = await fetch("http://localhost:8000/llm_add/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSONData
-        });
-        const result = await response.json();
-        setSessionData((prevSessionData) => ({
-            ...prevSessionData,
-            llm: [...prevSessionData.llm, result]
-        }));
-        fetchLLMData();
-    };
-
     const fetchSessionData = async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
@@ -89,7 +65,7 @@ export default function SessionPage({ params }) {
                 <p>{sessionData.description}</p>
             </div>
             <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
-            <AddLLMForm submitLLM={submitLLM} LLMData={LLMData}></AddLLMForm>
+            <AddLLMForm LLMData={LLMData} sessionData={sessionData} setSessionData={setSessionData} fetchLLMData={fetchLLMData} />
             {sessionData.llm.length > 0 ? (
                 <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                     {sessionData.llm.map((llm, index) => (
