@@ -12,6 +12,14 @@ export default function Navbar({ sessions, onFormSubmit }) {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <a className="navbar-brand" href="/#">ArtificialQI</a>
+                <ul className="navbar-nav flex-row me-auto mb-2 mb-lg-0">
+                    <li className="nav-item me-3">
+                        <a className="nav-link" href="/">Home</a>
+                    </li>
+                    <li className="nav-item me-3">
+                        <a className="nav-link" href="/manage-llm">Gestisci LLM</a>
+                    </li>
+                </ul>
                 <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div className="offcanvas-header">
                         <h1 className="offcanvas-title" id="offcanvasNavbarLabel">ArtificialQI</h1>
