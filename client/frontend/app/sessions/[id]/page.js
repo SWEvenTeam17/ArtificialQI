@@ -5,6 +5,7 @@ import { useResponse } from "@/app/components/contexts/ResponseContext";
 import { useRouter } from "next/navigation";
 import Form from 'next/form';
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
+import LLMCard from "@/app/components/LLM/LLMCard";
 
 export default function SessionPage({ params }) {
     const router = useRouter();
@@ -74,24 +75,6 @@ export default function SessionPage({ params }) {
         fetchLLMData();
     };
 
-    const deleteLLM = async (llmId) => {
-        const response = await fetch(`http://localhost:8000/llm_delete/${id}/${llmId}`, {
-            method: 'DELETE',
-        });
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-        if (response.status !== 204) {
-            await response.json();
-        }
-        setSessionData((prevSessionData) => ({
-            ...prevSessionData,
-            llm: prevSessionData.llm.filter((llm) => llm.id !== llmId),
-        }));
-        fetchLLMData();
-
-    };
-
     const fetchSessionData = async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
@@ -143,18 +126,7 @@ export default function SessionPage({ params }) {
                 <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                     {sessionData.llm.map((llm, index) => (
                         <div className="col" key={index}>
-                            <div className="card shadow-sm border-light rounded-lg">
-                                <div className="card-body">
-                                    <h5 className="card-title text-primary">{llm.name}</h5>
-                                    <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={() => deleteLLM(llm.id)}
-                                    >
-                                        Rimuovi
-                                    </button>
-                                </div>
-                            </div>
+                            <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
                         </div>
                     ))}
                 </div>
