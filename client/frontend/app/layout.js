@@ -46,6 +46,24 @@ export default function RootLayout({ children }) {
     }
   };
 
+  const deleteSession = async(id)=>{
+    let data = {
+      id: id
+    };
+    const JSONData = JSON.stringify(data);
+    try{
+      await fetch(`http://localhost:8000/session_list/${id}/`,{
+        method: 'DELETE',
+        headers: {"Content-type": "application/josn"},
+        body: JSONData
+      });
+      fetchSessions();
+
+    } catch(error){
+      console.error("Error deleting form: ",error);
+    }
+  };
+
   return (
     <html lang="en">
       <body>
@@ -54,8 +72,8 @@ export default function RootLayout({ children }) {
           <title>ArtificialQI</title>
         </header>
         <main>
-          <Navbar sessions={sessions} onFormSubmit={onSubmit} />
-          <SessionContext.Provider value={sessions}>{children}</SessionContext.Provider>
+          <Navbar sessions={sessions} onFormSubmit={onSubmit}/>
+          <SessionContext.Provider value={{sessions, deleteSession}}>{children}</SessionContext.Provider>
         </main>
       </body>
     </html>

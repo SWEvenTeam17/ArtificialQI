@@ -7,7 +7,7 @@ import QnAForm from "@/app/components/prompt/QnAForm";
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
-    const sessions = useContext(SessionContext);
+    const {sessions} = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
