@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar({ sessions, onFormSubmit }) {
-    const router = useRouter();
 
     return (
         <nav className="navbar bg-body-tertiary">
@@ -30,15 +29,7 @@ export default function Navbar({ sessions, onFormSubmit }) {
                         <div className="mt-4">
                             <ul className="list-group">
                                 {sessions.map((session, index) => (
-                                    <Link
-                                        href={`/sessions/${session.id}`}
-                                        onClick={() => router.push(`/sessions/${session.id}`)}
-                                        data-bs-dismiss="offcanvas"
-                                        key={index}
-                                        className="btn mt-2 btn-light rounded-5 border"
-                                    >
-                                        {session.title}
-                                    </Link>
+                                    <NavbarSessionElement session={session} key={index}></NavbarSessionElement>
                                 ))}
                             </ul>
                         </div>
@@ -47,6 +38,21 @@ export default function Navbar({ sessions, onFormSubmit }) {
             </div>
         </nav>
     );
+}
+
+
+function NavbarSessionElement({ session }) {
+    const router = useRouter();
+    return (
+
+        <Link
+            href={`/sessions/${session.id}`}
+            onClick={() => router.push(`/sessions/${session.id}`)}
+            data-bs-dismiss="offcanvas"
+            className="btn w-100 mt-2 btn-light rounded-5 border"
+        >
+            {session.title}
+        </Link>);
 }
 
 function AccordionForm({ onSubmit }) {
