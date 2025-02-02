@@ -62,7 +62,7 @@ const QnAForm = ({ sessionData }) => {
                 <label htmlFor="answer">Risposta attesa</label>
             </div>
             <div className="text-center align-items-center col-12">
-                <button
+                {sessionData.llm.length > 0 ? <button
                     type="submit"
                     className="btn btn-primary w-50 rounded-5"
                     disabled={loading}
@@ -72,7 +72,8 @@ const QnAForm = ({ sessionData }) => {
                     ) : (
                         "Invia"
                     )}
-                </button>
+                </button> : <button className="btn btn-primary disabled w-50 rounded-5">Aggiungi almeno un LLM per continuare...</button>}
+
             </div>
         </Form>
     );

@@ -1,6 +1,6 @@
 import Form from 'next/form';
 
-const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
+const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
 
     const submitLLM = async (e) => {
         e.preventDefault();
@@ -26,26 +26,40 @@ const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
         fetchLLMData();
     };
 
+    const isLLMDataEmpty = !LLMData || LLMData.length === 0;
+
     return (
-    <Form onSubmit={submitLLM}>
-        <select
-            className="form-select"
-            name="selectllm"
-            id="selectllm"
-            defaultValue=""
-            required
-        >
-            <option value="" disabled>
-                Seleziona un LLM...
-            </option>
-            {LLMData ? LLMData.map((llm, index) => (
-                <option key={index} value={llm.id}>{llm.name}</option>
-            )) : "ciao"}
-        </select>
-        <button className="btn btn-primary" type="submit">
-            Aggiungi
-        </button>
-    </Form>);
+        <div className='card rounded-4'>
+            <div className='card-body'>
+                <h3 className="card-title">Large Language Models connessi</h3>
+
+                <Form onSubmit={submitLLM}>
+                    {isLLMDataEmpty ? (
+                        <p className="text-center text-muted">Nessun LLM disponibile</p>
+                    ) : (
+                        <select
+                            className="form-select mt-4 mb-4 text-center"
+                            name="selectllm"
+                            id="selectllm"
+                            defaultValue=""
+                            required
+                            disabled={isLLMDataEmpty}
+                        >
+                            <option value="" disabled>
+                                Seleziona un LLM...
+                            </option>
+                            {LLMData.map((llm, index) => (
+                                <option key={index} value={llm.id}>{llm.name}</option>
+                            ))}
+                        </select>
+                    )}
+                    <button className="btn btn-primary w-100" type="submit" disabled={isLLMDataEmpty}>
+                        Aggiungi
+                    </button>
+                </Form>
+            </div>
+        </div>
+    );
 }
 
 export default AddLLMForm;

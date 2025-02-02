@@ -64,8 +64,9 @@ export default function SessionPage({ params }) {
                 <h1>Benvenuto alla sessione {sessionData.title}</h1>
                 <p>{sessionData.description}</p>
             </div>
-            <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
+            <div className="d-flex justify-content-center align-items-center">
             <AddLLMForm LLMData={LLMData} sessionData={sessionData} setSessionData={setSessionData} fetchLLMData={fetchLLMData} />
+            </div>
             {sessionData.llm.length > 0 ? (
                 <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
                     {sessionData.llm.map((llm, index) => (
