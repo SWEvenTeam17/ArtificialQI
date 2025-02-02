@@ -29,7 +29,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
     const isLLMDataEmpty = !LLMData || LLMData.length === 0;
 
     return (
-        <div className='card rounded-4'>
+        <div className='card shadow-sm border-light rounded-lg'>
             <div className='card-body'>
                 <h3 className="card-title">Large Language Models connessi</h3>
 
