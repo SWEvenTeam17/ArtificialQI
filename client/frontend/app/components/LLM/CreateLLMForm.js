@@ -38,7 +38,7 @@ const CreateLLMForm = ({fetchLLMList}) => {
                         type="text"
                         id="name"
                         name="name"
-                        className="form-control mt-3"
+                        className="form-control mt-3 rounded-5"
                         placeholder="Nome"
                     />
                     <label htmlFor="name">Nome</label>
@@ -48,7 +48,7 @@ const CreateLLMForm = ({fetchLLMList}) => {
                         type="text"
                         id="nparameters"
                         name="nparameters"
-                        className="form-control mt-3"
+                        className="form-control mt-3 rounded-5"
                         placeholder="Numero Parametri"
                     />
                     <label htmlFor="description">Numero Parametri</label>
