@@ -22,20 +22,33 @@ export default function ManageLLM() {
 
     return (
         <div className="container">
-            <div className="row">
-                <CreateLLMForm fetchLLMList={fetchLLMList} />
+            <div className="card shadow border-light rounded-5 mt-3">
+                <div className="card-body">
+                    <h2 className="card-title text-center">
+                        Gestisci LLM
+                    </h2>
+                    <div className="ms-5 me-5 mb-5">
+                        <CreateLLMForm fetchLLMList={fetchLLMList} />
+                    </div>
+                    <h2 className="card-title text-center">
+                        LLM collegati ad ArtificialQI
+                    </h2>
+                    <div className="row row-cols-lg-4 row-cols-2">
+                        {LLMList.length > 0 ? (
+                            LLMList.map((llm, index) => (
+                                <div className="col" key={index}>
+                                    <GeneralLLMCard llm={llm} fetchLLMList={fetchLLMList} />
+                                </div>
+                            ))
+                        ) : (
+                            <p>Nessun LLM disponibile</p>
+                        )}
+                    </div>
+                </div>
+
             </div>
-            <div className="row row-cols-lg-4 row-cols-2">
-                {LLMList.length > 0 ? (
-                    LLMList.map((llm, index) => (
-                        <div className="col" key={index}>
-                            <GeneralLLMCard llm={llm} fetchLLMList={fetchLLMList} />
-                        </div>
-                    ))
-                ) : (
-                    <p>Nessun LLM disponibile</p>
-                )}
-            </div>
+
+
         </div>
     );
 }

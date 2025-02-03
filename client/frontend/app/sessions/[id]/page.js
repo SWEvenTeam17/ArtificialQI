@@ -39,7 +39,6 @@ export default function SessionPage({ params }) {
         fetch(`http://localhost:8000/llm_remaining/${id}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 setLLMData(Array.isArray(data) ? data : []);
             })
             .catch((error) => {

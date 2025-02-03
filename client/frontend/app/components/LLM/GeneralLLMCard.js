@@ -1,4 +1,6 @@
 'use client'
+import delteIcon from '/public/images/icon.png';
+import Image from 'next/image';
 
 const GeneralLLMCard = ({ llm, fetchLLMList }) => {
 
@@ -24,13 +26,13 @@ const GeneralLLMCard = ({ llm, fetchLLMList }) => {
     return (
         <div className="card shadow-sm border-light rounded-lg">
             <div className="card-body">
-                <h5 className="card-title text-primary">{llm.name}</h5>
+                <h3 className="card-title text-primary">{llm.name}</h3>
                 <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
                 <button
-                    className="btn btn-danger"
+                    className="btn btn-danger w-100"
                     onClick={() => deleteLLM(llm.id)}
                 >
-                    Rimuovi
+                    <Image width={32} height={32} alt='Elimina llm' src={delteIcon} />
                 </button>
             </div>
         </div>
