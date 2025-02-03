@@ -7,7 +7,7 @@ import QnAForm from "@/app/components/prompt/QnAForm";
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
-    const {sessions} = useContext(SessionContext);
+    const { sessions } = useContext(SessionContext);
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
@@ -39,7 +39,6 @@ export default function SessionPage({ params }) {
         fetch(`http://localhost:8000/llm_remaining/${id}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 setLLMData(Array.isArray(data) ? data : []);
             })
             .catch((error) => {
@@ -60,28 +59,33 @@ export default function SessionPage({ params }) {
 
     return (
         <div className="container">
-            <div className="text-center mb-5">
-                <h1>Benvenuto alla sessione {sessionData.title}</h1>
-                <p>{sessionData.description}</p>
-            </div>
-            <h3 className="text-secondary mt-4">Large Language Models connessi</h3>
-            <AddLLMForm LLMData={LLMData} sessionData={sessionData} setSessionData={setSessionData} fetchLLMData={fetchLLMData} />
-            {sessionData.llm.length > 0 ? (
-                <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5 p-5">
-                    {sessionData.llm.map((llm, index) => (
-                        <div className="col" key={index}>
-                            <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
+            <div className="card shadow-lg border-light rounded-4 p-4 my-4">
+                <div className="card-body text-center">
+                    <h1 className="card-title">Benvenuto alla sessione <span className="text-primary">{sessionData.title}</span></h1>
+                    <p className="lead text-muted">{sessionData.description}</p>
+                    <div className="row justify-content-center">
+                        <div className="col-lg-7 col-12">
+                            <AddLLMForm LLMData={LLMData} sessionData={sessionData} setSessionData={setSessionData} fetchLLMData={fetchLLMData} />
                         </div>
-                    ))}
+                    </div>
+                    {sessionData.llm.length > 0 ? (
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5">
+                            {sessionData.llm.map((llm, index) => (
+                                <div className="col" key={index}>
+                                    <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="p-5 text-center">
+                            <p className="text-secondary">Nessun LLM selezionato, aggiungi un LLM per cominciare.</p>
+                        </div>
+                    )}
+                    <div className="row row justify-content-center"><div className="col-lg-7 col-12"><QnAForm sessionData={sessionData} />
+                    </div></div>
                 </div>
-            ) : (
-                <div className="p-5 text-center">
-                    <p>Nessun LLM selezionato, aggiungi un LLM per cominciare.</p>
-                </div>
-            )}
-            <div className="text-center justify-content-center">
-                <QnAForm sessionData={sessionData} />
             </div>
         </div>
+
     );
 }

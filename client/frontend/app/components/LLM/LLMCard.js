@@ -1,4 +1,6 @@
 'use client'
+import delteIcon from '/public/images/icon.png';
+import Image from 'next/image';
 
 const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
 
@@ -21,15 +23,15 @@ const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
     };
 
     return (
-        <div className="card shadow-sm border-light rounded-lg">
+        <div className="card shadow border-light rounded-5">
             <div className="card-body">
                 <h5 className="card-title text-primary">{llm.name}</h5>
                 <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
                 <button
-                    className="btn btn-danger"
+                    className="btn btn-danger w-100 rounded-5"
                     onClick={() => deleteLLM(llm.id)}
                 >
-                    Rimuovi
+                    <Image width={32} height={32} alt='Elimina llm' src={delteIcon} />
                 </button>
             </div>
         </div>

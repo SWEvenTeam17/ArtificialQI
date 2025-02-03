@@ -1,6 +1,14 @@
+import { useState, useEffect } from 'react';
 import Form from 'next/form';
 
-const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
+const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
+    // State to track if LLMData is empty
+    const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(!LLMData || LLMData.length === 0);
+
+    // Update the state whenever LLMData changes
+    useEffect(() => {
+        setIsLLMDataEmpty(!LLMData || LLMData.length === 0);
+    }, [LLMData]);
 
     const submitLLM = async (e) => {
         e.preventDefault();
@@ -8,7 +16,7 @@ const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
         const data = {
             sessionId: sessionData.id,
             llmId: formData.get('selectllm')
-        }
+        };
         const JSONData = JSON.stringify(data);
 
         const response = await fetch("http://localhost:8000/llm_add/", {
@@ -27,25 +35,27 @@ const AddLLMForm = ({LLMData, sessionData, setSessionData, fetchLLMData}) => {
     };
 
     return (
-    <Form onSubmit={submitLLM}>
-        <select
-            className="form-select"
-            name="selectllm"
-            id="selectllm"
-            defaultValue=""
-            required
-        >
-            <option value="" disabled>
-                Seleziona un LLM...
-            </option>
-            {LLMData ? LLMData.map((llm, index) => (
-                <option key={index} value={llm.id}>{llm.name}</option>
-            )) : "ciao"}
-        </select>
-        <button className="btn btn-primary" type="submit">
-            Aggiungi
-        </button>
-    </Form>);
-}
+        <Form onSubmit={submitLLM}>
+            <select
+                className="form-select mt-4 mb-4 rounded-5 text-center"
+                name="selectllm"
+                id="selectllm"
+                defaultValue={isLLMDataEmpty ? "no-llm" : ""}
+                required
+                disabled={isLLMDataEmpty}
+            >
+                <option value="">
+                    {isLLMDataEmpty ? "Nessun LLM disponibile" : "Seleziona un LLM..."}
+                </option>
+                {!isLLMDataEmpty && LLMData.map((llm, index) => (
+                    <option key={index} value={llm.id}>{llm.name}</option>
+                ))}
+            </select>
+            <button className="btn btn-primary rounded-5 w-100" type="submit" disabled={isLLMDataEmpty}>
+                Aggiungi
+            </button>
+        </Form>
+    );
+};
 
 export default AddLLMForm;

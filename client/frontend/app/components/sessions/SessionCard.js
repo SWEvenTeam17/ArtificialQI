@@ -8,8 +8,7 @@ const SessionCard = ({ session, deleteSession }) => {
     const router = useRouter();
 
     return (
-        <div className="d-flex flex-column align-items-center">
-            <div className="card text-center rounded-5 shadow-sm p-3 mb-2 w-100" style={{ maxWidth: '400px' }}>
+            <div className="card text-center rounded-5 shadow hover-grow p-3 mb-2 w-100" style={{ maxWidth: '400px' }}>
                 <Link
                     href={`/sessions/${session.id}`}
                     onClick={() => router.push(`/sessions/${session.id}`)}
@@ -28,12 +27,11 @@ const SessionCard = ({ session, deleteSession }) => {
                                 deleteSession(session.id);
                             }}
                         >
-                            <Image alt={"Cancella immagine"} width={32} height={32} src={delteIcon} />
+                            <Image alt={"Cancella sessione"} width={32} height={32} src={delteIcon} />
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 

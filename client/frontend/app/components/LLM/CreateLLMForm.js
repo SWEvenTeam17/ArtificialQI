@@ -1,6 +1,6 @@
 import Form from "next/form";
 
-const CreateLLMForm = ({fetchLLMList}) => {
+const CreateLLMForm = ({ fetchLLMList }) => {
 
     const createLLM = async (e) => {
         e.preventDefault();
@@ -31,14 +31,14 @@ const CreateLLMForm = ({fetchLLMList}) => {
 
     return (
         <div className="mt-5">
-            <p className="text-center fs-5">Crea un LLM:</p>
             <Form className="mt-5" onSubmit={createLLM}>
+                <p className="text-center fs-5">Crea un LLM:</p>
                 <div className="form-floating mb-3">
                     <input
                         type="text"
                         id="name"
                         name="name"
-                        className="form-control mt-3"
+                        className="form-control mt-3 rounded-5"
                         placeholder="Nome"
                     />
                     <label htmlFor="name">Nome</label>
@@ -48,7 +48,7 @@ const CreateLLMForm = ({fetchLLMList}) => {
                         type="text"
                         id="nparameters"
                         name="nparameters"
-                        className="form-control mt-3"
+                        className="form-control mt-3 rounded-5"
                         placeholder="Numero Parametri"
                     />
                     <label htmlFor="description">Numero Parametri</label>

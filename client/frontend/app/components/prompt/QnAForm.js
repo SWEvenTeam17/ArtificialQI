@@ -36,46 +36,58 @@ const QnAForm = ({ sessionData }) => {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <div className="form-floating mb-3">
-                <input
-                    type="text"
-                    className="form-control rounded-5"
-                    id="question"
-                    name="question"
-                    placeholder="Domanda"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                />
-                <label htmlFor="question">Domanda</label>
-            </div>
-            <div className="form-floating mb-3">
-                <input
-                    type="text"
-                    className="form-control rounded-5"
-                    id="answer"
-                    name="answer"
-                    placeholder="Risposta attesa"
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                />
-                <label htmlFor="answer">Risposta attesa</label>
-            </div>
-            <div className="text-center align-items-center col-12">
-                <button
-                    type="submit"
-                    className="btn btn-primary w-50 rounded-5"
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <div>
+            <h3 className="card-title mb-4 text-center">Avvia un test</h3>
+
+            <Form onSubmit={handleSubmit}>
+                <div className="form-floating mb-4">
+                    <input
+                        type="text"
+                        className="form-control rounded-5"
+                        id="question"
+                        name="question"
+                        placeholder="Domanda"
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="question">Domanda</label>
+                </div>
+                <div className="form-floating mb-4">
+                    <input
+                        type="text"
+                        className="form-control rounded-5"
+                        id="answer"
+                        name="answer"
+                        placeholder="Risposta attesa"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="answer">Risposta attesa</label>
+                </div>
+                <div className="text-center">
+                    {sessionData.llm.length > 0 ? (
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-50 rounded-5"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                "Invia"
+                            )}
+                        </button>
                     ) : (
-                        "Invia"
+                        <button className="btn btn-secondary w-50 rounded-5" disabled>
+                            Aggiungi almeno un LLM per continuare...
+                        </button>
                     )}
-                </button>
-            </div>
-        </Form>
+                </div>
+            </Form>
+        </div>
     );
-}
+};
 
 export default QnAForm;
