@@ -36,7 +36,7 @@ const QnAForm = ({ sessionData }) => {
     };
 
     return (
-        <div className="card border-light rounded-lg">
+        <div>
             <h3 className="card-title mb-4 text-center">Avvia un test</h3>
 
             <Form onSubmit={handleSubmit}>

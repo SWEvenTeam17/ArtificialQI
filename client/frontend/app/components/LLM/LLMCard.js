@@ -28,7 +28,7 @@ const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
                 <h5 className="card-title text-primary">{llm.name}</h5>
                 <p className="card-text text-muted">Numero di Parametri: {llm.n_parameters}</p>
                 <button
-                    className="btn btn-danger"
+                    className="btn btn-danger w-100 rounded-5"
                     onClick={() => deleteLLM(llm.id)}
                 >
                     <Image width={32} height={32} alt='Elimina llm' src={delteIcon} />
