@@ -37,13 +37,13 @@ const QnAForm = ({ sessionData }) => {
 
     return (
         <div className="card border-light rounded-lg">
-            <h3 className="card-title mb-4 text-center">Domanda e Risposta</h3>
+            <h3 className="card-title mb-4 text-center">Avvia un test</h3>
 
             <Form onSubmit={handleSubmit}>
                 <div className="form-floating mb-4">
                     <input
                         type="text"
-                        className="form-control rounded-3"
+                        className="form-control rounded-5"
                         id="question"
                         name="question"
                         placeholder="Domanda"
@@ -56,7 +56,7 @@ const QnAForm = ({ sessionData }) => {
                 <div className="form-floating mb-4">
                     <input
                         type="text"
-                        className="form-control rounded-3"
+                        className="form-control rounded-5"
                         id="answer"
                         name="answer"
                         placeholder="Risposta attesa"
