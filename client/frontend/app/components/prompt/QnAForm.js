@@ -26,6 +26,15 @@ const QnAForm = ({ sessionData }) => {
             const data = await response.json();
             console.log(data);
             setResponseData(data.responses);
+
+            await fetch("http://localhost:8000/prompt_list/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ prompt_text: question, expected_answer: answer, sessionId: sessionData.id }),
+            });
+
             router.push(`/sessions/${sessionData.id}/results`);
 
         } catch (error) {
