@@ -1,4 +1,5 @@
 from langchain_ollama import OllamaLLM
+from sentence_transformers import SentenceTransformer
 
 class LLMController:
     def __init__(self, LLMName):
@@ -11,3 +12,12 @@ class LLMController:
         for chunk in stream:
             output += chunk
         return output
+    
+    def getEvaluation(self, expected_answer, LLMAnswer):
+        model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        expected_embedding = model.encode(expected_answer)
+        LLMAnswer_embedding = model.encode(LLMAnswer)
+
+        similarities = model.similarity(expected_embedding, LLMAnswer_embedding)
+        approximated = round(similarities[0][0].item() * 100, 2)
+        return approximated
