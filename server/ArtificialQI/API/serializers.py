@@ -19,7 +19,7 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'created_at', 'updated_at', 'llm']
 
 class PromptSerializer(serializers.ModelSerializer):
-    session = SessionSerializer(required=True)
+    session = serializers.PrimaryKeyRelatedField(queryset=Session.objects.all())
 
     class Meta:
         model = Prompt
