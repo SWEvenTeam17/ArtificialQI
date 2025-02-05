@@ -7,11 +7,12 @@ export default function ResultsPage() {
     console.log(responseData);
     return (
         <div className="container">
-            <h1 className="text-center mb-5">Results</h1>
-            <div className="row row-cols-auto g-4 mb-5 p-5">
-                {responseData && responseData.length > 0 ? (
-                    responseData.map((response, index) => (
-                        <div className="col" key={index}>
+            <h2 className="text-center mb-3 mt-3">{responseData.question}</h2>
+            <p className="text-center mb-1">Risultati</p>
+            <div className="row row-cols-1 justify-content-center g-4 mb-5 p-5">
+                {responseData.results && responseData.results.length > 0 ? (
+                    responseData.results.map((response, index) => (
+                        <div className="col-12 col-md-6" key={index}>
                             <ResponseCard response={response}/>
                         </div>
                     ))
