@@ -17,7 +17,19 @@ def prompt_list(request):
         return Response(serializer.data)
     elif request.method == "POST":
         data = request.data
-        serializer = PromptSerializer(data=data)
+        session_id = data.get("sessionId")
+        try:
+            session = Session.objects.get(id = session_id)
+        except Session.DoesNotExist:
+            return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        save_data = {
+            "prompt_text": data.get("prompt_text"),
+            "expected_answer": data.get("expected_answer"),
+            "session": session.id
+        }
+
+        serializer = PromptSerializer(data=save_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -198,7 +210,6 @@ def add_llm_session(request):
 def get_llm_session(request, pk):
     try:
         result = LLM.objects.exclude(session__id=pk).all()
-        print(result)
         serializer = LLMSerializer(result, many=True)
         content = serializer.data;
         return Response(content, status=status.HTTP_200_OK)
