@@ -7,6 +7,9 @@ const ResponseCard = ({ response }) => {
                 <p className="card-text text-primary" style={{ fontSize: '1.2rem', fontWeight: '500' }}>
                     Valutazione semantica: <span className="font-weight-bold">{response.semantic_evaluation}%</span>
                 </p>
+                <p className="card-text text-primary" style={{ fontSize: '1.2rem', fontWeight: '500' }}>
+                    Valutazione LLM esterno: <span className="font-weight-bold">{response.external_evaluation}%</span>
+                </p>
             </div>
         </div>
     );

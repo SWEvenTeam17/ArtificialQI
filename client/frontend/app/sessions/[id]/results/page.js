@@ -4,7 +4,7 @@ import ResponseCard from "@/app/components/responses/ResponseCard";
 
 export default function ResultsPage() {
     const { responseData } = useResponse();
-
+    console.log(responseData);
     return (
         <div className="container">
             <h1 className="text-center mb-5">Results</h1>

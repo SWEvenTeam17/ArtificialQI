@@ -161,11 +161,13 @@ def runtest(request):
     for llm in llms:
         llmObj = LLMController(llm.name)
         output = llmObj.getAnswer(question)
-        evaluation = llmObj.getEvaluation(expected_answer, output)
+        semantic_evaluation = LLMController.getSemanticEvaluation(expected_answer, output)
+        external_evaluation = LLMController.getExternalEvaluation("google", expected_answer, output)
         responses.append({
             "llm_name": llm.name,
             "answer": output,
-            "semantic_evaluation": evaluation
+            "semantic_evaluation": semantic_evaluation,
+            "external_evaluation": external_evaluation
         })
     
     return Response({"responses": responses}, status=status.HTTP_200_OK)
