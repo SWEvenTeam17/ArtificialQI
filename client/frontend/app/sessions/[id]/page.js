@@ -4,6 +4,7 @@ import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
 import QnAForm from "@/app/components/prompt/QnAForm";
+import PreviousTestsCard from "@/app/components/sessions/PreviousTestsCard";
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
@@ -87,6 +88,9 @@ export default function SessionPage({ params }) {
                 <div className="col-12 col-md-8">
                     <QnAForm sessionData={sessionData} />
                 </div>
+            </div>
+            <div>
+                <PreviousTestsCard id={id}></PreviousTestsCard>
             </div>
 
         </div>

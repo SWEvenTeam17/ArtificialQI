@@ -2,10 +2,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from API.models import LLM, Session
+from API.models import LLM, Session, Prompt, Answer, Evaluation
 from API.serializers import (
     LLMSerializer,
     SessionSerializer,
+    PromptSerializer
 )
 
 @csrf_exempt
@@ -99,3 +100,17 @@ def delete_llm_session(request, session_id, llm_id):
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(["GET"])
+def get_previous_tests(request, pk):
+    if request.method == "GET":
+        session = Session.objects.get(id=pk)
+        previous_prompts = Prompt.objects.filter(session=session.id)
+        serializer = PromptSerializer(previous_prompts, many=True)  
+        return Response(serializer.data)
+    elif request.method == "DELETE":
+        target = Prompt.objects.get(id=request.data.get("previousPromptId"))
+        target.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
