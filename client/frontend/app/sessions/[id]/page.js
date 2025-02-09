@@ -81,10 +81,14 @@ export default function SessionPage({ params }) {
                             <p className="text-secondary">Nessun LLM selezionato, aggiungi un LLM per cominciare.</p>
                         </div>
                     )}
-                    <div className="row row justify-content-center"><div className="col-lg-7 col-12"><QnAForm sessionData={sessionData} />
-                    </div></div>
                 </div>
             </div>
+            <div className="row row justify-content-center">
+                <div className="col-12">
+                    <QnAForm sessionData={sessionData} />
+                </div>
+            </div>
+
         </div>
 
     );

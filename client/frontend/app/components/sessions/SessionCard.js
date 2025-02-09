@@ -8,7 +8,7 @@ const SessionCard = ({ session, deleteSession }) => {
     const router = useRouter();
 
     return (
-            <div className="card text-center rounded-5 shadow hover-grow p-3 mb-2 w-100" style={{ maxWidth: '400px' }}>
+            <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">
                 <Link
                     href={`/sessions/${session.id}`}
                     onClick={() => router.push(`/sessions/${session.id}`)}

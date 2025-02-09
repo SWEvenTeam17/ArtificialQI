@@ -10,7 +10,7 @@ export default function Home() {
     <div className="container">
       <h1 className="text-center display-1 fw-medium mt-5 p-5">ArtificialQI</h1>
       <p className="text-center fs-5">Per cominciare, seleziona una sessione:</p>
-      <div className="row row-cols-lg-4 row-cols-2 mt-5 g-2">
+      <div className="row row-cols-lg-4 row-cols-md-2 row-cols-1 mt-5 g-2">
         {sessions.map((session, index) => (
           <div className='col' key={index}>
             <SessionCard session={session} deleteSession={deleteSession} />

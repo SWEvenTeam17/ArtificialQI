@@ -74,7 +74,7 @@ const QnAForm = ({ sessionData }) => {
     };
 
     return (
-        <div>
+        <div className="card border-light rounded-5 w-75 mx-auto shadow-lg p-4 mb-5">
             <h3 className="card-title mb-4 text-center">Avvia un test</h3>
 
             <Form onSubmit={handleSubmit}>
