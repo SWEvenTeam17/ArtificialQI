@@ -158,29 +158,34 @@ def session_detail(request, pk):
         session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-@api_view(['GET'])
-def test(request):
-    llm = LLMController("llama3.2")
-    output = llm.getAnswer("Ciao come stai?")
-    return Response(output)
-
 @api_view(['POST'])
 def runtest(request):
     question = request.data.get('question', None)
-    if not question:
-        return Response({"error": "Question is required"}, status=status.HTTP_400_BAD_REQUEST)
+    expected_answer = request.data.get('answer', None)
+
+    if not question or not expected_answer:
+        return Response({"error": "Domanda e risposta sono campi obbligatori"}, status=status.HTTP_400_BAD_REQUEST)
+    
     session = Session.objects.get(id = request.data.get('sessionId'))
+
     llms = session.llm.all()
-    responses = []
+    results=[];
     for llm in llms:
         llmObj = LLMController(llm.name)
         output = llmObj.getAnswer(question)
-        responses.append({
+        semantic_evaluation = LLMController.getSemanticEvaluation(expected_answer, output)
+        external_evaluation = LLMController.getExternalEvaluation("google", expected_answer, output)
+        results.append({
             "llm_name": llm.name,
-            "answer": output
+            "answer": output,
+            "semantic_evaluation": semantic_evaluation,
+            "external_evaluation": external_evaluation
         })
-    return Response({"responses": responses}, status=status.HTTP_200_OK)
+    response = {
+        "results": results,
+        "question": question
+    }
+    return Response({"response": response}, status=status.HTTP_200_OK)
 
 
 # ADD LLM TO SESSION
