@@ -84,7 +84,7 @@ export default function SessionPage({ params }) {
                 </div>
             </div>
             <div className="row row justify-content-center">
-                <div className="col-12">
+                <div className="col-12 col-md-8">
                     <QnAForm sessionData={sessionData} />
                 </div>
             </div>

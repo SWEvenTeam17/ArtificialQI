@@ -57,13 +57,13 @@ const QnAForm = ({ sessionData }) => {
             console.log(data);
             setResponseData(data.response);
 
-            await fetch("http://localhost:8000/prompt_list/", {
+            /*await fetch("http://localhost:8000/prompt_list/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ prompt_text: question, expected_answer: answer, sessionId: sessionData.id }),
-            });
+            });*/
 
             router.push(`/sessions/${sessionData.id}/results`);
         } catch (error) {
@@ -74,7 +74,7 @@ const QnAForm = ({ sessionData }) => {
     };
 
     return (
-        <div className="card border-light rounded-5 w-75 mx-auto shadow-lg p-4 mb-5">
+        <div className="card border-light rounded-5 w-md-75 mx-auto shadow-lg p-4 mb-5">
             <h3 className="card-title mb-4 text-center">Avvia un test</h3>
 
             <Form onSubmit={handleSubmit}>
