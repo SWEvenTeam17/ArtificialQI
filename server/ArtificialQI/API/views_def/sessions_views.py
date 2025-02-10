@@ -101,12 +101,12 @@ def delete_llm_session(request, session_id, llm_id):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(["GET"])
+@api_view(["GET","DELETE"])
 def get_previous_tests(request, pk):
     if request.method == "GET":
         session = Session.objects.get(id=pk)
-        previous_prompts = Prompt.objects.filter(session=session.id)
-        serializer = PromptSerializer(previous_prompts, many=True)  
+        previous_prompts = Prompt.objects.filter(session=session)
+        serializer = PromptSerializer(previous_prompts, many=True)
         return Response(serializer.data)
     elif request.method == "DELETE":
         target = Prompt.objects.get(id=request.data.get("previousPromptId"))

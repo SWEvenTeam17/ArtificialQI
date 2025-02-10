@@ -5,6 +5,7 @@ import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
 import QnAForm from "@/app/components/prompt/QnAForm";
 import PreviousTestsCard from "@/app/components/sessions/PreviousTestsCard";
+import { QuestionsContextProvider } from "@/app/components/contexts/QuestionsContext";
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
@@ -70,7 +71,7 @@ export default function SessionPage({ params }) {
                         </div>
                     </div>
                     {sessionData.llm.length > 0 ? (
-                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5">
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5" style={{ height: '170px' }}>
                             {sessionData.llm.map((llm, index) => (
                                 <div className="col" key={index}>
                                     <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
@@ -84,13 +85,19 @@ export default function SessionPage({ params }) {
                     )}
                 </div>
             </div>
-            <div className="row row justify-content-center">
+            <div className="row row justify-content-center" style={{ height: '220px' }}>
                 <div className="col-12 col-md-8">
-                    <QnAForm sessionData={sessionData} />
+                <QuestionsContextProvider>
+                    <PreviousTestsCard id={id}/>
+                </QuestionsContextProvider>
                 </div>
             </div>
-            <div>
-                <PreviousTestsCard id={id}></PreviousTestsCard>
+            <div className="row row justify-content-center">
+                <div className="col-12 col-md-8">
+                    <QuestionsContextProvider>
+                        <QnAForm sessionData={sessionData} />
+                    </QuestionsContextProvider>
+                </div>
             </div>
 
         </div>

@@ -18,14 +18,16 @@ class SessionSerializer(serializers.ModelSerializer):
         model = Session
         fields = ['id', 'title', 'description', 'created_at', 'updated_at', 'llm']
 
-class PromptSerializer(serializers.ModelSerializer):
-    session = serializers.PrimaryKeyRelatedField(queryset=Session.objects.all())
-
-    class Meta:
-        model = Prompt
-        fields = ['id', 'prompt_text', 'expected_answer', 'timestamp', 'session']
 
 class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluation
-        fields = ['__all__']
+        fields = ['llm', 'prompt','semantic_evaluation', 'external_evaluation']
+
+class PromptSerializer(serializers.ModelSerializer):
+    session = serializers.PrimaryKeyRelatedField(queryset=Session.objects.all())
+    evaluation_set = EvaluationSerializer(many=True, read_only=True)
+    class Meta:
+        model = Prompt
+        fields = ['id', 'prompt_text', 'expected_answer', 'timestamp', 'session', 'evaluation_set']
+
