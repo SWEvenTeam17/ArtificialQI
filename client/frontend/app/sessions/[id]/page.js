@@ -85,7 +85,7 @@ export default function SessionPage({ params }) {
                     )}
                 </div>
             </div>
-            <div className="row row justify-content-center" style={{ height: '220px' }}>
+            <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
                 <div className="col-12 col-md-8">
                 <QuestionsContextProvider>
                     <PreviousTestsCard id={id}/>
