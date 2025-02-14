@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useResponse } from "../contexts/ResponseContext";
+import { useQuestionsContext } from '../contexts/QuestionsContext';
 import Form from "next/form";
 
 const QnAForm = ({ sessionData }) => {
@@ -10,10 +11,10 @@ const QnAForm = ({ sessionData }) => {
     const [answer, setAnswer] = useState("");
     const [formErrors, setFormErrors] = useState({});
     const { setResponseData } = useResponse();
-
+    const { selectedQuestions, setSelectedQuestions } = useQuestionsContext();
     const validateForm = () => {
         const errors = {};
-        
+
         if (!question) {
             errors.question = "La domanda è obbligatoria.";
         }
@@ -41,30 +42,33 @@ const QnAForm = ({ sessionData }) => {
         setFormErrors({});
 
         try {
+            var formatted = [];
+            selectedQuestions.forEach(element => {
+                formatted.push({
+                        "id":element.id,
+                        "prompt_text": element.prompt_text,
+                        "expected_answer": element.expected_answer
+                    })
+            });
+            formatted.push({
+                "prompt_text": question,
+                "expected_answer": answer
+            })
+            console.log(formatted);
+
             const response = await fetch("http://localhost:8000/runtest", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    question: question,
-                    answer: answer,
+                    data: formatted,
                     sessionId: sessionData.id,
                 }),
             });
 
             const data = await response.json();
-            console.log(data);
-            setResponseData(data.response);
-
-            /*await fetch("http://localhost:8000/prompt_list/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ prompt_text: question, expected_answer: answer, sessionId: sessionData.id }),
-            });*/
-
+            setResponseData(data);
             router.push(`/sessions/${sessionData.id}/results`);
         } catch (error) {
             console.error("Error submitting form:", error);

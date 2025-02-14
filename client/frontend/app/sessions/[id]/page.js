@@ -85,20 +85,20 @@ export default function SessionPage({ params }) {
                     )}
                 </div>
             </div>
-            <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
-                <div className="col-12 col-md-8">
-                <QuestionsContextProvider>
-                    <PreviousTestsCard id={id}/>
-                </QuestionsContextProvider>
+            <QuestionsContextProvider>
+                <div>
+                    <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
+                        <div className="col-12 col-md-8">
+                            <PreviousTestsCard id={id} />
+                        </div>
+                    </div>
+                    <div className="row row justify-content-center">
+                        <div className="col-12 col-md-8">
+                            <QnAForm sessionData={sessionData} />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className="row row justify-content-center">
-                <div className="col-12 col-md-8">
-                    <QuestionsContextProvider>
-                        <QnAForm sessionData={sessionData} />
-                    </QuestionsContextProvider>
-                </div>
-            </div>
+            </QuestionsContextProvider>
 
         </div>
 
