@@ -3,7 +3,6 @@ from django.db import models
 class LLM(models.Model):
     name = models.TextField()
     n_parameters = models.TextField(default="")
-    # session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
 
 class Session(models.Model):

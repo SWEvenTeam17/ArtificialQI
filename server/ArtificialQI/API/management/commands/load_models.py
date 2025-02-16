@@ -13,7 +13,7 @@ class Command(BaseCommand):
         for model in models:
             name = model.get("name")
             size = model.get("details", {}).get("parameter_size")
-            llm, created = LLM.objects.get_or_create(name=name)
+            llm, _ = LLM.objects.get_or_create(name=name)
             llm.n_parameters = size
             llm.save()
 
