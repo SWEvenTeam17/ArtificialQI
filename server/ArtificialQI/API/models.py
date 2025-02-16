@@ -20,9 +20,14 @@ class Prompt(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
-
 class Answer(models.Model):
     prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
     LLM = models.ForeignKey(LLM, on_delete=models.CASCADE)
     LLM_answer = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class Evaluation(models.Model):
+    prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
+    llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
+    semantic_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
+    external_evaluation = models.DecimalField(max_digits=5, decimal_places=2)

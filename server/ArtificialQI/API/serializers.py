@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from API.models import Prompt, LLM, Answer, Session
+from API.models import Prompt, LLM, Answer, Session, Evaluation
 
 class LLMSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,9 +18,16 @@ class SessionSerializer(serializers.ModelSerializer):
         model = Session
         fields = ['id', 'title', 'description', 'created_at', 'updated_at', 'llm']
 
+
+class EvaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Evaluation
+        fields = ['llm', 'prompt','semantic_evaluation', 'external_evaluation']
+
 class PromptSerializer(serializers.ModelSerializer):
     session = serializers.PrimaryKeyRelatedField(queryset=Session.objects.all())
-
+    evaluation_set = EvaluationSerializer(many=True, read_only=True)
     class Meta:
         model = Prompt
-        fields = ['id', 'prompt_text', 'expected_answer', 'timestamp', 'session']
+        fields = ['id', 'prompt_text', 'expected_answer', 'timestamp', 'session', 'evaluation_set']
+

@@ -4,6 +4,8 @@ import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
 import QnAForm from "@/app/components/prompt/QnAForm";
+import PreviousTestsCard from "@/app/components/sessions/PreviousTestsCard";
+import { QuestionsContextProvider } from "@/app/components/contexts/QuestionsContext";
 
 export default function SessionPage({ params }) {
     const { id } = use(params);
@@ -69,7 +71,7 @@ export default function SessionPage({ params }) {
                         </div>
                     </div>
                     {sessionData.llm.length > 0 ? (
-                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5">
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5" style={{ height: '170px' }}>
                             {sessionData.llm.map((llm, index) => (
                                 <div className="col" key={index}>
                                     <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
@@ -81,10 +83,23 @@ export default function SessionPage({ params }) {
                             <p className="text-secondary">Nessun LLM selezionato, aggiungi un LLM per cominciare.</p>
                         </div>
                     )}
-                    <div className="row row justify-content-center"><div className="col-lg-7 col-12"><QnAForm sessionData={sessionData} />
-                    </div></div>
                 </div>
             </div>
+            <QuestionsContextProvider>
+                <div>
+                    <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
+                        <div className="col-12 col-md-8">
+                            <PreviousTestsCard id={id} />
+                        </div>
+                    </div>
+                    <div className="row row justify-content-center">
+                        <div className="col-12 col-md-8">
+                            <QnAForm sessionData={sessionData} />
+                        </div>
+                    </div>
+                </div>
+            </QuestionsContextProvider>
+
         </div>
 
     );

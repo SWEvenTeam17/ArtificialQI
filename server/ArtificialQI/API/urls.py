@@ -4,6 +4,7 @@ from API import views
 urlpatterns=[
     path('session_list/', views.session_list),
     path('session_list/<int:pk>/', views.session_detail),
+    path('previous_tests/<int:pk>/', views.get_previous_tests),
     path('prompt_list/', views.prompt_list),
     path('prompt_list/<int:pk>/', views.prompt_detail),
     path('answer_list/', views.answer_list),
