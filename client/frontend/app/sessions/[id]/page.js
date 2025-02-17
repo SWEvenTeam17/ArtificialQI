@@ -15,11 +15,11 @@ export default function SessionPage({ params }) {
 
     useEffect(() => {
         fetchSessionData();
-    }, []);
+    }, [id,sessions]);
 
     useEffect(() => {
         fetchLLMData();
-    }, []);
+    }, [id]);
 
     const fetchSessionData = async () => {
         let data = sessions.find((data) => data.id == id);

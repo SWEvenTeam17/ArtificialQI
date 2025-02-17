@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react';
 import Form from 'next/form';
 
 const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
-    // State to track if LLMData is empty
     const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(!LLMData || LLMData.length === 0);
 
-    // Update the state whenever LLMData changes
     useEffect(() => {
         setIsLLMDataEmpty(!LLMData || LLMData.length === 0);
     }, [LLMData]);

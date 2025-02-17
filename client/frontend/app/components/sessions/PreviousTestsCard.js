@@ -3,17 +3,18 @@ import { useQuestionsContext } from '../contexts/QuestionsContext';
 
 const PreviousTestsCard = ({ id }) => {
     const [previousTests, setPreviousTests] = useState([]);
-    const { selectedQuestions, setSelectedQuestions, addQuestion, removeQuestion } = useQuestionsContext();
+    const { selectedQuestions, addQuestion, removeQuestion } = useQuestionsContext();
 
     useEffect(() => {
+        const fetchPreviousTests = async () => {
+            let response = await fetch(`http://localhost:8000/previous_tests/${id}/`);
+            let data = await response.json();
+            setPreviousTests(data);
+        };
         fetchPreviousTests();
-    }, []);
+    }, [id]);
 
-    const fetchPreviousTests = async () => {
-        let response = await fetch(`http://localhost:8000/previous_tests/${id}/`);
-        let data = await response.json();
-        setPreviousTests(data);
-    };
+
 
     const deletePreviousTest = async (testId) => {
         let response = await fetch(`http://localhost:8000/previous_tests/${testId}/`, {
