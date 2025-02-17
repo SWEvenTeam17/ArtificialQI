@@ -14,7 +14,7 @@ export default function SessionPage({ params }) {
     const [LLMData, setLLMData] = useState(null);
 
     const fetchSessionData = useCallback(async () => {
-        let data = sessions.find((data) => data.id == id);
+        let data = sessions?.find((data) => data.id == id);
         if (data) {
             setSessionData(data);
         }
@@ -28,7 +28,7 @@ export default function SessionPage({ params }) {
                 setSessionData(null);
             }
         }
-    }, [id, sessions]);
+    }, [id]);
 
     const fetchLLMData = useCallback(async () => {
         try {
@@ -47,6 +47,7 @@ export default function SessionPage({ params }) {
 
     useEffect(() => {
         fetchLLMData();
+
     }, [fetchLLMData]);
 
     if (sessionData === null) {
