@@ -1,5 +1,5 @@
 'use client'
-import { use, useState, useEffect, useContext } from "react";
+import { use, useState, useEffect, useContext, useCallback } from "react";
 import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
@@ -13,41 +13,41 @@ export default function SessionPage({ params }) {
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
-    useEffect(() => {
-        fetchSessionData();
-    }, [id,sessions]);
-
-    useEffect(() => {
-        fetchLLMData();
-    }, [id]);
-
-    const fetchSessionData = async () => {
+    const fetchSessionData = useCallback(async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
             setSessionData(data);
         }
         else {
-            fetch(`http://localhost:8000/session_list/${id}`)
-                .then((response) => response.json())
-                .then((data) => setSessionData(data))
-                .catch((error) => {
-                    console.error("Error fetching session data:", error);
-                    setSessionData(null);
-                });
+            try {
+                let response = await fetch(`http://localhost:8000/session_list/${id}`);
+                let data = await response.json();
+                setSessionData(data);
+            } catch (error) {
+                console.error("Error fetching session data:", error);
+                setSessionData(null);
+            }
         }
-    };
+    }, [id, sessions]);
 
-    const fetchLLMData = async () => {
-        fetch(`http://localhost:8000/llm_remaining/${id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setLLMData(Array.isArray(data) ? data : []);
-            })
-            .catch((error) => {
-                console.error("Error fetching LLM data:", error);
-                setLLMData([]);
-            });
-    }
+    const fetchLLMData = useCallback(async () => {
+        try {
+            let response = await fetch(`http://localhost:8000/llm_remaining/${id}`);
+            let data = await response.json();
+            setLLMData(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error("Error fetching LLM data:", error);
+            setLLMData([]);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        fetchSessionData();
+    }, [fetchSessionData]);
+
+    useEffect(() => {
+        fetchLLMData();
+    }, [fetchLLMData]);
 
     if (sessionData === null) {
         return (
@@ -67,14 +67,24 @@ export default function SessionPage({ params }) {
                     <p className="lead text-muted">{sessionData.description}</p>
                     <div className="row justify-content-center">
                         <div className="col-lg-7 col-12">
-                            <AddLLMForm LLMData={LLMData} sessionData={sessionData} setSessionData={setSessionData} fetchLLMData={fetchLLMData} />
+                            <AddLLMForm 
+                                LLMData={LLMData} 
+                                sessionData={sessionData} 
+                                setSessionData={setSessionData} 
+                                fetchLLMData={fetchLLMData} 
+                            />
                         </div>
                     </div>
                     {sessionData.llm.length > 0 ? (
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5" style={{ height: '170px' }}>
                             {sessionData.llm.map((llm, index) => (
                                 <div className="col" key={index}>
-                                    <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
+                                    <LLMCard 
+                                        id={id} 
+                                        llm={llm} 
+                                        fetchLLMData={fetchLLMData} 
+                                        setSessionData={setSessionData} 
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -89,18 +99,20 @@ export default function SessionPage({ params }) {
                 <div>
                     <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
                         <div className="col-12 col-md-8">
-                            <PreviousTestsCard id={id} />
+                            <PreviousTestsCard 
+                                id={id} 
+                            />
                         </div>
                     </div>
                     <div className="row row justify-content-center">
                         <div className="col-12 col-md-8">
-                            <QnAForm sessionData={sessionData} />
+                            <QnAForm 
+                                sessionData={sessionData} 
+                            />
                         </div>
                     </div>
                 </div>
             </QuestionsContextProvider>
-
         </div>
-
     );
 }
