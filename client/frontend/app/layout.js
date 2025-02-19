@@ -22,30 +22,6 @@ export default function RootLayout({ children }) {
     }
   };
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = {
-      title: formData.get('title'),
-      description: formData.get('description'),
-    };
-
-    const JSONData = JSON.stringify(data);
-
-    try {
-      await fetch('http://localhost:8000/session_list/', {
-        method: 'POST',
-        headers: { "Content-type": "application/json" },
-        body: JSONData,
-      });
-
-      fetchSessions();
-      event.target.reset();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
-
   const deleteSession = async(id)=>{
     let data = {
       id: id
@@ -72,7 +48,7 @@ export default function RootLayout({ children }) {
           <title>ArtificialQI</title>
         </header>
         <main>
-          <Navbar sessions={sessions} onFormSubmit={onSubmit}/>
+          <Navbar sessions={sessions} fetchSessions={fetchSessions}/>
           <SessionContext.Provider value={{sessions, deleteSession}}>{children}</SessionContext.Provider>
         </main>
       </body>
