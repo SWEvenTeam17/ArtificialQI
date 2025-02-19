@@ -1,11 +1,38 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Navbar({ sessions, fetchSessions }) {
+    const [formErrors, setFormErrors] = useState({});
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+
+    const validateForm = () => {
+        const errors = {};
+
+        if(!title) {
+            errors.title = "Il titolo è obbligatorio.";
+        }
+
+        if(!description) {
+            errors.description = "La descrizione è obbligatoria.";
+        }
+
+        return errors;
+    };
 
     const onSubmit = async (event) => {
         event.preventDefault();
+
+        const errors = validateForm();
+        if(Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
+        setFormErrors({});
+
         const formData = new FormData(event.target);
         const data = {
             title: formData.get('title'),
@@ -49,7 +76,7 @@ export default function Navbar({ sessions, fetchSessions }) {
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
-                        <AccordionForm onSubmit={onSubmit} />
+                        <AccordionForm {...{onSubmit, formErrors, title, setTitle, description, setDescription}}/>
                         <div className="mt-4">
                             <ul className="list-group">
                                 {sessions.map((session, index) => (
@@ -79,7 +106,7 @@ function NavbarSessionElement({ session }) {
         </Link>);
 }
 
-function AccordionForm({ onSubmit }) {
+function AccordionForm({ onSubmit, formErrors, title, setTitle, description, setDescription }) {
     return (
         <div className="accordion" id="formAccordion">
             <div className="accordion-item">
@@ -94,12 +121,30 @@ function AccordionForm({ onSubmit }) {
                             <div className="mt-3">
                                 <form onSubmit={onSubmit}>
                                     <div className="form-floating mb-3">
-                                        <input type="text" className="form-control rounded-5" id="title" name="title" placeholder="Titolo" />
+                                        <input
+                                            type="text"
+                                            className={`form-control rounded-5 ${formErrors.title ? "is-invalid" : ""}`}
+                                            id="title"
+                                            name="title"
+                                            placeholder="Titolo"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                        />
                                         <label htmlFor="title">Titolo</label>
+                                        {formErrors.title && <div className="invalid-feedback">{formErrors.title}</div>}
                                     </div>
                                     <div className="form-floating mb-3">
-                                        <input type="text" className="form-control rounded-5" id="description" name="description" placeholder="Descrizione" />
+                                        <input
+                                            type="text"
+                                            className={`form-control rounded-5 ${formErrors.description ? "is-invalid" : ""}`}
+                                            id="description"
+                                            name="description"
+                                            placeholder="Descrizione"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
                                         <label htmlFor="description">Descrizione</label>
+                                        {formErrors.description && <div className="invalid-feedback">{formErrors.description}</div>}
                                     </div>
                                     <div className="text-center align-items-center col-12">
                                         <button type="submit" className="btn btn-primary w-50 rounded-5">Crea</button>
