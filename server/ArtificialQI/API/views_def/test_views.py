@@ -5,7 +5,7 @@ from rest_framework import status
 import json
 from API.models import Session, Evaluation, Prompt
 from API.serializers import PromptSerializer, EvaluationSerializer
-from API.classes.LLMController import LLMController
+from server.ArtificialQI.API.classes.llm_controller import LLMController
 
 
 @csrf_exempt
@@ -68,11 +68,11 @@ def evaluate(llms, data):  #fa le valutazioni
         question = prompt_instance.prompt_text
         for llm in llms:
             llmObj = LLMController(llm.name)
-            output = llmObj.getAnswer(question)
-            semantic_evaluation = LLMController.getSemanticEvaluation(
+            output = llmObj.get_answer(question)
+            semantic_evaluation = LLMController.get_semantic_evaluation(
                 x["expected_answer"], output
             )
-            external_evaluation = LLMController.getExternalEvaluation(
+            external_evaluation = LLMController.get_external_evaluation(
                 "google", x["expected_answer"], output
             )
             Evaluation(
