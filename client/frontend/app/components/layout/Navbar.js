@@ -2,7 +2,31 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function Navbar({ sessions, onFormSubmit }) {
+export default function Navbar({ sessions, fetchSessions }) {
+
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            title: formData.get('title'),
+            description: formData.get('description'),
+        };
+    
+        const JSONData = JSON.stringify(data);
+    
+        try {
+            await fetch('http://localhost:8000/session_list/', {
+                method: 'POST',
+                headers: { "Content-type": "application/json" },
+                body: JSONData,
+            });
+        
+            fetchSessions();
+            event.target.reset();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
 
     return (
         <nav className="navbar bg-body-tertiary">
@@ -25,7 +49,7 @@ export default function Navbar({ sessions, onFormSubmit }) {
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
-                        <AccordionForm onSubmit={onFormSubmit} />
+                        <AccordionForm onSubmit={onSubmit} />
                         <div className="mt-4">
                             <ul className="list-group">
                                 {sessions.map((session, index) => (
