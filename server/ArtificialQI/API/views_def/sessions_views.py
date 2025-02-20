@@ -1,8 +1,11 @@
+"""
+File contenente le viste relative alla gestione delle sessioni
+"""
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from API.models import LLM, Session, Prompt, Answer, Evaluation
+from API.models import LLM, Session, Prompt
 from API.serializers import (
     LLMSerializer,
     SessionSerializer,
@@ -13,21 +16,28 @@ from API.serializers import (
 # Sessions
 @api_view(["GET", "POST"])
 def session_list(request):
+    """"
+    Vista che restituisce la lista delle sessioni
+    oppure ne crea una nuova
+    """
     if request.method == "GET":
         sessions = Session.objects.all()
         serializer = SessionSerializer(sessions, many=True)
         return Response(serializer.data)
-    elif request.method == "POST":
+    if request.method == "POST":
         data = request.data
         serializer = SessionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 @api_view(["GET", "PUT", "DELETE"])
 def session_detail(request, pk):
+    """
+    Vista che restituisce i dettagli di una sessione
+    oppure ne modifica/cancella una
+    """
     try:
         session = Session.objects.get(pk=pk)
     except Session.DoesNotExist:
@@ -36,20 +46,22 @@ def session_detail(request, pk):
     if request.method == "GET":
         serializer = SessionSerializer(session)
         return Response(serializer.data)
-    elif request.method == "PUT":
+    if request.method == "PUT":
         data = request.data
         serializer = SessionSerializer(session, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
+    if request.method == "DELETE":
         session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 @api_view(["POST"])
 def add_llm_session(request):
+    """
+    Vista che crea un nuovo collegamento tra LLM e sessione
+    """
     try:
         session = Session.objects.get(id=request.data.get("sessionId"))
         llm = LLM.objects.get(id=request.data.get("llmId"))
@@ -64,12 +76,11 @@ def add_llm_session(request):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(["GET"])
 def get_llm_session(request, pk):
+    """
+    Vista che ritorna tutti i LLM connessi ad una sessione
+    """
     try:
         result = LLM.objects.exclude(session__id=pk).all()
         serializer = LLMSerializer(result, many=True)
@@ -81,12 +92,11 @@ def get_llm_session(request, pk):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(["DELETE"])
 def delete_llm_session(request, session_id, llm_id):
+    """
+    Vista che elimina una connessione tra LLM e sessione
+    """
     try:
         session = Session.objects.get(id=session_id)
         llm = LLM.objects.get(id=llm_id)
@@ -98,19 +108,19 @@ def delete_llm_session(request, session_id, llm_id):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
 @api_view(["GET","DELETE"])
 def get_previous_tests(request, pk):
+    """
+    Vista che restituisce i test precedenti relativi ad una sessione
+    oppure ne elimina uno
+    """
     if request.method == "GET":
         session = Session.objects.get(id=pk)
         previous_prompts = Prompt.objects.filter(session=session)
         serializer = PromptSerializer(previous_prompts, many=True)
         return Response(serializer.data)
-    elif request.method == "DELETE":
+    if request.method == "DELETE":
         target = Prompt.objects.get(id=request.data.get("previousPromptId"))
         target.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
+    return Response(status=status.HTTP_400_BAD_REQUEST)
