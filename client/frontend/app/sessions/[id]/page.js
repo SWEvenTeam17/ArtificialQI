@@ -13,20 +13,11 @@ export default function SessionPage({ params }) {
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
-    useEffect(() => {
-        fetchSessionData();
-    }, []);
-
-    useEffect(() => {
-        fetchLLMData();
-    }, []);
-
     const fetchSessionData = async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
             setSessionData(data);
-        }
-        else {
+        } else {
             fetch(`http://localhost:8000/session_list/${id}`)
                 .then((response) => response.json())
                 .then((data) => setSessionData(data))
@@ -47,7 +38,12 @@ export default function SessionPage({ params }) {
                 console.error("Error fetching LLM data:", error);
                 setLLMData([]);
             });
-    }
+    };
+
+    useEffect(() => {
+        fetchSessionData();
+        fetchLLMData();
+    }, [id]);
 
     if (sessionData === null) {
         return (
@@ -98,6 +94,5 @@ export default function SessionPage({ params }) {
             </QuestionsContextProvider>
 
         </div>
-
     );
 }

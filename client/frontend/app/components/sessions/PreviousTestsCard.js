@@ -1,20 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuestionsContext } from '../contexts/QuestionsContext';
 import { getCSRFToken } from '@/app/helpers/csrf';
 
 const PreviousTestsCard = ({ id }) => {
     const [previousTests, setPreviousTests] = useState([]);
     const { selectedQuestions, setSelectedQuestions, addQuestion, removeQuestion } = useQuestionsContext();
-
-    useEffect(() => {
-        fetchPreviousTests();
-    }, []);
-
-    const fetchPreviousTests = async () => {
+    const fetchPreviousTests = useCallback(async () => {
         let response = await fetch(`http://localhost:8000/previous_tests/${id}/`);
         let data = await response.json();
         setPreviousTests(data);
-    };
+    },[id]);
+
+    useEffect(() => {
+        fetchPreviousTests();
+    }, [fetchPreviousTests]);
 
     const deletePreviousTest = async (testId) => {
         let response = await fetch(`http://localhost:8000/previous_tests/${testId}/`, {
