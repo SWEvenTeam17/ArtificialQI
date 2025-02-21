@@ -12,7 +12,7 @@ from API.serializers import (
     PromptSerializer
 )
 
-@csrf_exempt
+
 # Sessions
 @api_view(["GET", "POST"])
 def session_list(request):

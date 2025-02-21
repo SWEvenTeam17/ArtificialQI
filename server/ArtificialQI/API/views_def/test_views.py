@@ -10,7 +10,7 @@ from API.models import Session, Evaluation, Prompt
 from API.serializers import PromptSerializer
 from API.classes.llm_controller import LLMController
 
-@csrf_exempt
+
 @api_view(["POST"])
 def runtest(request):
     """

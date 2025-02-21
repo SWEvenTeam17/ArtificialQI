@@ -9,7 +9,7 @@ from rest_framework import status
 from API.models import Answer
 from API.serializers import AnswerSerializer
 
-@csrf_exempt
+
 @api_view(['GET', 'POST'])
 def answer_list(request):
     """

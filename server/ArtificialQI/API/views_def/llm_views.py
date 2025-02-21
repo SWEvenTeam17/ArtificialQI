@@ -8,7 +8,7 @@ from rest_framework import status
 from API.models import LLM
 from API.serializers import LLMSerializer
 
-@csrf_exempt
+
 #LLM
 @api_view(['GET', 'POST'])
 def llm_list(request):

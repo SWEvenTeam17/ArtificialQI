@@ -8,7 +8,7 @@ from rest_framework import status
 from API.models import Prompt, Session
 from API.serializers import PromptSerializer
 
-@csrf_exempt
+
 @api_view(['GET', 'POST'])
 def prompt_list(request):
     """
