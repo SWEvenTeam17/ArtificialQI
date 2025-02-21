@@ -1,3 +1,4 @@
+import { getCSRFToken } from "@/app/helpers/csrf";
 import Form from "next/form";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
             await fetch(`http://localhost:8000/llm_list/`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json", "X-CSRFToken": getCSRFToken()
                 },
                 body: JSONData,
             });

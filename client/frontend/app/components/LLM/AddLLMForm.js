@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Form from 'next/form';
+import { getCSRFToken } from '@/app/helpers/csrf';
 
 const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
     // State to track if LLMData is empty
@@ -26,7 +27,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
             const response = await fetch("http://localhost:8000/llm_add/", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json", 'X-CSRFToken': getCSRFToken()
                 },
                 body: JSONData
             });

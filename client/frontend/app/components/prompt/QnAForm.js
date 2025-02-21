@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useResponse } from "../contexts/ResponseContext";
 import { useQuestionsContext } from '../contexts/QuestionsContext';
 import Form from "next/form";
+import { getCSRFToken } from "@/app/helpers/csrf";
 
 const QnAForm = ({ sessionData }) => {
     const router = useRouter();
@@ -58,6 +59,7 @@ const QnAForm = ({ sessionData }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
                 },
                 body: JSON.stringify({
                     data: formatted,

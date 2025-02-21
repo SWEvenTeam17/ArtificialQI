@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuestionsContext } from '../contexts/QuestionsContext';
+import { getCSRFToken } from '@/app/helpers/csrf';
 
 const PreviousTestsCard = ({ id }) => {
     const [previousTests, setPreviousTests] = useState([]);
@@ -21,6 +22,7 @@ const PreviousTestsCard = ({ id }) => {
             body: JSON.stringify({ "previousPromptId": testId }),
             headers: {
                 "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken()
             },
         });
         if (response.status === 204) {
