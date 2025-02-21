@@ -46,9 +46,9 @@ const CreateLLMForm = ({ fetchLLMList }) => {
                 },
                 body: JSONData,
             });
-
             fetchLLMList();
-            e.target.reset();
+            setName('');
+            setParameters('');
         } catch (error) {
             console.error("Error submitting form:", error);
         }

@@ -35,7 +35,7 @@ export default function ManageLLM() {
                     <h2 className="card-title text-center mb-4">
                         LLM collegati ad ArtificialQI
                     </h2>
-                    <div className="row row-cols-lg-3 g-2 row-cols-1">
+                    <div className="row row-cols-lg-12 g-2 row-cols-1">
                         {LLMList.length > 0 ? (
                             LLMList.map((llm) => (
                                 <div className="col" key={llm.id}>
@@ -43,7 +43,7 @@ export default function ManageLLM() {
                                 </div>
                             ))
                         ) : (
-                            <p>Nessun LLM disponibile</p>
+                            <p className="text-center">Nessun LLM disponibile</p>
                         )}
                     </div>
                 </div>
