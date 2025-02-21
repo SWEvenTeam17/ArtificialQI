@@ -35,58 +35,64 @@ const PreviousTestsCard = ({ id }) => {
     };
 
     return (
-        <div className='card border-light shadow-lg rounded-4 mb-5'>
-            <div className='card-body'>
-                <h5 className="card-title text-center text-primary font-weight-bold">Test precedenti</h5>
-                <ul className='list-group list-group-flush'>
-                    {previousTests && previousTests.map((pTest) => (
-                        <a href="#" key={pTest.id} className="list-group-item list-group-item-action rounded-3">
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1">{pTest.prompt_text}</h5>
-                            </div>
-                            <p className="mb-1">{pTest.expected_answer}</p>
-                            <div className='row row-cols-1 row-cols-md-2'>
-                                <div className='col'>
-                                    {isSelected(pTest.id) ? (
-                                        <button
-                                            className='btn btn-outline-success rounded-5 w-100'
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                removeQuestion(pTest.id);
-                                            }}
-                                        >
-                                            Rimuovi
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className='btn btn-success rounded-5 w-100'
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                addQuestion(pTest.id);
-                                            }}
-                                        >
-                                            Seleziona
-                                        </button>
-                                    )}
-                                </div>
-                                <div className='col'>
-                                    <button
-                                        className='btn btn-danger rounded-5 w-100'
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            deletePreviousTest(pTest.id);
-                                        }}
-                                    >
-                                        Elimina
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    ))}
-                </ul>
+        previousTests.length > 0 ? (
+            <div className="row row justify-content-center" style={{ minHeight: '220px' }}>
+                <div className="col-12 col-md-8">
+                    <div className='card border-light shadow-lg rounded-4 mb-5'>
+                        <div className='card-body'>
+                            <h5 className="card-title text-center text-primary font-weight-bold">Test precedenti</h5>
+                            <ul className='list-group list-group-flush'>
+                                {previousTests.map((pTest) => (
+                                    <a href="#" key={pTest.id} className="list-group-item list-group-item-action rounded-3">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1">{pTest.prompt_text}</h5>
+                                        </div>
+                                        <p className="mb-1">{pTest.expected_answer}</p>
+                                        <div className='row row-cols-1 row-cols-md-2'>
+                                            <div className='col'>
+                                                {isSelected(pTest.id) ? (
+                                                    <button
+                                                        className='btn btn-outline-success rounded-5 w-100'
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            removeQuestion(pTest.id);
+                                                        }}
+                                                    >
+                                                        Rimuovi
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className='btn btn-success rounded-5 w-100'
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            addQuestion(pTest.id);
+                                                        }}
+                                                    >
+                                                        Seleziona
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <div className='col'>
+                                                <button
+                                                    className='btn btn-danger rounded-5 w-100'
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        deletePreviousTest(pTest.id);
+                                                    }}
+                                                >
+                                                    Elimina
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </a>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        ) : (null)
     );
-}
+};
 
 export default PreviousTestsCard;
