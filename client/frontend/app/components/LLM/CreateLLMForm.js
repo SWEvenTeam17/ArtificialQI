@@ -40,7 +40,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
         const JSONData = JSON.stringify(data);
 
         try {
-            await fetch(`http://localhost:8000/llm_list/`, {
+            await fetch(`http://backend:8000/llm_list/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json", "X-CSRFToken": getCSRFToken()

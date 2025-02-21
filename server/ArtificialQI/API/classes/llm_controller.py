@@ -15,7 +15,7 @@ class LLMController:
     La classe gestisce attivamente l'interrogazione e la valutazione degli LLM.
     """
     def __init__(self, llm_name):
-        base_url = "http://localhost:11434"
+        base_url = "http://ollama:11434"
         self.llm = OllamaLLM(model=llm_name, base_url=base_url)
     def get_answer(self, prompt:str):
         """
