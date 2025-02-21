@@ -2,7 +2,7 @@
 File che contiene le viste relative alla gestione dei test.
 """
 
-from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,7 +10,7 @@ from API.models import Session, Evaluation, Prompt
 from API.serializers import PromptSerializer
 from API.classes.llm_controller import LLMController
 
-@csrf_exempt
+
 @api_view(["POST"])
 def runtest(request):
     """

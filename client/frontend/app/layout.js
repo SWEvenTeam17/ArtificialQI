@@ -4,6 +4,7 @@ import { SessionContext } from './components/contexts/SessionContext';
 import Script from 'next/script';
 import Navbar from './components/layout/Navbar';
 import './bootstrap.css';
+import { getCSRFToken } from './helpers/csrf';
 
 export default function RootLayout({ children }) {
   const [sessions, setSessions] = useState([]);
@@ -30,7 +31,7 @@ export default function RootLayout({ children }) {
     try{
       await fetch(`http://localhost:8000/session_list/${id}/`,{
         method: 'DELETE',
-        headers: {"Content-type": "application/josn"},
+        headers: {"Content-type": "application/josn", "X-CSRFToken": getCSRFToken()},
         body: JSONData
       });
       fetchSessions();

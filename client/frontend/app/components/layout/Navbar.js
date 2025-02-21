@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { getCSRFToken } from '@/app/helpers/csrf';
 
 export default function Navbar({ sessions, fetchSessions }) {
     const [formErrors, setFormErrors] = useState({});
@@ -44,7 +45,7 @@ export default function Navbar({ sessions, fetchSessions }) {
         try {
             await fetch('http://localhost:8000/session_list/', {
                 method: 'POST',
-                headers: { "Content-type": "application/json" },
+                headers: { "Content-type": "application/json", 'X-CSRFToken': getCSRFToken() },
                 body: JSONData,
             });
         

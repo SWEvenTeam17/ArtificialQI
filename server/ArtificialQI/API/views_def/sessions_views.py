@@ -1,7 +1,7 @@
 """
 File contenente le viste relative alla gestione delle sessioni
 """
-from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,7 +12,7 @@ from API.serializers import (
     PromptSerializer
 )
 
-@csrf_exempt
+
 # Sessions
 @api_view(["GET", "POST"])
 def session_list(request):

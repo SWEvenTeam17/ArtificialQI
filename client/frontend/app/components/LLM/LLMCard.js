@@ -1,4 +1,5 @@
 'use client'
+import { getCSRFToken } from '@/app/helpers/csrf';
 import delteIcon from '/public/images/icon.png';
 import Image from 'next/image';
 
@@ -7,6 +8,7 @@ const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
     const deleteLLM = async (llmId) => {
         const response = await fetch(`http://localhost:8000/llm_delete/${id}/${llmId}`, {
             method: 'DELETE',
+            headers:{"X-CSRFToken":getCSRFToken()}
         });
         if (!response.ok) {
             throw new Error(response.statusText);

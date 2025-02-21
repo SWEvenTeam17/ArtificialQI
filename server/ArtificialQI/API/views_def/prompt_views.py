@@ -1,14 +1,14 @@
 """
 File che contiene le viste relative ai prompt.
 """
-from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from API.models import Prompt, Session
 from API.serializers import PromptSerializer
 
-@csrf_exempt
+
 @api_view(['GET', 'POST'])
 def prompt_list(request):
     """

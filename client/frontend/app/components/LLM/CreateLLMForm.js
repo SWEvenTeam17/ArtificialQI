@@ -1,3 +1,4 @@
+import { getCSRFToken } from "@/app/helpers/csrf";
 import Form from "next/form";
 import { useState } from "react";
 
@@ -39,16 +40,16 @@ const CreateLLMForm = ({ fetchLLMList }) => {
         const JSONData = JSON.stringify(data);
 
         try {
-            const response = await fetch(`http://localhost:8000/llm_list/`, {
+            await fetch(`http://localhost:8000/llm_list/`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json", "X-CSRFToken": getCSRFToken()
                 },
                 body: JSONData,
             });
-
             fetchLLMList();
-            e.target.reset();
+            setName('');
+            setParameters('');
         } catch (error) {
             console.error("Error submitting form:", error);
         }

@@ -1,4 +1,5 @@
 'use client'
+import { getCSRFToken } from '@/app/helpers/csrf';
 import delteIcon from '/public/images/icon.png';
 import Image from 'next/image';
 
@@ -13,7 +14,7 @@ const GeneralLLMCard = ({ llm, fetchLLMList }) => {
         try {
             await fetch(`http://localhost:8000/llm_list/${id}/`, {
                 method: 'DELETE',
-                headers: { "Content-type": "application/json" },
+                headers: { "Content-type": "application/json", "X-CSRFToken": getCSRFToken() },
                 body: JSONData
             });
             fetchLLMList();
