@@ -37,8 +37,8 @@ export default function ManageLLM() {
                     </h2>
                     <div className="row row-cols-lg-3 g-2 row-cols-1">
                         {LLMList.length > 0 ? (
-                            LLMList.map((llm, index) => (
-                                <div className="col" key={index}>
+                            LLMList.map((llm) => (
+                                <div className="col" key={llm.id}>
                                     <GeneralLLMCard llm={llm} fetchLLMList={fetchLLMList} />
                                 </div>
                             ))

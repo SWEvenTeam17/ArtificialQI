@@ -72,8 +72,8 @@ export default function SessionPage({ params }) {
                     </div>
                     {sessionData.llm.length > 0 ? (
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5 mt-5" style={{ height: '170px' }}>
-                            {sessionData.llm.map((llm, index) => (
-                                <div className="col" key={index}>
+                            {sessionData.llm.map((llm) => (
+                                <div className="col" key={llm.id}>
                                     <LLMCard id={id} llm={llm} fetchLLMData={fetchLLMData} setSessionData={setSessionData} />
                                 </div>
                             ))}
