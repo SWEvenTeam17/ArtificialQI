@@ -39,7 +39,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
         const JSONData = JSON.stringify(data);
 
         try {
-            const response = await fetch(`http://localhost:8000/llm_list/`, {
+            await fetch(`http://localhost:8000/llm_list/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
