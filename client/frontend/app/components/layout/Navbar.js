@@ -62,13 +62,13 @@ export default function Navbar({ sessions, fetchSessions }) {
                 <button className="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <a className="navbar-brand" href="/">ArtificialQI</a>
+                <Link className="navbar-brand" href="/">ArtificialQI</Link>
                 <ul className="navbar-nav flex-row me-auto mb-2 mb-lg-0">
                     <li className="nav-item me-3">
-                        <a className="nav-link" href="/">Home</a>
+                        <Link className="nav-link" href="/">Home</Link>
                     </li>
                     <li className="nav-item me-3">
-                        <a className="nav-link" href="/manage-llm">Gestisci LLM</a>
+                        <Link className="nav-link" href="/manage-llm">Gestisci LLM</Link>
                     </li>
                 </ul>
                 <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">

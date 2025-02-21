@@ -1,5 +1,5 @@
 'use client'
-import { use, useState, useEffect, useContext } from "react";
+import { use, useState, useEffect, useContext, useCallback } from "react";
 import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
@@ -13,20 +13,11 @@ export default function SessionPage({ params }) {
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
-    useEffect(() => {
-        fetchSessionData();
-    }, []);
-
-    useEffect(() => {
-        fetchLLMData();
-    }, []);
-
-    const fetchSessionData = async () => {
+    const fetchSessionData = useCallback(async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
             setSessionData(data);
-        }
-        else {
+        } else {
             fetch(`http://localhost:8000/session_list/${id}`)
                 .then((response) => response.json())
                 .then((data) => setSessionData(data))
@@ -35,9 +26,9 @@ export default function SessionPage({ params }) {
                     setSessionData(null);
                 });
         }
-    };
+    }, [sessions, id]);
 
-    const fetchLLMData = async () => {
+    const fetchLLMData = useCallback(async () => {
         fetch(`http://localhost:8000/llm_remaining/${id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -47,7 +38,15 @@ export default function SessionPage({ params }) {
                 console.error("Error fetching LLM data:", error);
                 setLLMData([]);
             });
-    }
+    }, [id]);
+
+    useEffect(() => {
+        fetchSessionData();
+    }, [fetchSessionData]);
+
+    useEffect(() => {
+        fetchLLMData();
+    }, [fetchLLMData]);
 
     if (sessionData === null) {
         return (
@@ -98,6 +97,5 @@ export default function SessionPage({ params }) {
             </QuestionsContextProvider>
 
         </div>
-
     );
 }
