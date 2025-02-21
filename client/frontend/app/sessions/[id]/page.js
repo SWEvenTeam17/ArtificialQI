@@ -1,5 +1,5 @@
 'use client'
-import { use, useState, useEffect, useContext, useCallback } from "react";
+import { use, useState, useEffect, useContext } from "react";
 import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
@@ -13,7 +13,7 @@ export default function SessionPage({ params }) {
     const [sessionData, setSessionData] = useState(null);
     const [LLMData, setLLMData] = useState(null);
 
-    const fetchSessionData = useCallback(async () => {
+    const fetchSessionData = async () => {
         let data = sessions.find((data) => data.id == id);
         if (data) {
             setSessionData(data);
@@ -26,9 +26,9 @@ export default function SessionPage({ params }) {
                     setSessionData(null);
                 });
         }
-    }, [sessions, id]);
+    };
 
-    const fetchLLMData = useCallback(async () => {
+    const fetchLLMData = async () => {
         fetch(`http://localhost:8000/llm_remaining/${id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -38,15 +38,12 @@ export default function SessionPage({ params }) {
                 console.error("Error fetching LLM data:", error);
                 setLLMData([]);
             });
-    }, [id]);
+    };
 
     useEffect(() => {
         fetchSessionData();
-    }, [fetchSessionData]);
-
-    useEffect(() => {
         fetchLLMData();
-    }, [fetchLLMData]);
+    }, [id]);
 
     if (sessionData === null) {
         return (
