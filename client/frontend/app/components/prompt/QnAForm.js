@@ -15,11 +15,8 @@ const QnAForm = ({ sessionData }) => {
     const validateForm = () => {
         const errors = {};
 
-        if (!question) {
+        if (selectedQuestions.length == 0 && (!question || !answer)) {
             errors.question = "La domanda è obbligatoria.";
-        }
-
-        if (!answer) {
             errors.answer = "La risposta attesa è obbligatoria.";
         }
 
@@ -45,16 +42,17 @@ const QnAForm = ({ sessionData }) => {
             var formatted = [];
             selectedQuestions.forEach(element => {
                 formatted.push({
-                        "id":element.id,
-                        "prompt_text": element.prompt_text,
-                        "expected_answer": element.expected_answer
-                    })
+                    "id": element.id,
+                    "prompt_text": element.prompt_text,
+                    "expected_answer": element.expected_answer
+                })
             });
-            formatted.push({
-                "prompt_text": question,
-                "expected_answer": answer
-            })
-            console.log(formatted);
+            if (question !== '' && answer !== '') {
+                formatted.push({
+                    "prompt_text": question,
+                    "expected_answer": answer
+                })
+            }
 
             const response = await fetch("http://localhost:8000/runtest", {
                 method: "POST",
