@@ -79,8 +79,8 @@ export default function Navbar({ sessions, fetchSessions }) {
                         <AccordionForm {...{onSubmit, formErrors, title, setTitle, description, setDescription}}/>
                         <div className="mt-4">
                             <ul className="list-group">
-                                {sessions.map((session, index) => (
-                                    <NavbarSessionElement session={session} key={index}></NavbarSessionElement>
+                                {sessions.map((session) => (
+                                    <NavbarSessionElement session={session} key={session.id}></NavbarSessionElement>
                                 ))}
                             </ul>
                         </div>

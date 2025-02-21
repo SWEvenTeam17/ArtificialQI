@@ -52,8 +52,8 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
                 <option value="">
                     {isLLMDataEmpty ? "Nessun LLM disponibile" : "Seleziona un LLM..."}
                 </option>
-                {!isLLMDataEmpty && LLMData.map((llm, index) => (
-                    <option key={index} value={llm.id}>{llm.name}</option>
+                {!isLLMDataEmpty && LLMData.map((llm) => (
+                    <option key={llm.id} value={llm.id}>{llm.name}</option>
                 ))}
             </select>
             <button className="btn btn-primary rounded-5 w-100" type="submit" disabled={isLLMDataEmpty}>
