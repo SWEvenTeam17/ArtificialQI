@@ -2,6 +2,7 @@
 File che contiene la definizione della logica della classe LLMController
 """
 import os
+import re
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from sentence_transformers import SentenceTransformer
@@ -32,9 +33,16 @@ class LLMController:
         Funzione che ritorna la valutazione semantica di una risposta
         di un LLM
         """
+        # Pulisce input e output rendendo tutto in minuscolo e togliendo l'ultimo punto nella stringa
+        clean_expected = re.sub(r"\.$", "", expected_answer.lower())
+        clean_llm_answer = re.sub(r"\.$", "", llm_answer.lower())
+        
+        # Controlla se la risposta aspettata è già contenuta nella risposta effettiva
+        if clean_expected in clean_llm_answer:
+            return 100
         model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-        expected_embedding = model.encode(expected_answer)
-        llm_answer_embedding = model.encode(llm_answer)
+        expected_embedding = model.encode(clean_expected)
+        llm_answer_embedding = model.encode(clean_llm_answer)
         similarities = model.similarity(expected_embedding, llm_answer_embedding)
         approximated = round(similarities[0][0].item() * 100, 2)
         return approximated
@@ -63,7 +71,10 @@ class LLMController:
                 output = next(stream)
                 for chunk in stream:
                     output += chunk
-                return output.content
+                match = re.search(r"\d+(\.\d+)?", output.content)
+                if match:
+                    return match.group(0)
+                return "Percentage not found."
             print("API key not found.")
             return "API key not found."
         return "Unsupported provider"
