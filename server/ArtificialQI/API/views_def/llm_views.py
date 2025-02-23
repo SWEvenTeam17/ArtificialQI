@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from API.models import LLM
+import requests
 from API.serializers import LLMSerializer
 
 
@@ -51,3 +52,20 @@ def llm_detail(request, pk):
         llm.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def load_ollama_llms(request):
+    try:
+        url = "http://localhost:11434/api/tags"
+        response = requests.get(url)
+        data = response.json()
+        models = data.get("models", [])
+        for model in models:
+            name = model.get("name")
+            size = model.get("details", {}).get("parameter_size")
+            llm, _ = LLM.objects.get_or_create(name=name)
+            llm.n_parameters = size
+            llm.save()
+        return Response({"message":"LLM models loaded successfully from Ollama server"},status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
