@@ -24,7 +24,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
     const createLLM = async (e) => {
         e.preventDefault();
         const errors = validateForm();
-        if(Object.keys(errors).length > 0) {
+        if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
             return;
         }
@@ -54,6 +54,18 @@ const CreateLLMForm = ({ fetchLLMList }) => {
             console.error("Error submitting form:", error);
         }
     };
+
+    const loadOllamaModels = async(e)=>{
+        e.preventDefault();
+        let response = await fetch(`http://localhost:8000/llm_list/load_ollama/`,{
+            method: "POST",
+            headers:{"X-CSRFToken": getCSRFToken()}
+        });
+        if(response.status === 200)
+        {
+            fetchLLMList();
+        }
+    }
 
     return (
         <div className="mt-5">
@@ -85,13 +97,24 @@ const CreateLLMForm = ({ fetchLLMList }) => {
                     <label htmlFor="description">Numero Parametri</label>
                     {formErrors.n_parameters && <div className="invalid-feedback">{formErrors.n_parameters}</div>}
                 </div>
-                <div className="text-center align-items-center col-12">
-                    <button
-                        type="submit"
-                        className="btn btn-primary w-50 rounded-5"
-                    >
-                        Crea
-                    </button>
+                <div className="row row-cols-1 text-center justify-content-center g-3">
+                    <div className="col-12">
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-50 rounded-5"
+                        >
+                            Crea
+                        </button>
+                    </div>
+                    <div className="col-12">
+                        <button
+                            onClick={(e)=>{loadOllamaModels(e)}}
+                            className="btn btn-outline-success w-50 rounded-5"
+                        >
+                            Carica modelli di Ollama
+                        </button>
+                    </div>
+
                 </div>
             </Form>
         </div>

@@ -11,6 +11,7 @@ urlpatterns=[
     path('answer_list/<int:pk>/', views.answer_detail),
     path('llm_list/', views.llm_list),
     path('llm_list/<int:pk>/', views.llm_detail),
+    path('llm_list/load_ollama/', views.load_ollama_llms),
     path('llm_add/', views.add_llm_session),
     path('llm_remaining/<int:pk>', views.get_llm_session),
     path('llm_delete/<int:session_id>/<int:llm_id>', views.delete_llm_session),
