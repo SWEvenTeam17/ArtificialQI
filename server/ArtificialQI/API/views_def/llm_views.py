@@ -10,8 +10,8 @@ import requests
 from API.serializers import LLMSerializer
 
 
-#LLM
-@api_view(['GET', 'POST'])
+# LLM
+@api_view(["GET", "POST"])
 def llm_list(request):
     """
     Vista che restituisce la lista dei LLM collegati oppure ne crea uno nuovo.
@@ -29,7 +29,8 @@ def llm_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+
+@api_view(["GET", "PUT", "DELETE"])
 def llm_detail(request, pk):
     """
     Vista che ritorna le informazioni su un LLM specifico oppure lo modifica/elimina.
@@ -53,7 +54,8 @@ def llm_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def load_ollama_llms(request):
     try:
         url = "http://localhost:11434/api/tags"
@@ -66,6 +68,9 @@ def load_ollama_llms(request):
             llm, _ = LLM.objects.get_or_create(name=name)
             llm.n_parameters = size
             llm.save()
-        return Response({"message":"LLM models loaded successfully from Ollama server"},status=status.HTTP_200_OK)
+        return Response(
+            {"message": "LLM models loaded successfully from Ollama server"},
+            status=status.HTTP_200_OK,
+        )
     except Exception as e:
-        return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
