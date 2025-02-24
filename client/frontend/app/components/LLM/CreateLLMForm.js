@@ -6,6 +6,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
   const [formErrors, setFormErrors] = useState({});
   const [name, setName] = useState("");
   const [parameters, setParameters] = useState("");
+  const [ollamaError, setOllamaError] = useState("");
 
   const validateForm = () => {
     const errors = {};
@@ -64,6 +65,8 @@ const CreateLLMForm = ({ fetchLLMList }) => {
     });
     if (response.status === 200) {
       fetchLLMList();
+    } else {
+      setOllamaError("Connessione con il server Ollama fallita.");
     }
   };
 
@@ -117,6 +120,9 @@ const CreateLLMForm = ({ fetchLLMList }) => {
               Carica modelli di Ollama
             </button>
           </div>
+          {ollamaError && (
+            <div className="col-12 text-danger mt-2">{ollamaError}</div>
+          )}
         </div>
       </Form>
     </div>
