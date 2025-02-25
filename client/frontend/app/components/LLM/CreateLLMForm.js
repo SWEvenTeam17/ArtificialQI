@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const CreateLLMForm = ({ fetchLLMList }) => {
   const [formErrors, setFormErrors] = useState({});
-  const [conflict, setConflict] = useState(null)
+  const [conflict, setConflict] = useState(null);
   const [name, setName] = useState("");
   const [parameters, setParameters] = useState("");
   const [ollamaError, setOllamaError] = useState("");
