@@ -24,7 +24,13 @@ def runtest(request):
         )
     save_data(data, session)
     llms = session.llm.all()
-    response = evaluate(llms, data)
+    try:
+        response = evaluate(llms, data)
+    except ConnectionError as e:
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
     return Response(response, status=status.HTTP_200_OK)
 def get_data(request):
     """

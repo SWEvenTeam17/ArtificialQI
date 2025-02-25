@@ -3,6 +3,8 @@ File che contiene la definizione della logica della classe LLMController
 """
 import os
 import re
+import requests
+from requests.exceptions import RequestException
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from sentence_transformers import SentenceTransformer
@@ -17,6 +19,13 @@ class LLMController:
     """
     def __init__(self, llm_name):
         base_url = "http://localhost:11434"
+        # Controlla se il server Ollama funziona
+        try:
+            response = requests.get(f"{base_url}/api/version", timeout=5)
+            response.raise_for_status()
+        except RequestException as e:
+            raise ConnectionError(f"Errore di connessione al server Ollama: {e}")
+        # Se funziona, crea l'oggetto OllamaLLM
         self.llm = OllamaLLM(model=llm_name, base_url=base_url)
     def get_answer(self, prompt:str):
         """

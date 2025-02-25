@@ -68,6 +68,11 @@ const QnAForm = ({ sessionData }) => {
       });
 
       const data = await response.json();
+      if (response.status === 503) {
+        alert(data.error);
+        router.push("/");
+        return;
+      }
       setResponseData(data);
       router.push(`/sessions/${sessionData.id}/results`);
     } catch (error) {
