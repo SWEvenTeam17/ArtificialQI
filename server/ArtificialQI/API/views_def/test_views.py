@@ -2,7 +2,6 @@
 File che contiene le viste relative alla gestione dei test.
 """
 
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -24,8 +23,20 @@ def runtest(request):
         )
     save_data(data, session)
     llms = session.llm.all()
-    response = evaluate(llms, data)
+    try:
+        response = evaluate(llms, data)
+    except (ConnectionError, FileNotFoundError) as e:
+        if isinstance(e, ConnectionError):
+            return Response(
+                {"error": str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        elif isinstance(e, FileNotFoundError):
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     return Response(response, status=status.HTTP_200_OK)
+
+
 def get_data(request):
     """
     Funzione che ritorna i dati necessari all'esecuzione
@@ -33,6 +44,8 @@ def get_data(request):
     """
     session = Session.objects.get(id=request.data.get("sessionId"))
     return get_formatted(request), session
+
+
 def get_formatted(request):
     """
     Funzione che formatta i dati in maniera corretta per l'esecuzione
@@ -41,26 +54,34 @@ def get_formatted(request):
     data = request.data.get("data")
     ret = []
     for x in data:
-        if 'id' in x and x['id'] is not None:
+        if "id" in x and x["id"] is not None:
             ret.append(
-                {"id": x["id"], "prompt_text": x["prompt_text"],
-                "expected_answer": x["expected_answer"]}
+                {
+                    "id": x["id"],
+                    "prompt_text": x["prompt_text"],
+                    "expected_answer": x["expected_answer"],
+                }
             )
         else:
             ret.append(
-                {"prompt_text": x["prompt_text"], "expected_answer": x["expected_answer"]}
+                {
+                    "prompt_text": x["prompt_text"],
+                    "expected_answer": x["expected_answer"],
+                }
             )
     return ret
+
+
 def save_data(data, session):
     """
     Funzione che salva i prompt in database
     """
     for x in data:
-        if 'id' not in x:
+        if "id" not in x:
             save = {
                 "prompt_text": x["prompt_text"],
                 "expected_answer": x["expected_answer"],
-                "session":session.id
+                "session": session.id,
             }
             serializer = PromptSerializer(data=save)
             if serializer.is_valid():
@@ -69,6 +90,8 @@ def save_data(data, session):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return None
+
+
 def evaluate(llms, data):
     """
     Funzione che valuta le risposte dei LLM

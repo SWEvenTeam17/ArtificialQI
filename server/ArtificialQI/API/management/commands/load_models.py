@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 import requests
 from API.models import LLM
 
+
 class Command(BaseCommand):
-    help = 'Load models from an external API'
+    help = "Load models from an external API"
 
     def handle(self, *args, **kwargs):
         url = "http://localhost:11434/api/tags"
@@ -16,4 +17,3 @@ class Command(BaseCommand):
             llm, created = LLM.objects.get_or_create(name=name)
             llm.n_parameters = size
             llm.save()
-

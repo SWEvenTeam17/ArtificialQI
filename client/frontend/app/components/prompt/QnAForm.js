@@ -11,6 +11,7 @@ const QnAForm = ({ sessionData }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [formErrors, setFormErrors] = useState({});
+  const [serverError, setServerError] = useState(null);
   const { setResponseData } = useResponse();
   const { selectedQuestions, setSelectedQuestions } = useQuestionsContext();
   const validateForm = () => {
@@ -68,8 +69,12 @@ const QnAForm = ({ sessionData }) => {
       });
 
       const data = await response.json();
-      setResponseData(data);
-      router.push(`/sessions/${sessionData.id}/results`);
+      if (response.status === 503 || response.status === 500) {
+        setServerError(data.error);
+      } else {
+        setResponseData(data);
+        router.push(`/sessions/${sessionData.id}/results`);
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -80,7 +85,13 @@ const QnAForm = ({ sessionData }) => {
   return (
     <div className="card border-light rounded-5 w-md-75 mx-auto shadow-lg p-4 mb-5">
       <h3 className="card-title mb-4 text-center">Avvia un test</h3>
-
+      <div className="text-center">
+        {serverError && (
+          <div className="alert alert-danger rounded-5" role="alert">
+            {serverError}
+          </div>
+        )}
+      </div>
       <Form onSubmit={handleSubmit}>
         <div className="form-floating mb-4">
           <input

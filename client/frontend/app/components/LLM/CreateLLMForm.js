@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const CreateLLMForm = ({ fetchLLMList }) => {
   const [formErrors, setFormErrors] = useState({});
+  const [conflict, setConflict] = useState(null);
   const [name, setName] = useState("");
   const [parameters, setParameters] = useState("");
   const [ollamaError, setOllamaError] = useState("");
@@ -41,7 +42,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
     const JSONData = JSON.stringify(data);
 
     try {
-      await fetch(`http://localhost:8000/llm_list/`, {
+      const response = await fetch(`http://localhost:8000/llm_list/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,6 +50,12 @@ const CreateLLMForm = ({ fetchLLMList }) => {
         },
         body: JSONData,
       });
+
+      const responseData = await response.json();
+      if (response.status === 409) {
+        setConflict(responseData.error);
+      }
+
       fetchLLMList();
       setName("");
       setParameters("");
@@ -72,6 +79,13 @@ const CreateLLMForm = ({ fetchLLMList }) => {
 
   return (
     <div className="mt-5">
+      <div>
+        {conflict && (
+          <div className="alert alert-danger rounded-5" role="alert">
+            {conflict}
+          </div>
+        )}
+      </div>
       <Form className="mt-5" onSubmit={createLLM}>
         <p className="text-center fs-5">Crea un LLM:</p>
         <div className="form-floating mb-3">
