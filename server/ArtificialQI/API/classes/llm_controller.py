@@ -1,6 +1,7 @@
 """
 File che contiene la definizione della logica della classe LLMController
 """
+
 import os
 import re
 import requests
@@ -10,6 +11,7 @@ from langchain_ollama import OllamaLLM
 from sentence_transformers import SentenceTransformer
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+
 class LLMController:
     """
     Classe che gestisce tutte le operazioni che un LLM può fare.
@@ -17,6 +19,7 @@ class LLMController:
     due attributi (url server Ollama e istanza di un oggetto di tipo OllamaLLM).
     La classe gestisce attivamente l'interrogazione e la valutazione degli LLM.
     """
+
     def __init__(self, llm_name):
         base_url = "http://localhost:11434"
         # Controlla se il server Ollama funziona
@@ -27,7 +30,8 @@ class LLMController:
             raise ConnectionError(f"Errore di connessione al server Ollama: {e}")
         # Se funziona, crea l'oggetto OllamaLLM
         self.llm = OllamaLLM(model=llm_name, base_url=base_url)
-    def get_answer(self, prompt:str):
+
+    def get_answer(self, prompt: str):
         """
         Funzione che interroga un LLM
         """
@@ -36,6 +40,7 @@ class LLMController:
         for chunk in stream:
             output += chunk
         return output
+
     @staticmethod
     def get_semantic_evaluation(expected_answer, llm_answer):
         """
@@ -45,7 +50,7 @@ class LLMController:
         # Pulisce input e output rendendo tutto in minuscolo e togliendo l'ultimo punto nella stringa
         clean_expected = re.sub(r"\.$", "", expected_answer.lower())
         clean_llm_answer = re.sub(r"\.$", "", llm_answer.lower())
-        
+
         # Controlla se la risposta aspettata è già contenuta nella risposta effettiva
         if clean_expected in clean_llm_answer:
             return 100
@@ -55,6 +60,7 @@ class LLMController:
         similarities = model.similarity(expected_embedding, llm_answer_embedding)
         approximated = round(similarities[0][0].item() * 100, 2)
         return approximated
+
     @staticmethod
     def get_external_evaluation(llm_provider, expected_answer, llm_answer):
         """
@@ -64,10 +70,14 @@ class LLMController:
         if llm_provider == "google":
             envcheck = load_dotenv()
             if not envcheck:
-                raise FileNotFoundError("Il file .env non è presente nella cartella server\\ArtificialQI")
-            key = os.getenv('GEMINI_API_KEY')
+                raise FileNotFoundError(
+                    "Il file .env non è presente nella cartella server\\ArtificialQI"
+                )
+            key = os.getenv("GEMINI_API_KEY")
             if key != "":
-                llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=key)
+                llm = ChatGoogleGenerativeAI(
+                    model="gemini-2.0-flash", google_api_key=key
+                )
                 prompt = f"""
                 You are an AI evaluator. Your task is to compare two answers. 
                 The first answer is the 'expected answer', and the second answer is the 'LLM answer'.

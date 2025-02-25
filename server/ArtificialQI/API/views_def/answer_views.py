@@ -2,6 +2,7 @@
 File che contiene tutte le viste relative
 alla gestione delle risposte dei LLM
 """
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,10 +10,10 @@ from API.models import Answer
 from API.serializers import AnswerSerializer
 
 
-@api_view(['GET', 'POST'])
+@api_view(["GET", "POST"])
 def answer_list(request):
     """
-    Funzione che ritorna la lista delle risposte 
+    Funzione che ritorna la lista delle risposte
     oppure ne crea una nuova
     """
     if request.method == "GET":
@@ -27,7 +28,9 @@ def answer_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['GET', 'DELETE'])
+
+
+@api_view(["GET", "DELETE"])
 def answer_detail(request, pk):
     """
     Funzione che ritorna le informazioni su una risposta

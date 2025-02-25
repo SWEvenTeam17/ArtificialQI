@@ -6,17 +6,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from API.models import LLM, Session, Prompt
-from API.serializers import (
-    LLMSerializer,
-    SessionSerializer,
-    PromptSerializer
-)
+from API.serializers import LLMSerializer, SessionSerializer, PromptSerializer
 
 
 # Sessions
 @api_view(["GET", "POST"])
 def session_list(request):
-    """"
+    """ "
     Vista che restituisce la lista delle sessioni
     oppure ne crea una nuova
     """
@@ -32,6 +28,8 @@ def session_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["GET", "PUT", "DELETE"])
 def session_detail(request, pk):
     """
@@ -57,6 +55,8 @@ def session_detail(request, pk):
         session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["POST"])
 def add_llm_session(request):
     """
@@ -76,6 +76,8 @@ def add_llm_session(request):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(["GET"])
 def get_llm_session(request, pk):
     """
@@ -92,6 +94,8 @@ def get_llm_session(request, pk):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(["DELETE"])
 def delete_llm_session(request, session_id, llm_id):
     """
@@ -108,7 +112,9 @@ def delete_llm_session(request, session_id, llm_id):
         )
     except LLM.DoesNotExist:
         return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
-@api_view(["GET","DELETE"])
+
+
+@api_view(["GET", "DELETE"])
 def get_previous_tests(request, pk):
     """
     Vista che restituisce i test precedenti relativi ad una sessione
