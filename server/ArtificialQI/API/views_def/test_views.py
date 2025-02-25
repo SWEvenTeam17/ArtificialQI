@@ -26,11 +26,17 @@ def runtest(request):
     llms = session.llm.all()
     try:
         response = evaluate(llms, data)
-    except ConnectionError as e:
-        return Response(
-            {"error": str(e)},
-            status=status.HTTP_503_SERVICE_UNAVAILABLE
-        )
+    except (ConnectionError, FileNotFoundError) as e:
+        if isinstance(e, ConnectionError):
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        elif isinstance(e, FileNotFoundError):
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     return Response(response, status=status.HTTP_200_OK)
 def get_data(request):
     """

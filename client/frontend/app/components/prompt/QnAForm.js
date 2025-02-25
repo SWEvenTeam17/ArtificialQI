@@ -68,7 +68,7 @@ const QnAForm = ({ sessionData }) => {
       });
 
       const data = await response.json();
-      if (response.status === 503) {
+      if (response.status === 503 || response.status === 500) {
         alert(data.error);
         router.push("/");
         return;

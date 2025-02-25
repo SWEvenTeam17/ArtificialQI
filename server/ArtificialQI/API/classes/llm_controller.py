@@ -62,7 +62,9 @@ class LLMController:
         una risposta data da un LLM
         """
         if llm_provider == "google":
-            load_dotenv()
+            envcheck = load_dotenv()
+            if not envcheck:
+                raise FileNotFoundError("Il file .env non è presente nella cartella server\\ArtificialQI")
             key = os.getenv('GEMINI_API_KEY')
             if key != "":
                 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=key)
