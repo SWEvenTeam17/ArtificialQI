@@ -25,7 +25,7 @@ def llm_list(request):
         # Controlla se esiste già un LLM con lo stesso nome
         if LLM.objects.all().filter(name=data.get("name")).first():
             return Response(
-                {"error": "LLM already exists"}, status=status.HTTP_409_CONFLICT
+                {"error": "Esiste già un LLM con lo stesso nome."}, status=status.HTTP_409_CONFLICT
             )
         serializer = LLMSerializer(data=data)
         if serializer.is_valid():

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const CreateLLMForm = ({ fetchLLMList }) => {
   const [formErrors, setFormErrors] = useState({});
+  const [conflict, setConflict] = useState(null)
   const [name, setName] = useState("");
   const [parameters, setParameters] = useState("");
   const [ollamaError, setOllamaError] = useState("");
@@ -52,7 +53,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
 
       const responseData = await response.json();
       if (response.status === 409) {
-        alert(responseData.error);
+        setConflict(responseData.error);
       }
 
       fetchLLMList();
@@ -78,6 +79,13 @@ const CreateLLMForm = ({ fetchLLMList }) => {
 
   return (
     <div className="mt-5">
+      <div>
+        {conflict && (
+          <div className="alert alert-danger rounded-5" role="alert">
+            {conflict}
+          </div>
+        )}
+      </div>
       <Form className="mt-5" onSubmit={createLLM}>
         <p className="text-center fs-5">Crea un LLM:</p>
         <div className="form-floating mb-3">

@@ -3,6 +3,7 @@ import Form from "next/form";
 import { getCSRFToken } from "@/app/helpers/csrf";
 
 const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
+  const [limit, setLimit] = useState(null);
   // State to track if LLMData is empty
   const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(
     !LLMData || LLMData.length === 0,
@@ -17,7 +18,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
     e.preventDefault();
 
     if (sessionData.llm.length >= 3) {
-      alert("Solo fino a 3 LLM possono essere aggiunti!");
+      setLimit("Solo un massimo di 3 LLM è ammesso.");
     } else {
       const formData = new FormData(e.target);
       const data = {
@@ -45,6 +46,13 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
 
   return (
     <Form onSubmit={submitLLM}>
+      <div>
+        {limit && (
+          <div className="alert alert-danger rounded-5" role="alert">
+            {limit}
+          </div>
+        )}
+      </div>
       <select
         className="form-select mt-4 mb-4 rounded-5 text-center"
         name="selectllm"
