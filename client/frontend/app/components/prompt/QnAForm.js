@@ -127,7 +127,7 @@ const QnAForm = ({ sessionData }) => {
 
         <div className="text-center">
           {formErrors.llm && (
-            <div className="alert alert-danger">{formErrors.llm}</div>
+            <div className="alert alert-danger rounded-5">{formErrors.llm}</div>
           )}
 
           <button

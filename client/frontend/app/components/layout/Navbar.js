@@ -32,6 +32,12 @@ export default function Navbar({ sessions, fetchSessions }) {
       return;
     }
 
+    const isDuplicate = sessions.some((session) => session.title === title);
+    if (isDuplicate) {
+      setFormErrors({ title: "Esiste già una sessione con questo titolo." });
+      return;
+    }
+
     setFormErrors({});
 
     const formData = new FormData(event.target);
@@ -54,6 +60,8 @@ export default function Navbar({ sessions, fetchSessions }) {
 
       fetchSessions();
       event.target.reset();
+      setTitle("");
+      setDescription("");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
