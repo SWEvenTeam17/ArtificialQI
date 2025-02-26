@@ -1,9 +1,6 @@
-'use client'
-import { ResponseProvider } from './../../components/contexts/ResponseContext';
+"use client";
+import { ResponseProvider } from "./../../components/contexts/ResponseContext";
 
-export default function SessionLayout({children})
-{
-    return (
-        <ResponseProvider>{children}</ResponseProvider>
-    )
+export default function SessionLayout({ children }) {
+  return <ResponseProvider>{children}</ResponseProvider>;
 }
