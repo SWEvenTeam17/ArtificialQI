@@ -63,7 +63,7 @@ def llm_detail(request, pk):
 @api_view(["POST"])
 def load_ollama_llms(request):
     try:
-        url = "http://localhost:11434/api/tags"
+        url = "http://ollama:11434/api/tags"
         response = requests.get(url)
         data = response.json()
         models = data.get("models", [])

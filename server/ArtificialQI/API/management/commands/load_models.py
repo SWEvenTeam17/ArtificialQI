@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = "Load models from an external API"
 
     def handle(self, *args, **kwargs):
-        url = "http://localhost:11434/api/tags"
+        url = "http://ollama:11434/api/tags"
         response = requests.get(url)
         data = response.json()
         models = data.get("models", [])
