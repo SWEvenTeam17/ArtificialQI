@@ -18,7 +18,7 @@ export default function SessionPage({ params }) {
     if (data) {
       setSessionData(data);
     } else {
-      fetch(`http://localhost:8000/session_list/${id}`)
+      fetch(`http://backend:8000/session_list/${id}`)
         .then((response) => response.json())
         .then((data) => setSessionData(data))
         .catch((error) => {
@@ -29,7 +29,7 @@ export default function SessionPage({ params }) {
   }, [id, sessions]);
 
   const fetchLLMData = useCallback(async () => {
-    fetch(`http://localhost:8000/llm_remaining/${id}`)
+    fetch(`http://backend:8000/llm_remaining/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setLLMData(Array.isArray(data) ? data : []);

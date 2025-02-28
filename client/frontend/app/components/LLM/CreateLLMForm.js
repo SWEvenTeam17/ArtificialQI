@@ -42,7 +42,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
     const JSONData = JSON.stringify(data);
 
     try {
-      const response = await fetch(`http://localhost:8000/llm_list/`, {
+      const response = await fetch(`http://backend:8000/llm_list/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
 
   const loadOllamaModels = async (e) => {
     e.preventDefault();
-    let response = await fetch(`http://localhost:8000/llm_list/load_ollama/`, {
+    let response = await fetch(`http://backend:8000/llm_list/load_ollama/`, {
       method: "POST",
       headers: { "X-CSRFToken": getCSRFToken() },
     });
