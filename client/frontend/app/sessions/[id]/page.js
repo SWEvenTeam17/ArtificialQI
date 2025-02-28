@@ -27,7 +27,7 @@ export default function SessionPage({ params }) {
   }, [id]);
 
   const fetchLLMData = useCallback(async () => {
-    fetch(`http://localhost:8000/llm_remaining/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_remaining/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setLLMData(Array.isArray(data) ? data : []);

@@ -55,7 +55,6 @@ const QnAForm = ({ sessionData }) => {
           expected_answer: answer,
         });
       }
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`, {
         method: "POST",
         headers: {
