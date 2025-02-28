@@ -27,7 +27,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
       };
       const JSONData = JSON.stringify(data);
 
-      const response = await fetch("http://localhost:8000/llm_add/", {
+      const response = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_add/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

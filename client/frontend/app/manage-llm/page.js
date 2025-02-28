@@ -12,7 +12,7 @@ export default function ManageLLM() {
 
   const fetchLLMList = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/llm_list/`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`);
       const data = await response.json();
       setLLMList(data);
     } catch (error) {

@@ -10,7 +10,7 @@ const GeneralLLMCard = ({ llm, fetchLLMList }) => {
     };
     const JSONData = JSON.stringify(data);
     try {
-      await fetch(`http://localhost:8000/llm_list/${id}/`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/${id}/`, {
         method: "DELETE",
         headers: {
           "Content-type": "application/json",
