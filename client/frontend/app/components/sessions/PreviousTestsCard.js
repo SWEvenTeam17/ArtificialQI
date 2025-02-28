@@ -11,7 +11,7 @@ const PreviousTestsCard = ({ id }) => {
     removeQuestion,
   } = useQuestionsContext();
   const fetchPreviousTests = useCallback(async () => {
-    let response = await fetch(`http://backend:8000/previous_tests/${id}/`);
+    let response = await fetch(`http://localhost:8000/previous_tests/${id}/`);
     let data = await response.json();
     setPreviousTests(data);
   }, [id]);
@@ -22,7 +22,7 @@ const PreviousTestsCard = ({ id }) => {
 
   const deletePreviousTest = async (testId) => {
     let response = await fetch(
-      `http://backend:8000/previous_tests/${testId}/`,
+      `http://localhost:8000/previous_tests/${testId}/`,
       {
         method: "DELETE",
         body: JSON.stringify({ previousPromptId: testId }),

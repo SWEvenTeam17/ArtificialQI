@@ -6,7 +6,7 @@ import Image from "next/image";
 const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
   const deleteLLM = async (llmId) => {
     const response = await fetch(
-      `http://backend:8000/llm_delete/${id}/${llmId}`,
+      `http://localhost:8000/llm_delete/${id}/${llmId}`,
       {
         method: "DELETE",
         headers: { "X-CSRFToken": getCSRFToken() },

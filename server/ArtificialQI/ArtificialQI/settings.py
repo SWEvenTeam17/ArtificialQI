@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'backend',
-    'backend:8000'
+    'localhost'
 ]
 
 
