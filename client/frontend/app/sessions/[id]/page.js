@@ -14,19 +14,17 @@ export default function SessionPage({ params }) {
   const [LLMData, setLLMData] = useState(null);
 
   const fetchSessionData = useCallback(async () => {
-    let data = sessions.find((data) => data.id == id);
-    if (data) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`, {
+        cache: "no-store",
+      });
+      const data = await response.json();
       setSessionData(data);
-    } else {
-      fetch(`http://localhost:8000/session_list/${id}`)
-        .then((response) => response.json())
-        .then((data) => setSessionData(data))
-        .catch((error) => {
-          console.error("Error fetching session data:", error);
-          setSessionData(null);
-        });
+    } catch (error) {
+      console.error("Error fetching session data:", error);
+      setSessionData(null);
     }
-  }, [id, sessions]);
+  }, [id]);
 
   const fetchLLMData = useCallback(async () => {
     fetch(`http://localhost:8000/llm_remaining/${id}`)
