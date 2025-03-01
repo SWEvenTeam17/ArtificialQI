@@ -56,7 +56,7 @@ const QnAForm = ({ sessionData }) => {
         });
       }
 
-      const response = await fetch("${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
