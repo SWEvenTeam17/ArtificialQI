@@ -8,7 +8,8 @@ from rest_framework import status
 from API.models import LLM
 import requests
 from API.serializers import LLMSerializer
-
+import os
+from dotenv import load_dotenv
 
 # LLM
 @api_view(["GET", "POST"])
@@ -63,7 +64,8 @@ def llm_detail(request, pk):
 @api_view(["POST"])
 def load_ollama_llms(request):
     try:
-        url = "http://ollama:11434/api/tags"
+        load_dotenv()
+        url = os.getenv("OLLAMA_URL")+"/api/tags"
         response = requests.get(url)
         data = response.json()
         models = data.get("models", [])

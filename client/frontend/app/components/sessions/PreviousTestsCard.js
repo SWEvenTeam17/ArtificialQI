@@ -56,7 +56,7 @@ const PreviousTestsCard = ({ id }) => {
             </h5>
             <ul className="list-group list-group-flush">
               {previousTests.map((pTest) => (
-                <a
+                <div
                   href="#"
                   key={pTest.id}
                   className="list-group-item list-group-item-action rounded-3"
@@ -101,7 +101,7 @@ const PreviousTestsCard = ({ id }) => {
                       </button>
                     </div>
                   </div>
-                </a>
+                </div>
               ))}
             </ul>
           </div>
