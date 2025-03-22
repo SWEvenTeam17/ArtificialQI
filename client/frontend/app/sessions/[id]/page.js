@@ -15,7 +15,7 @@ export default function SessionPage({ params }) {
 
   const fetchSessionData = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`, {
+      const response = await fetch(`http://localhost:8000/session_list/${id}`, {
         cache: "no-store",
       });
       const data = await response.json();
