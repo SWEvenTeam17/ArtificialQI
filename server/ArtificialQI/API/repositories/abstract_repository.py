@@ -20,3 +20,7 @@ class AbstractRepository(ABC):
     def delete(id: int)->bool:
         """Eliminare una istanza esistente"""
         pass
+
+    @abstractmethod
+    def update(id: int):
+        pass

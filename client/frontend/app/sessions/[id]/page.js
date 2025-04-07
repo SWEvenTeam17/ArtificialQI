@@ -15,11 +15,7 @@ export default function SessionPage({ params }) {
 
   const fetchSessionData = useCallback(async () => {
     try {
-<<<<<<< HEAD
-      const response = await fetch(`http://localhost:8000/session_list/${id}`, {
-=======
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`, {
->>>>>>> 99d777b (Fix su cache della pagina)
         cache: "no-store",
       });
       const data = await response.json();
@@ -29,11 +25,6 @@ export default function SessionPage({ params }) {
       setSessionData(null);
     }
   }, [id]);
-<<<<<<< HEAD
-=======
-  
->>>>>>> 99d777b (Fix su cache della pagina)
-
   const fetchLLMData = useCallback(async () => {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_remaining/${id}`)
       .then((response) => response.json())

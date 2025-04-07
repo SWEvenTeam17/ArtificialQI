@@ -17,8 +17,8 @@ def answer_list(request):
     if request.method == "GET":
         return Response(AnswerRepository.get_all(), status=status.HTTP_200_OK)
     if request.method == "POST":
-        status, data = AnswerRepository.create(request.data)
-        if status:
+        result, data = AnswerRepository.create(request.data)
+        if result:
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
     return Response(data, status=status.HTTP_400_BAD_REQUEST)
@@ -31,7 +31,7 @@ def answer_detail(request, pk):
     oppure ne cancella una
     """
     if request.method == "GET":
-        data = AnswerRepository.get_by_id(id=pk)
+        data = AnswerRepository.get_by_id(id=pk).data
         if data != None:
             return Response(data)
         return Response(status=status.HTTP_404_NOT_FOUND)

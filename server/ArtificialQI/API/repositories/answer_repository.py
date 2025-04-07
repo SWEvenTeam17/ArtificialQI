@@ -13,7 +13,7 @@ class AnswerRepository(AbstractRepository):
     def get_by_id(id: int):
         try:
             answer = Answer.objects.get(pk=id)
-            return AnswerSerializer(answer).data
+            return AnswerSerializer(answer)
         except Answer.DoesNotExist:
             return None
         
@@ -26,8 +26,7 @@ class AnswerRepository(AbstractRepository):
     
     def delete(id: int)->bool:
         try:
-            answer = Answer.objects.get(pk=id)
-            answer.delete()
+            Answer.objects.get(pk=id).delete()
             return True
         except Answer.DoesNotExist:
             return False
