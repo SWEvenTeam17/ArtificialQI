@@ -21,7 +21,8 @@ class LLMController:
     """
 
     def __init__(self, llm_name):
-        base_url = "http://ollama:11434"
+        load_dotenv()
+        base_url = os.getenv("OLLAMA_URL")
         # Controlla se il server Ollama funziona
         try:
             response = requests.get(f"{base_url}/api/version", timeout=5)

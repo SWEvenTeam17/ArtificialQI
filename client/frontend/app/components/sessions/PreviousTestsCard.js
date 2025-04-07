@@ -11,7 +11,7 @@ const PreviousTestsCard = ({ id }) => {
     removeQuestion,
   } = useQuestionsContext();
   const fetchPreviousTests = useCallback(async () => {
-    let response = await fetch(`http://localhost:8000/previous_tests/${id}/`);
+    let response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`);
     let data = await response.json();
     setPreviousTests(data);
   }, [id]);
@@ -22,7 +22,7 @@ const PreviousTestsCard = ({ id }) => {
 
   const deletePreviousTest = async (testId) => {
     let response = await fetch(
-      `http://localhost:8000/previous_tests/${testId}/`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${testId}/`,
       {
         method: "DELETE",
         body: JSON.stringify({ previousPromptId: testId }),
@@ -56,7 +56,7 @@ const PreviousTestsCard = ({ id }) => {
             </h5>
             <ul className="list-group list-group-flush">
               {previousTests.map((pTest) => (
-                <a
+                <div
                   href="#"
                   key={pTest.id}
                   className="list-group-item list-group-item-action rounded-3"
@@ -101,7 +101,7 @@ const PreviousTestsCard = ({ id }) => {
                       </button>
                     </div>
                   </div>
-                </a>
+                </div>
               ))}
             </ul>
           </div>

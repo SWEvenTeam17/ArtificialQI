@@ -49,7 +49,7 @@ export default function Navbar({ sessions, fetchSessions }) {
     const JSONData = JSON.stringify(data);
 
     try {
-      await fetch("http://localhost:8000/session_list/", {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
