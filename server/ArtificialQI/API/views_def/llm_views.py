@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from API.models import LLM
+from API.repositories import LLMRepository
 import requests
 from API.serializers import LLMSerializer
 import os
@@ -18,21 +19,14 @@ def llm_list(request):
     Vista che restituisce la lista dei LLM collegati oppure ne crea uno nuovo.
     """
     if request.method == "GET":
-        llm_all = LLM.objects.all()
-        serializer = LLMSerializer(llm_all, many=True)
-        return Response(serializer.data)
+        return Response(LLMRepository.get_all(), status=status.HTTP_200_OK)
     if request.method == "POST":
-        data = request.data
-        # Controlla se esiste già un LLM con lo stesso nome
-        if LLM.objects.all().filter(name=data.get("name")).first():
+        status, instance = LLMRepository.create(data=request.data)
+        if status == False:
             return Response(
                 {"error": "Esiste già un LLM con lo stesso nome."}, status=status.HTTP_409_CONFLICT
             )
-        serializer = LLMSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(instance, status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 

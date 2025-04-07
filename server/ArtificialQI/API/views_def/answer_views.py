@@ -6,9 +6,7 @@ alla gestione delle risposte dei LLM
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from API.models import Answer
-from API.serializers import AnswerSerializer
-
+from API.repositories import AnswerRepository
 
 @api_view(["GET", "POST"])
 def answer_list(request):
@@ -17,17 +15,13 @@ def answer_list(request):
     oppure ne crea una nuova
     """
     if request.method == "GET":
-        answer_texts = Answer.objects.all()
-        serializer = AnswerSerializer(answer_texts, many=True)
-        return Response(serializer.data)
+        return Response(AnswerRepository.get_all(), status=status.HTTP_200_OK)
     if request.method == "POST":
-        data = request.data
-        serializer = AnswerSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        status, data = AnswerRepository.create(request.data)
+        if status:
+            return Response(data, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
+    return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET", "DELETE"])
@@ -36,14 +30,13 @@ def answer_detail(request, pk):
     Funzione che ritorna le informazioni su una risposta
     oppure ne cancella una
     """
-    try:
-        answer = Answer.objects.get(pk=pk)
-    except Answer.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "GET":
-        serializer = AnswerSerializer(answer)
-        return Response(serializer.data)
+        data = AnswerRepository.get_by_id(id=pk)
+        if data != None:
+            return Response(data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "DELETE":
-        answer.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if AnswerRepository.delete(id=pk):
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
