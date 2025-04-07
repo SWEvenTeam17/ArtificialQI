@@ -8,8 +8,7 @@ se necessario.
 """
 
 from rest_framework import serializers
-from API.models import Prompt, LLM, Answer, Session, Evaluation
-
+from API.models import Prompt, LLM, Answer, Session, Evaluation, Test
 
 class LLMSerializer(serializers.ModelSerializer):
     """
@@ -71,3 +70,13 @@ class PromptSerializer(serializers.ModelSerializer):
             "session",
             "evaluation_set",
         ]
+
+class TestSerializer(serializers.ModelSerializer):
+    session = SessionSerializer(read_only=True)
+    prompt = PromptSerializer(read_only=True)
+    llm = LLMSerializer(read_only=True)
+    evaluation = EvaluationSerializer(read_only=True)
+
+    class Meta:
+        model = Test
+        fields = '__all__'
