@@ -15,7 +15,7 @@ export default function SessionPage({ params }) {
 
   const fetchSessionData = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`, {
+      const response = await fetch(`http://localhost:8000/session_list/${id}`, {
         cache: "no-store",
       });
       const data = await response.json();
@@ -25,10 +25,9 @@ export default function SessionPage({ params }) {
       setSessionData(null);
     }
   }, [id]);
-  
 
   const fetchLLMData = useCallback(async () => {
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_remaining/${id}`)
+    fetch(`http://localhost:8000/llm_remaining/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setLLMData(Array.isArray(data) ? data : []);
