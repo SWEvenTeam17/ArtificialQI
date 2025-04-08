@@ -1,2 +1,3 @@
 from .answer_repository import AnswerRepository
 from .llm_repository import LLMRepository
+from .abstract_repository import AbstractRepository

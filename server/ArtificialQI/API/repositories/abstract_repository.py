@@ -22,5 +22,5 @@ class AbstractRepository(ABC):
         pass
 
     @abstractmethod
-    def update(id: int):
+    def update(id: int, data)->bool:
         pass

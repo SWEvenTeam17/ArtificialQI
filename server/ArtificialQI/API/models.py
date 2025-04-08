@@ -42,6 +42,15 @@ class Answer(models.Model):
     LLM_answer = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+class Evaluation(models.Model):
+    """
+    Modello che rappresenta una valutazione data da ArtificialQI
+    ad una determinata risposta di un determinato modello.
+    """
+    prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
+    semantic_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
+    external_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
+
 class Test(models.Model):
     """
     Modello che rappresenta un test richiesto da un utente.
@@ -51,12 +60,3 @@ class Test(models.Model):
     llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
-class Evaluation(models.Model):
-    """
-    Modello che rappresenta una valutazione data da ArtificialQI
-    ad una determinata risposta di un determinato modello.
-    """
-    prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
-    semantic_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
-    external_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
