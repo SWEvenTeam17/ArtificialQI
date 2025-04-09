@@ -9,7 +9,7 @@ class LLM(models.Model):
     """
     Modello che rappresenta un LLM collegato ad ArtificialQI
     """
-    name = models.TextField()
+    name = models.TextField(unique=True)
     n_parameters = models.TextField(default="")
     # session = models.ForeignKey(Session, on_delete=models.CASCADE)
 

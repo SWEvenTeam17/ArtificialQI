@@ -9,10 +9,12 @@ class AbstractRepository(ABC):
     serializer_class = Type[Serializer]
 
     @classmethod
+    @abstractmethod
     def get_all(cls):
-        return cls.serializer_class(cls.model_class.objects.all(), many=True).data
+        return cls.serializer_class(cls.model_class.objects.all(), many=True)
     
     @classmethod
+    @abstractmethod
     def get_by_id(cls, id: int):
         try:
             instance = cls.model_class.objects.get(pk=id)
@@ -20,7 +22,8 @@ class AbstractRepository(ABC):
         except cls.model_class.DoesNotExist:
             return None
     
-    @classmethod   
+    @classmethod
+    @abstractmethod   
     def create(cls, data):
         serializer = cls.serializer_class(data=data)
         if serializer.is_valid():
@@ -29,6 +32,7 @@ class AbstractRepository(ABC):
         return False, serializer.errors
 
     @classmethod
+    @abstractmethod
     def delete(cls, id: int)->bool:
         try:
             cls.model_class.objects.get(pk=id).delete()
@@ -36,7 +40,8 @@ class AbstractRepository(ABC):
         except cls.model_class.DoesNotExist:
             return False
         
-    @classmethod    
+    @classmethod
+    @abstractmethod    
     def update(cls, id: int, data):
         serializer = cls.serializer_class(cls.model_class.objects.get(pk=id),data=data)
         if serializer.is_valid():

@@ -15,7 +15,7 @@ def answer_list(request):
     oppure ne crea una nuova
     """
     if request.method == "GET":
-        return Response(AnswerRepository.get_all(), status=status.HTTP_200_OK)
+        return Response(AnswerRepository.get_all().data, status=status.HTTP_200_OK)
     if request.method == "POST":
         result, data = AnswerRepository.create(request.data)
         if result:
