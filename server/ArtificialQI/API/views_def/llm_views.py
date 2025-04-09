@@ -16,7 +16,7 @@ def llm_list(request):
     Vista che restituisce la lista dei LLM collegati oppure ne crea uno nuovo.
     """
     if request.method == "GET":
-        return Response(LLMRepository.get_all())
+        return Response(LLMRepository.get_all().data)
     if request.method == "POST":
         result, instance = LLMRepository.create(data=request.data)
         if result == False:

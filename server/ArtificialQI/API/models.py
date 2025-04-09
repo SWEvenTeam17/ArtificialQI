@@ -9,7 +9,7 @@ class LLM(models.Model):
     """
     Modello che rappresenta un LLM collegato ad ArtificialQI
     """
-    name = models.TextField(unique=True)
+    name = models.CharField(max_length=255, unique=True)
     n_parameters = models.TextField(default="")
     # session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
@@ -18,7 +18,7 @@ class Session(models.Model):
     Modello che rappresenta una sessione creata in ArtificialQI,
     una sessione è un insieme di massimo 3 modelli collegati e utilizzati a scopi di benchmark.
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     description = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
