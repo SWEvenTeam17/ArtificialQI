@@ -2,7 +2,7 @@ import os, requests
 from rest_framework.response import Response
 from rest_framework import status
 from dotenv import load_dotenv
-from API.services import AbstractService
+from .abstract_service import AbstractService
 from API.repositories import LLMRepository
 
 class LLMService(AbstractService):
