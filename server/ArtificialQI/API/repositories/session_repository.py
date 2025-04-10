@@ -3,5 +3,4 @@ from API.serializers import SessionSerializer
 from .abstract_repository import AbstractRepository
 
 class SessionRepository(AbstractRepository):
-    model_class = Session
-    serializer_class = SessionSerializer
+    model = Session

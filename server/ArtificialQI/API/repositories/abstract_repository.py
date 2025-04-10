@@ -1,52 +1,42 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from django.db import models
-from rest_framework.serializers import Serializer
-from typing import Type
+from typing import ClassVar
 
 class AbstractRepository(ABC):
 
-    model_class = Type[models.Model]
-    serializer_class = Type[Serializer]
+    model: ClassVar[models.Model]
 
     @classmethod
-    @abstractmethod
     def get_all(cls):
-        return cls.serializer_class(cls.model_class.objects.all(), many=True)
+        return cls.model.objects.all()
     
     @classmethod
-    @abstractmethod
     def get_by_id(cls, id: int):
         try:
-            instance = cls.model_class.objects.get(pk=id)
-            return cls.serializer_class(instance)
-        except cls.model_class.DoesNotExist:
+            return cls.model.objects.get(pk=id)
+        except cls.model.DoesNotExist:
             return None
     
     @classmethod
-    @abstractmethod   
-    def create(cls, data):
-        serializer = cls.serializer_class(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return True, serializer.data
-        return False, serializer.errors
+    def create(cls, data: dict):
+        return cls.model.objects.create(**data)
 
     @classmethod
-    @abstractmethod
     def delete(cls, id: int)->bool:
-        try:
-            cls.model_class.objects.get(pk=id).delete()
+        instance = cls.get_by_id(id)
+        if instance:
+            instance.delete()
             return True
-        except cls.model_class.DoesNotExist:
-            return False
+        return False
         
     @classmethod
-    @abstractmethod    
-    def update(cls, id: int, data):
-        serializer = cls.serializer_class(cls.model_class.objects.get(pk=id),data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return True, serializer.data
-        return False, serializer.errors
+    def update(cls, id: int, data: dict):
+        instance = cls.get_by_id(id)
+        if instance is None:
+            return None
+        for key, value in data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
 
 

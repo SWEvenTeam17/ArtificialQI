@@ -5,7 +5,6 @@ File che contiene le viste relative ai LLM.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from API.models import LLM
 from API.repositories import LLMRepository
 from API.services import LLMService
 
