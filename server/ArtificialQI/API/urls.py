@@ -1,9 +1,10 @@
 from django.urls import path
 from API import views
+from .views_def.sessions_view import SessionsView
 
 urlpatterns = [
-    path("session_list/", views.session_list),
-    path("session_list/<int:pk>/", views.session_detail),
+    path("session_list/", SessionsView.as_view()),
+    path("session_list/<int:pk>/", SessionsView.as_view()),
     path("previous_tests/<int:pk>/", views.get_previous_tests),
     path("prompt_list/", views.prompt_list),
     path("prompt_list/<int:pk>/", views.prompt_detail),
