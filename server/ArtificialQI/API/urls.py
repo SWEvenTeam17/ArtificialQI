@@ -4,6 +4,7 @@ from .views_def.sessions_view import SessionsView
 from .views_def.prompt_view import PromptView
 from .views_def.llm_view import LLMView, OllamaView
 from .views_def.answer_view import AnswerView
+from .views_def.session_llm_view import SessionLLMView
 
 urlpatterns = [
     path("session_list/", SessionsView.as_view()),
@@ -16,8 +17,8 @@ urlpatterns = [
     path("llm_list/", LLMView.as_view()),
     path("llm_list/<int:pk>/", LLMView.as_view()),
     path("llm_list/load_ollama/", OllamaView.as_view()),
-    path("llm_add/", views.add_llm_session),
-    path("llm_remaining/<int:pk>", views.get_llm_session),
-    path("llm_delete/<int:session_id>/<int:llm_id>", views.delete_llm_session),
+    path("llm_add/", SessionLLMView.as_view()),
+    path("llm_remaining/<int:pk>", SessionLLMView.as_view()),
+    path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
     path("runtest", views.runtest),
 ]
