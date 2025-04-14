@@ -12,6 +12,10 @@ class AbstractService(ABC):
     @classmethod
     def read(cls, id: int):
         return cls.repository.get_by_id(id=id)
+    
+    @classmethod
+    def read_all(cls):
+        return cls.repository.get_all()
 
     @classmethod
     def update(cls, id: int, data: dict):
