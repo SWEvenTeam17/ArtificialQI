@@ -10,12 +10,10 @@ class SessionLLMView(AbstractView):
 
     def get(self, request, pk: int):
         try:
-            print(f"Fetching LLM for session_id: {pk}")
             result = self.service.get_llm(session_id=pk)
             serializer = self.serializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            print(f"Error: {e}")
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
