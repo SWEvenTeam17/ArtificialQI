@@ -15,13 +15,9 @@ class LLMService(AbstractService):
         return requests.get(url).json().get("models", [])
 
     @classmethod
-    def sync_ollama_llms(cls):
+    def sync_ollama_llms(cls)->None:
         models = LLMService.fetch_ollama_models()
         for model in models:
             name = model.get("name")
             size = model.get("details", {}).get("parameter_size")
             cls.repository.update_or_create(name=name, parameters=size)
-        return Response(
-            {"message": "LLM models loaded successfully from Ollama server"},
-            status=status.HTTP_200_OK,
-        )
