@@ -1,5 +1,5 @@
 from .abstract_service import AbstractService
-from API.repositories import AnswerRepository
+from API.repositories import PromptRepository
 
 class PromptService(AbstractService):
-    repository = AnswerRepository
+    repository = PromptRepository

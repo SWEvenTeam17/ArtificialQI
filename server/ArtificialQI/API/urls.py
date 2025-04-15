@@ -21,5 +21,5 @@ urlpatterns = [
     path("llm_add/", SessionLLMView.as_view()),
     path("llm_remaining/<int:pk>", SessionLLMView.as_view()),
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
-    path("runtest", views.runtest),
+    path("runtest", TestView.as_view()),
 ]
