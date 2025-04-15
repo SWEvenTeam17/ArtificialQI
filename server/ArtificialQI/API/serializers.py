@@ -49,7 +49,7 @@ class EvaluationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Evaluation
-        fields = ["llm", "prompt", "semantic_evaluation", "external_evaluation"]
+        fields = ["prompt", "semantic_evaluation", "external_evaluation"]
 
 
 class PromptSerializer(serializers.ModelSerializer):

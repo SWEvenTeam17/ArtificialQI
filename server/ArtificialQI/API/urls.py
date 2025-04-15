@@ -6,11 +6,12 @@ from .views_def.llm_view import LLMView, OllamaView
 from .views_def.answer_view import AnswerView
 from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
+from .views_def.prev_test_view import PrevTestView
 
 urlpatterns = [
     path("session_list/", SessionsView.as_view()),
     path("session_list/<int:pk>/", SessionsView.as_view()),
-    path("previous_tests/<int:pk>/", TestView.as_view()),
+    path("previous_tests/<int:pk>/", PrevTestView.as_view()),
     path("prompt_list/", PromptView.as_view()),
     path("prompt_list/<int:pk>/", PromptView.as_view()),
     path("answer_list/", AnswerView.as_view()),
