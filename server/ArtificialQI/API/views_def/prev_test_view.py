@@ -14,7 +14,6 @@ class PrevTestView(AbstractView):
             serializer = self.serializer(previous_prompts, many=True)
             return Response(serializer.data)
         except Exception as e:
-            print(str(e))
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self, request, pk):
