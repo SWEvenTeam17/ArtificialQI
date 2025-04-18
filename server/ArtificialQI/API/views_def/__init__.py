@@ -4,8 +4,8 @@ per la gestione della logica delle operazioni eseguite
 dal server
 """
 
-from .answer_views import *
-from .llm_views import *
-from .prompt_views import *
-from .sessions_views import *
-from .test_views import *
+from .answer_view import *
+from .llm_view import *
+from .prompt_view import *
+from .sessions_view import *
+from .test_view import *
