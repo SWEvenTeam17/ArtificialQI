@@ -7,14 +7,14 @@ from langchain_ollama import OllamaLLM
 class LLMService:
     
     @staticmethod
-    def get_llm(name: str)->OllamaLLM | ConnectionError:
+    def get_llm(name: str)->OllamaLLM | None:
         load_dotenv()
         try:
             response = requests.get(f"{os.getenv("OLLAMA_URL")}/api/version", timeout=5)
             response.raise_for_status()
             return OllamaLLM(model=name, base_url=os.getenv("OLLAMA_URL"))
-        except RequestException as e:
-            raise ConnectionError(f"Errore di connessione al server Ollama: {e}")
+        except RequestException:
+            return None
     
     @staticmethod
     def interrogate(llm: OllamaLLM, prompt: str)->str:

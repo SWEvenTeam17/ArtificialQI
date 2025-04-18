@@ -14,7 +14,10 @@ class LLMView(APIView):
     def post(self, request):
         llm_name = request.data.get("llm_name")
         prompt = request.data.get("prompt")
-        answer = LLMService.interrogate(llm=LLMService.get_llm(llm_name), prompt=prompt)
+        llm_object = LLMService.get_llm(llm_name)
+        if llm_object == None:
+            return Response({"error":"Connessione con Ollama fallita"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        answer = LLMService.interrogate(llm=llm_object, prompt=prompt)
         return Response({"llm_name":llm_name,"prompt":prompt,"answer":answer})
 
         
