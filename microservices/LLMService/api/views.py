@@ -10,7 +10,11 @@ class LLMView(APIView):
     permission_classes = []
 
     def get(self, request):
-        pass
+        result = LLMService.get_ollama_llms()
+        if result == None:
+            return Response({"error":"Connessione con Ollama fallita"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(result)
+
     def post(self, request):
         llm_name = request.data.get("llm_name")
         prompt = request.data.get("prompt")

@@ -2,7 +2,7 @@ import os, requests
 from requests.exceptions import RequestException
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
-
+from typing import List, Dict, Any
 
 class LLMService:
     
@@ -23,4 +23,13 @@ class LLMService:
         for chunk in stream:
             output += chunk
         return output
-
+    
+    @staticmethod 
+    def get_ollama_llms()->List[Dict[str,Any]]:
+        load_dotenv()
+        url = os.getenv("OLLAMA_URL")+"/api/tags"
+        try:
+            result = requests.get(url).json().get("models", [])   
+            return result
+        except RequestException:
+            return None
