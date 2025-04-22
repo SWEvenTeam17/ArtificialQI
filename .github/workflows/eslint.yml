@@ -36,7 +36,7 @@ jobs:
           npm install
           
       - name: Format code with Prettier
-        run: npm run format
+        run: npx prettier . --write
         working-directory: ./client/frontend
         continue-on-error: true
         
