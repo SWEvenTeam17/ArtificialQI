@@ -27,14 +27,17 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
       };
       const JSONData = JSON.stringify(data);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_add/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_add/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSONData,
         },
-        body: JSONData,
-      });
+      );
       const result = await response.json();
       setSessionData((prevSessionData) => ({
         ...prevSessionData,

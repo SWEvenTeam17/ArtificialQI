@@ -10,9 +10,12 @@ export const QuestionsContextProvider = ({ children }) => {
   const [selectedQuestions, setSelectedQuestions] = useState([]);
 
   const addQuestion = async (id) => {
-    let response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${id}/`, {
-      method: "GET",
-    });
+    let response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${id}/`,
+      {
+        method: "GET",
+      },
+    );
     let data = await response.json();
     setSelectedQuestions((prevQuestions) => [...prevQuestions, data]);
   };
