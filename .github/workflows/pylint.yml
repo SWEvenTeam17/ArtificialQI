@@ -23,4 +23,4 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        pylint --load-plugins pylint_django --django-settings-module=ArtificialQI.settings ./server/ArtificialQI/
+        pylint --load-plugins pylint_django ./server/ArtificialQI/
