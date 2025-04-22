@@ -40,5 +40,5 @@ jobs:
       - name: Run ESLint
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
-        run: npx eslint ./client/frontend/
+        run: npm run lint ./client/frontend/
         continue-on-error: true
