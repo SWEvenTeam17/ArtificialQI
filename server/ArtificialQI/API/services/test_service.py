@@ -10,11 +10,13 @@ from API.classes.llm_controller import LLMController
 class TestService(AbstractService):
     repository = TestRepository
 
+    @staticmethod
     def runtest(data: List[dict], session: Session):
         TestService.save_data(data=data, session=session)
         llms = session.llm.all()
         return TestService.evaluate(llms, data)
 
+    @staticmethod
     def save_data(data: List[dict], session: Session) -> None:
         for x in data:
             if "id" not in x:
@@ -27,6 +29,7 @@ class TestService(AbstractService):
                 x["id"] = saved_prompt.id
         return
 
+    @staticmethod
     def evaluate(llms: List[dict], data: List[dict]) -> List[dict]:
         results = []
         for x in data:
