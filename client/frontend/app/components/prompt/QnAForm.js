@@ -55,17 +55,20 @@ const QnAForm = ({ sessionData }) => {
           expected_answer: answer,
         });
       }
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify({
+            data: formatted,
+            sessionId: sessionData.id,
+          }),
         },
-        body: JSON.stringify({
-          data: formatted,
-          sessionId: sessionData.id,
-        }),
-      });
+      );
 
       const data = await response.json();
       if (response.status === 503 || response.status === 500) {
