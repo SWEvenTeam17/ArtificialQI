@@ -32,8 +32,10 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@8.10.0
+          npm install eslint@latest
           npm install eslint-config-next
+          npm install @babel/eslint-parser
+          npm install next
 
       - name: Run ESLint
         env:
