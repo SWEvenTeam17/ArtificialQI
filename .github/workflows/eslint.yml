@@ -34,7 +34,12 @@ jobs:
         working-directory: ./client/frontend
         run: |
           npm install
-
+          
+      - name: Format code with Prettier
+        run: npm run format
+        working-directory: ./client/frontend
+        continue-on-error: true
+        
       - name: Run ESLint
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
