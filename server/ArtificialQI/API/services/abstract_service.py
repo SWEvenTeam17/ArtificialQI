@@ -1,27 +1,48 @@
+"""
+File che contiene la definizione della classe astratta da cui derivano tutti i service.
+"""
 from abc import ABC
 from typing import ClassVar
 from API.repositories import AbstractRepository
 
 
 class AbstractService(ABC):
+    """
+    Classe astratta da cui derivano tutti i service.
+    """
     repository: ClassVar[AbstractRepository]
 
     @classmethod
     def create(cls, data: dict):
+        """
+        Funzione che gestisce la creazione di una istanza in DB.
+        """
         return cls.repository.create(data)
 
     @classmethod
-    def read(cls, id: int):
-        return cls.repository.get_by_id(id=id)
+    def read(cls, instance_id: int):
+        """
+        Funzione che gestisce la lettura di una istanza in DB.
+        """
+        return cls.repository.get_by_id(id=instance_id)
 
     @classmethod
     def read_all(cls):
+        """
+        Funzione che gestisce la lettura di tutte le istanze in DB.
+        """
         return cls.repository.get_all()
 
     @classmethod
-    def update(cls, id: int, data: dict):
-        return cls.repository.update(id=id, data=data)
+    def update(cls, instance_id: int, data: dict):
+        """
+        Funzione che gestisce l'aggiornamento di una istanza in DB.
+        """
+        return cls.repository.update(id=instance_id, data=data)
 
     @classmethod
-    def delete(cls, id: int):
-        return cls.repository.delete(id=id)
+    def delete(cls, instance_id: int):
+        """
+        Funzione che gestisce la canellazione di una istanza in DB.
+        """
+        return cls.repository.delete(id=instance_id)

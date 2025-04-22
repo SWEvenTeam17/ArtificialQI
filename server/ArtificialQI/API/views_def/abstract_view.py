@@ -58,7 +58,7 @@ class AbstractView(APIView, ABC):
 
     def delete(self, request, pk: int = None):
         try:
-            self.service.delete(id=pk)
+            self.service.delete(instance_id=pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

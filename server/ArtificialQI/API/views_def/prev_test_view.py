@@ -21,7 +21,7 @@ class PrevTestView(AbstractView):
 
     def delete(self, request, pk):
         try:
-            PromptService.delete(id=pk)
+            PromptService.delete(instance_id=pk)
             return Response(status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
