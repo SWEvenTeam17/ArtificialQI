@@ -15,7 +15,9 @@ export default function RootLayout({ children }) {
 
   const fetchSessions = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list`,
+      );
       const data = await response.json();
       setSessions(data);
     } catch (error) {
@@ -29,14 +31,17 @@ export default function RootLayout({ children }) {
     };
     const JSONData = JSON.stringify(data);
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}/`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/josn",
-          "X-CSRFToken": getCSRFToken(),
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/josn",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSONData,
         },
-        body: JSONData,
-      });
+      );
       fetchSessions();
     } catch (error) {
       console.error("Error deleting form: ", error);

@@ -11,7 +11,9 @@ const PreviousTestsCard = ({ id }) => {
     removeQuestion,
   } = useQuestionsContext();
   const fetchPreviousTests = useCallback(async () => {
-    let response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`);
+    let response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`,
+    );
     let data = await response.json();
     setPreviousTests(data);
   }, [id]);
@@ -32,11 +34,9 @@ const PreviousTestsCard = ({ id }) => {
         },
       },
     );
-    if (response.status === 204) {
-      setPreviousTests((prevTests) => {
-        return prevTests.filter((test) => test.id !== testId);
-      });
-    }
+    setPreviousTests((prevTests) => {
+      return prevTests.filter((test) => test.id !== testId);
+    });
   };
 
   const isSelected = (questionId) => {

@@ -4,6 +4,7 @@ from API.services import SessionService
 from rest_framework.response import Response
 from rest_framework import status
 
+
 class SessionLLMView(AbstractView):
     serializer = LLMSerializer
     service = SessionService
@@ -20,11 +21,13 @@ class SessionLLMView(AbstractView):
         try:
             session_id = request.data.get("sessionId")
             llm_id = request.data.get("llmId")
-            serializer = self.serializer(self.service.add_llm(session_id=session_id, llm_id=llm_id))
+            serializer = self.serializer(
+                self.service.add_llm(session_id=session_id, llm_id=llm_id)
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-        
+
     def delete(self, request, session_id: int, llm_id: int):
         try:
             self.service.delete_llm(session_id, llm_id)

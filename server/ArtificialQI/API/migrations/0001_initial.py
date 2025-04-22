@@ -8,71 +8,161 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='LLM',
+            name="LLM",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('n_parameters', models.TextField(default='')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("n_parameters", models.TextField(default="")),
             ],
         ),
         migrations.CreateModel(
-            name='Prompt',
+            name="Prompt",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('prompt_text', models.TextField()),
-                ('expected_answer', models.TextField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("prompt_text", models.TextField()),
+                ("expected_answer", models.TextField()),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Evaluation',
+            name="Evaluation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('semantic_evaluation', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('external_evaluation', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('prompt', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.prompt')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "semantic_evaluation",
+                    models.DecimalField(decimal_places=2, max_digits=5),
+                ),
+                (
+                    "external_evaluation",
+                    models.DecimalField(decimal_places=2, max_digits=5),
+                ),
+                (
+                    "prompt",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.prompt"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Answer',
+            name="Answer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('LLM_answer', models.TextField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-                ('LLM', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.llm')),
-                ('prompt', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.prompt')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("LLM_answer", models.TextField()),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
+                (
+                    "LLM",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.llm"
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.prompt"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Session',
+            name="Session",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255, unique=True)),
-                ('description', models.TextField(default='')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('llm', models.ManyToManyField(to='API.llm')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255, unique=True)),
+                ("description", models.TextField(default="")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("llm", models.ManyToManyField(to="API.llm")),
             ],
         ),
         migrations.AddField(
-            model_name='prompt',
-            name='session',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.session'),
+            model_name="prompt",
+            name="session",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="API.session"
+            ),
         ),
         migrations.CreateModel(
-            name='Test',
+            name="Test",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('evaluation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.evaluation')),
-                ('llm', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.llm')),
-                ('prompt', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.prompt')),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.session')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "evaluation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.evaluation"
+                    ),
+                ),
+                (
+                    "llm",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.llm"
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.prompt"
+                    ),
+                ),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="API.session"
+                    ),
+                ),
             ],
         ),
     ]

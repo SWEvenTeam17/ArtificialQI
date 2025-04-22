@@ -42,14 +42,17 @@ const CreateLLMForm = ({ fetchLLMList }) => {
     const JSONData = JSON.stringify(data);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSONData,
         },
-        body: JSONData,
-      });
+      );
 
       const responseData = await response.json();
       if (response.status === 409) {
@@ -66,10 +69,13 @@ const CreateLLMForm = ({ fetchLLMList }) => {
 
   const loadOllamaModels = async (e) => {
     e.preventDefault();
-    let response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/load_ollama/`, {
-      method: "POST",
-      headers: { "X-CSRFToken": getCSRFToken() },
-    });
+    let response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/load_ollama/`,
+      {
+        method: "POST",
+        headers: { "X-CSRFToken": getCSRFToken() },
+      },
+    );
     if (response.status === 200) {
       fetchLLMList();
     } else {

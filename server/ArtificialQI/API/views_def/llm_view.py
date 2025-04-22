@@ -7,9 +7,11 @@ from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
+
 class LLMView(AbstractView):
     serializer = LLMSerializer
     service = LLMService
+
 
 class OllamaView(APIView):
     def post(self, request=None):
@@ -20,4 +22,6 @@ class OllamaView(APIView):
                 status=status.HTTP_200_OK,
             )
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

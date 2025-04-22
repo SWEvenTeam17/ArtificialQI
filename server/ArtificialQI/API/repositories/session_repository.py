@@ -3,6 +3,7 @@ from API.serializers import SessionSerializer
 
 from .abstract_repository import AbstractRepository
 
+
 class SessionRepository(AbstractRepository):
     model = Session
 
@@ -15,7 +16,7 @@ class SessionRepository(AbstractRepository):
         session.llm.add(llm)
         session.save()
         return llm
-    
+
     @classmethod
     def delete_llm(cls, session: Session, llm: LLM):
         session.llm.remove(llm)
