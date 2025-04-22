@@ -26,4 +26,4 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        pylint --load-plugins pylint_django --fail-under=5 ./server/ArtificialQI/
+        pylint --load-plugins pylint_django --fail-under=9 ./server/ArtificialQI/
