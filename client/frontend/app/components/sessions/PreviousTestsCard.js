@@ -32,11 +32,9 @@ const PreviousTestsCard = ({ id }) => {
         },
       },
     );
-    if (response.status === 204) {
-      setPreviousTests((prevTests) => {
-        return prevTests.filter((test) => test.id !== testId);
-      });
-    }
+    setPreviousTests((prevTests) => {
+      return prevTests.filter((test) => test.id !== testId);
+    });
   };
 
   const isSelected = (questionId) => {
