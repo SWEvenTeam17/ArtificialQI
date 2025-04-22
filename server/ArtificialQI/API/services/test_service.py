@@ -10,14 +10,6 @@ from API.classes.llm_controller import LLMController
 class TestService(AbstractService):
     repository = TestRepository
 
-    def get_prev(pk):
-        session = Session.objects.get(id=pk)
-        return Prompt.objects.filter(session=session)
-
-    def delete_prompt(request):
-        target = Prompt.objects.get(id=request.data.get("previousPromptId"))
-        target.delete()
-
     def runtest(data: List[dict], session: Session):
         TestService.save_data(data=data, session=session)
         llms = session.llm.all()
