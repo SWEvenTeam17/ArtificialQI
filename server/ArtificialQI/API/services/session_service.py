@@ -2,6 +2,7 @@ from .abstract_service import AbstractService
 from API.repositories import SessionRepository
 from API.models import Session, LLM
 
+
 class SessionService(AbstractService):
     repository = SessionRepository
 
@@ -24,7 +25,7 @@ class SessionService(AbstractService):
             return "Session not found"
         except LLM.DoesNotExist:
             return "LLM not found"
-    
+
     @classmethod
     def delete_llm(cls, session_id: int, llm_id: int):
         try:

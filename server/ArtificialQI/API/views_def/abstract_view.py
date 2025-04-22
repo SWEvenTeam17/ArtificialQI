@@ -5,6 +5,7 @@ from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+
 class AbstractView(APIView, ABC):
     serializer: ClassVar[type[serializers.Serializer]]
     service: ClassVar[type[AbstractService]]
@@ -21,7 +22,7 @@ class AbstractView(APIView, ABC):
         # Le sottoclassi devono definire un service
         pass
 
-    def get(self, request, pk:int=None):
+    def get(self, request, pk: int = None):
         try:
             if pk:
                 data = self.service.read(id=pk)
@@ -32,18 +33,20 @@ class AbstractView(APIView, ABC):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
-    def post(self, request, pk:int=None):
+
+    def post(self, request, pk: int = None):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
                 data = self.service.create(serializer.validated_data)
-                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+                return Response(
+                    serializer.validated_data, status=status.HTTP_201_CREATED
+                )
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def put(self, request, pk:int=None):
+
+    def put(self, request, pk: int = None):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -52,8 +55,8 @@ class AbstractView(APIView, ABC):
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, pk:int=None):
+
+    def delete(self, request, pk: int = None):
         try:
             self.service.delete(id=pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
