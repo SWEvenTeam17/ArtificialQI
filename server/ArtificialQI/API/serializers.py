@@ -10,6 +10,7 @@ se necessario.
 from rest_framework import serializers
 from API.models import Prompt, LLM, Answer, Session, Evaluation, Test
 
+
 class LLMSerializer(serializers.ModelSerializer):
     """
     Serializzatore del modello LLM
@@ -71,6 +72,7 @@ class PromptSerializer(serializers.ModelSerializer):
             "evaluation_set",
         ]
 
+
 class TestSerializer(serializers.ModelSerializer):
     session = SessionSerializer(read_only=True)
     prompt = PromptSerializer(read_only=True)
@@ -79,4 +81,4 @@ class TestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Test
-        fields = '__all__'
+        fields = "__all__"

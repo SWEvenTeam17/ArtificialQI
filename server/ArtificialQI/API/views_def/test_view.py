@@ -4,6 +4,7 @@ from API.services import TestService
 from rest_framework.response import Response
 from rest_framework import status
 
+
 class TestView(AbstractView):
     serializer = TestSerializer
     service = TestService
