@@ -10,7 +10,8 @@ from API.services import TestService
 from .abstract_view import AbstractView
 class TestView(AbstractView):
     """
-    File che contiene la definizione della classe TestView.
+    Classe che contiene la definizione della vista dedicata
+    alla gestione dei test precedentemente eseguiti in una sessione..
     """
     serializer = TestSerializer
     service = TestService

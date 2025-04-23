@@ -1,20 +1,28 @@
-from .abstract_view import AbstractView
-from API.serializers import LLMSerializer
-from API.services import LLMService
+"""
+File che contiene le definizioni delle viste LLMView e OllamaView.
+"""
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-
-
+from API.serializers import LLMSerializer
+from API.services import LLMService
+from .abstract_view import AbstractView
 class LLMView(AbstractView):
+    """
+    Classe che gestisce le richieste per creare,modificare e cancellare LLM.
+    """
     serializer = LLMSerializer
     service = LLMService
 
-
 class OllamaView(APIView):
+    """
+    Classe che gestisce le richieste per caricare i modelli di Ollama nell'applicativo.
+    """
     def post(self, request=None):
+        """
+        Funzione che sincronizza i modelli di Ollama con il DB.
+        """
         try:
             LLMService.sync_ollama_llms()
             return Response(
