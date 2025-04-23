@@ -46,13 +46,13 @@ class LLMController:
     def get_semantic_evaluation(expected_answer, llm_answer):
         """
         Funzione che ritorna la valutazione semantica di una risposta
-        di un LLM
+        di un LLM.
+        Pulisce input e output rendendo tutto in minuscolo e 
+        togliendo l'ultimo punto nella stringa
         """
-        # Pulisce input e output rendendo tutto in minuscolo e togliendo l'ultimo punto nella stringa
+
         clean_expected = re.sub(r"\.$", "", expected_answer.lower())
         clean_llm_answer = re.sub(r"\.$", "", llm_answer.lower())
-
-        # Controlla se la risposta aspettata è già contenuta nella risposta effettiva
         if clean_expected in clean_llm_answer:
             return 100
         model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
