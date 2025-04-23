@@ -1,6 +1,7 @@
 """
 File che contiene i servizi riguardanti i test.
 """
+
 from typing import List
 from API.repositories import TestRepository
 from API.models import Session
@@ -10,11 +11,11 @@ from .prompt_service import PromptService
 from .evaluation_service import EvaluationService
 
 
-
 class TestService(AbstractService):
     """
     Classe che contiene i servizi riguardanti i test.
     """
+
     repository = TestRepository
 
     @staticmethod
@@ -27,9 +28,9 @@ class TestService(AbstractService):
         return TestService.evaluate(llms, data)
 
     @staticmethod
-    def save_data(data: List[dict], session: Session)->None:
+    def save_data(data: List[dict], session: Session) -> None:
         """
-        Funzione che controlla i dati e salva eventuali domande 
+        Funzione che controlla i dati e salva eventuali domande
         non ancora registrate in DB.
         """
         for x in data:

@@ -1,13 +1,16 @@
 """
 Repository che gestisce le istanze delle Sessioni in DB.
 """
+
 from API.models import Session, LLM
 from .abstract_repository import AbstractRepository
+
 
 class SessionRepository(AbstractRepository):
     """
     Classe del repository che gestisce le istanze delle Sessioni in DB.
     """
+
     model = Session
 
     @classmethod
@@ -18,7 +21,7 @@ class SessionRepository(AbstractRepository):
         return LLM.objects.exclude(session__id=session_id).all()
 
     @classmethod
-    def add_llm(cls, session: Session, llm: LLM)->LLM:
+    def add_llm(cls, session: Session, llm: LLM) -> LLM:
         """
         Aggiunge un collegamento LLM-Sessione.
         """
@@ -27,7 +30,7 @@ class SessionRepository(AbstractRepository):
         return llm
 
     @classmethod
-    def delete_llm(cls, session: Session, llm: LLM)->None:
+    def delete_llm(cls, session: Session, llm: LLM) -> None:
         """
         Rimuove un collegamento LLM-Sessione.
         """
