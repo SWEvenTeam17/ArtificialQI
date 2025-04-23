@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint pylint-django django django-rest-framework requests black
+        pip install pylint pylint-django django django-rest-framework requests black django-cors-headers langchain-google-genai sentence-transformers python-dotenv langchain-ollama
     - name: Format code with black
       run: |
         black ./server/ArtificialQI/
