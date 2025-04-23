@@ -1,23 +1,38 @@
-from .abstract_service import AbstractService
+"""
+File che contiene i servizi riguardanti i test.
+"""
+
+from typing import List
 from API.repositories import TestRepository
+from API.models import Session
+from API.classes.llm_controller import LLMController
+from .abstract_service import AbstractService
 from .prompt_service import PromptService
 from .evaluation_service import EvaluationService
-from typing import List
-from API.models import Session, Prompt
-from API.classes.llm_controller import LLMController
 
 
 class TestService(AbstractService):
+    """
+    Classe che contiene i servizi riguardanti i test.
+    """
+
     repository = TestRepository
 
     @staticmethod
     def runtest(data: List[dict], session: Session):
+        """
+        Funzione che gestisce le chiamate dei vari helper per fare i test.
+        """
         TestService.save_data(data=data, session=session)
         llms = session.llm.all()
         return TestService.evaluate(llms, data)
 
     @staticmethod
     def save_data(data: List[dict], session: Session) -> None:
+        """
+        Funzione che controlla i dati e salva eventuali domande
+        non ancora registrate in DB.
+        """
         for x in data:
             if "id" not in x:
                 save = {
@@ -27,13 +42,16 @@ class TestService(AbstractService):
                 }
                 saved_prompt = PromptService.create(save)
                 x["id"] = saved_prompt.id
-        return
 
     @staticmethod
     def evaluate(llms: List[dict], data: List[dict]) -> List[dict]:
+        """
+        Funzione che chiama le funzioni dedicate alle valutazioni, salva
+        i dati e ritorna i risultati.
+        """
         results = []
         for x in data:
-            prompt = PromptService.read(id=x["id"])
+            prompt = PromptService.read(instance_id=x["id"])
             for llm in llms:
                 llm_obj = LLMController(llm.name)
                 output = llm_obj.get_answer(prompt.prompt_text)
@@ -50,7 +68,7 @@ class TestService(AbstractService):
                         "external_evaluation": external_evaluation,
                     }
                 )
-                test = TestService.create(
+                TestService.create(
                     {
                         "session": prompt.session,
                         "prompt": prompt,

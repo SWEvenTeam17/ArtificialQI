@@ -1,3 +1,9 @@
+"""
+Modulo che contiene tutti i servizi
+i servizi gesticono la logica di business
+per rendere le views meno complesse.
+"""
+
 from .llm_service import LLMService
 from .abstract_service import AbstractService
 from .answer_service import AnswerService
