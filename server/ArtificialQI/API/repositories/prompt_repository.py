@@ -1,6 +1,7 @@
 """
 Repository che gestisce le istanze dei Prompt in DB.
 """
+
 from API.models import Prompt, Session
 from .abstract_repository import AbstractRepository
 
@@ -9,6 +10,7 @@ class PromptRepository(AbstractRepository):
     """
     Classe del repository che gestisce le istanze dei Prompt in DB.
     """
+
     model = Prompt
 
     @classmethod
