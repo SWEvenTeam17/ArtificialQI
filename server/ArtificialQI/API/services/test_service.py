@@ -3,6 +3,8 @@ File che contiene i servizi riguardanti i test.
 """
 
 from typing import List
+import requests, os
+from dotenv import load_dotenv
 from API.repositories import TestRepository
 from API.models import Session
 from API.classes.llm_controller import LLMController
@@ -53,8 +55,7 @@ class TestService(AbstractService):
         for x in data:
             prompt = PromptService.read(instance_id=x["id"])
             for llm in llms:
-                llm_obj = LLMController(llm.name)
-                output = llm_obj.get_answer(prompt.prompt_text)
+                output = TestService.interrogate(llm.name, prompt.prompt_text)
                 semantic_evaluation = LLMController.get_semantic_evaluation(
                     x["expected_answer"], output
                 )
@@ -122,3 +123,8 @@ class TestService(AbstractService):
         """
         session = Session.objects.get(id=request.data.get("sessionId"))
         return TestService.get_formatted(request), session
+    
+    def interrogate(llm_name: str, prompt: str)->str:
+        load_dotenv()
+        url = os.getenv("LLM_SERVICE_URL") +"interrogate/"
+        return requests.post(url,{"llm_name":llm_name, "prompt":prompt}).json().get("answer")

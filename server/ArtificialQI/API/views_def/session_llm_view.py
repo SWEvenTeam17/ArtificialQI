@@ -16,12 +16,12 @@ class SessionLLMView(APIView):
     serializer = LLMSerializer
     service = SessionService
 
-    def get(self, request, pk: int)->Response:
+    def get(self, request, instance_id: int)->Response:
         """
         Ritorna tutti i modelli collegati ad una sessione.
         """
         try:
-            result = self.service.get_llm(session_id=pk)
+            result = self.service.get_llm(session_id=instance_id)
             serializer = self.serializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:

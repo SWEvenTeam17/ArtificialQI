@@ -19,25 +19,25 @@ class PrevTestView(APIView):
     serializer = PromptSerializer
     service = TestService
 
-    def get(self, request, pk: int) -> Response:
+    def get(self, request, instance_id: int) -> Response:
         """
         Funzione che ritorna tutti i test precedenti.
         """
         try:
             previous_prompts = PromptService.filter_by_session(
-                session=SessionService.read(instance_id=pk)
+                session=SessionService.read(instance_id=instance_id)
             )
             serializer = self.serializer(previous_prompts, many=True)
             return Response(serializer.data)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk: int) -> Response:
+    def delete(self, request, instance_id: int) -> Response:
         """
         Funzione che cancella un test precdente.
         """
         try:
-            PromptService.delete(instance_id=pk)
+            PromptService.delete(instance_id=instance_id)
             return Response(status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
