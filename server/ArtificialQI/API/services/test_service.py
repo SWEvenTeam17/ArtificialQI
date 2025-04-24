@@ -90,12 +90,12 @@ class TestService(AbstractService):
         return results
 
     @staticmethod
-    def get_formatted(request):
+    def get_formatted(unformatted_data):
         """
         Funzione che formatta i dati in maniera corretta per l'esecuzione
         del test
         """
-        data = request.data.get("data")
+        data = unformatted_data.get("data")
         ret = []
         for x in data:
             if "id" in x and x["id"] is not None:
@@ -116,13 +116,13 @@ class TestService(AbstractService):
         return ret
 
     @staticmethod
-    def get_data(request):
+    def get_data(unformatted_data, id):
         """
         Funzione che ritorna i dati necessari all'esecuzione
         del test
         """
-        session = SessionRepository.get_by_id(request.data.get("sessionId"))
-        return TestService.get_formatted(request), session
+        session = SessionRepository.get_by_id(id)
+        return TestService.get_formatted(unformatted_data), session
     
     def interrogate(llm_name: str, prompt: str)->str:
         load_dotenv()
