@@ -5,7 +5,7 @@ File che contiene i servizi riguardanti i test.
 from typing import List
 import requests, os
 from dotenv import load_dotenv
-from API.repositories import TestRepository
+from API.repositories import TestRepository, SessionRepository
 from API.models import Session
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
@@ -121,7 +121,7 @@ class TestService(AbstractService):
         Funzione che ritorna i dati necessari all'esecuzione
         del test
         """
-        session = Session.objects.get(id=request.data.get("sessionId"))
+        session = SessionRepository.get_by_id(request.data.get("sessionId"))
         return TestService.get_formatted(request), session
     
     def interrogate(llm_name: str, prompt: str)->str:
