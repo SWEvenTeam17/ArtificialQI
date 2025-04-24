@@ -95,9 +95,9 @@ class TestService(AbstractService):
         Funzione che formatta i dati in maniera corretta per l'esecuzione
         del test
         """
-        data = unformatted_data.get("data")
+        # data = unformatted_data.get("data")
         ret = []
-        for x in data:
+        for x in unformatted_data:
             if "id" in x and x["id"] is not None:
                 ret.append(
                     {
