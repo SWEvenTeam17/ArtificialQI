@@ -27,15 +27,15 @@ export default function ManageLLM() {
       <div className="card shadow border-light rounded-5 mt-3">
         <div className="card-body">
           <h2 className="card-title text-center">Gestisci LLM</h2>
-          <div className="ms-5 me-5 mb-5 row justify-content-center">
-            <div className="col-12 col-md-7">
+          <div className="row mb-5 justify-content-center">
+            <div className="col-12 col-md-6">
               <CreateLLMForm fetchLLMList={fetchLLMList} />
             </div>
           </div>
           <h2 className="card-title text-center mb-4">
             LLM collegati ad ArtificialQI
           </h2>
-          <div className="row row-cols-lg-12 g-2 row-cols-1">
+          <div className="row g-2 row-cols-1 row-cols-md-2">
             {LLMList.length > 0 ? (
               LLMList.map((llm) => (
                 <div className="col" key={llm.id}>

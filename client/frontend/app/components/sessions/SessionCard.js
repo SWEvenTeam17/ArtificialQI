@@ -22,7 +22,7 @@ const SessionCard = ({ session, deleteSession }) => {
       <div className="row justify-content-center">
         <div className="col">
           <button
-            className="btn btn-danger shadow-sm w-100 rounded-5"
+            className="btn btn-danger shadow-sm w-50 rounded-5"
             onClick={() => {
               deleteSession(session.id);
             }}
