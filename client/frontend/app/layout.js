@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
   const fetchSessions = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/`,
       );
       const data = await response.json();
       setSessions(data);
