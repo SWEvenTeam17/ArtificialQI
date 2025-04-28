@@ -1,5 +1,5 @@
 from django.test import TestCase
-from API.llm_controller import LLMController
+from API.classes.llm_controller import LLMController
 from unittest.mock import patch
 
 class LLMControllerTests(TestCase):
@@ -9,12 +9,13 @@ class LLMControllerTests(TestCase):
         score = llm.get_semantic_evaluation("Hello", "Hello")
         self.assertEqual(score, 100)
 
-        def test_semantic_evaluation_no_match(self):
+    def test_semantic_evaluation_no_match(self):
         """Verifica che risposte diverse abbiano score basso."""
-        llm = LLMController("llama3")
+        llm = LLMController("llama3") 
         score = llm.get_semantic_evaluation("Hello", "Goodbye")
-        self.assertTrue(0 <= score < 50)
-
+        self.assertTrue(0 <= score < 50) 
+  
+  "patch simula chiamate API esterne"
     @patch("requests.get")  # Mock della chiamata API a Ollama
     def test_get_answer_from_llm(self, mock_get):
         """Testa che get_answer() restituisca una risposta valida."""
