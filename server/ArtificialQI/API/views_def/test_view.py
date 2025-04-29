@@ -20,7 +20,7 @@ class TestView(AbstractView):
         """
         Override della funzione che gestisce le richieste di tipo POST.
         """
-        data, session = self.service.get_data(request=request)
+        data, session = self.service.get_data(request.data.get("data"), request.data.get("sessionId"))
         if not data:
             return Response(
                 {"error": "Domanda e risposta sono campi obbligatori"},

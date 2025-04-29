@@ -5,7 +5,7 @@ File che contiene i servizi riguardanti i test.
 from typing import List
 import requests, os
 from dotenv import load_dotenv
-from API.repositories import TestRepository
+from API.repositories import TestRepository, SessionRepository
 from API.models import Session
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
@@ -90,14 +90,14 @@ class TestService(AbstractService):
         return results
 
     @staticmethod
-    def get_formatted(request):
+    def get_formatted(unformatted_data):
         """
         Funzione che formatta i dati in maniera corretta per l'esecuzione
         del test
         """
-        data = request.data.get("data")
+        # data = unformatted_data.get("data")
         ret = []
-        for x in data:
+        for x in unformatted_data:
             if "id" in x and x["id"] is not None:
                 ret.append(
                     {
@@ -116,13 +116,13 @@ class TestService(AbstractService):
         return ret
 
     @staticmethod
-    def get_data(request):
+    def get_data(unformatted_data, id):
         """
         Funzione che ritorna i dati necessari all'esecuzione
         del test
         """
-        session = Session.objects.get(id=request.data.get("sessionId"))
-        return TestService.get_formatted(request), session
+        session = SessionRepository.get_by_id(id)
+        return TestService.get_formatted(unformatted_data), session
     
     def interrogate(llm_name: str, prompt: str)->str:
         load_dotenv()
