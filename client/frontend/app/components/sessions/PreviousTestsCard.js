@@ -10,9 +10,10 @@ const PreviousTestsCard = ({ id }) => {
     addQuestion,
     removeQuestion,
   } = useQuestionsContext();
+
   const fetchPreviousTests = useCallback(async () => {
     let response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`
     );
     let data = await response.json();
     setPreviousTests(data);
@@ -32,7 +33,7 @@ const PreviousTestsCard = ({ id }) => {
           "Content-Type": "application/json",
           "X-CSRFToken": getCSRFToken(),
         },
-      },
+      }
     );
     setPreviousTests((prevTests) => {
       return prevTests.filter((test) => test.id !== testId);
@@ -44,17 +45,12 @@ const PreviousTestsCard = ({ id }) => {
   };
 
   return previousTests.length > 0 ? (
-    <div
-      className="row row justify-content-center"
-      style={{ minHeight: "220px" }}
-    >
-      <div className="col-12 col-md-8">
-        <div className="card border-light shadow-lg rounded-4 mb-5">
+        <div className="card border-light">
           <div className="card-body">
             <h5 className="card-title text-center text-primary font-weight-bold">
               Test precedenti
             </h5>
-            <ul className="list-group list-group-flush">
+            <ul className="list-group list-group-flush" style={{ maxHeight: "300px", overflowY: "auto" }}>
               {previousTests.map((pTest) => (
                 <div
                   href="#"
@@ -106,8 +102,6 @@ const PreviousTestsCard = ({ id }) => {
             </ul>
           </div>
         </div>
-      </div>
-    </div>
   ) : null;
 };
 

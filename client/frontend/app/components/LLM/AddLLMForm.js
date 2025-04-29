@@ -48,7 +48,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
   };
 
   return (
-    <Form onSubmit={submitLLM}>
+    <Form onSubmit={submitLLM} className="h-100">
       <div>
         {limit && (
           <div className="alert alert-danger rounded-5" role="alert">

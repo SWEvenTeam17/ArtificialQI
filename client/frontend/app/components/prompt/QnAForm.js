@@ -67,7 +67,7 @@ const QnAForm = ({ sessionData }) => {
             data: formatted,
             sessionId: sessionData.id,
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -85,7 +85,7 @@ const QnAForm = ({ sessionData }) => {
   };
 
   return (
-    <div className="card border-light rounded-5 w-md-75 mx-auto shadow-lg p-4 mb-5">
+    <div className="card border-light w-md-75 mx-auto p-4">
       <h3 className="card-title mb-4 text-center">Avvia un test</h3>
       <div className="text-center">
         {serverError && (
@@ -95,36 +95,41 @@ const QnAForm = ({ sessionData }) => {
         )}
       </div>
       <Form onSubmit={handleSubmit}>
-        <div className="form-floating mb-4">
-          <input
-            type="text"
-            className={`form-control rounded-5 ${formErrors.question ? "is-invalid" : ""}`}
-            id="question"
-            name="question"
-            placeholder="Domanda"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
-          <label htmlFor="question">Domanda</label>
-          {formErrors.question && (
-            <div className="invalid-feedback">{formErrors.question}</div>
-          )}
-        </div>
-
-        <div className="form-floating mb-4">
-          <input
-            type="text"
-            className={`form-control rounded-5 ${formErrors.answer ? "is-invalid" : ""}`}
-            id="answer"
-            name="answer"
-            placeholder="Risposta attesa"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-          <label htmlFor="answer">Risposta attesa</label>
-          {formErrors.answer && (
-            <div className="invalid-feedback">{formErrors.answer}</div>
-          )}
+        <div className="row row-cols-md-2 row-cols-1">
+          <div className="col">
+            <div className="form-floating mb-4">
+              <input
+                type="text"
+                className={`form-control rounded-5 ${formErrors.question ? "is-invalid" : ""}`}
+                id="question"
+                name="question"
+                placeholder="Domanda"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+              />
+              <label htmlFor="question">Domanda</label>
+              {formErrors.question && (
+                <div className="invalid-feedback">{formErrors.question}</div>
+              )}
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-floating mb-4">
+              <input
+                type="text"
+                className={`form-control rounded-5 ${formErrors.answer ? "is-invalid" : ""}`}
+                id="answer"
+                name="answer"
+                placeholder="Risposta attesa"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+              />
+              <label htmlFor="answer">Risposta attesa</label>
+              {formErrors.answer && (
+                <div className="invalid-feedback">{formErrors.answer}</div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="text-center">
