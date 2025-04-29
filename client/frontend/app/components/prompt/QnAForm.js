@@ -8,19 +8,22 @@ import { getCSRFToken } from "@/app/helpers/csrf";
 const QnAForm = ({ sessionData }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [questionAnswerPairs, setQuestionAnswerPairs] = useState([
+    { question: "", answer: "" },
+  ]);
   const [formErrors, setFormErrors] = useState({});
   const [serverError, setServerError] = useState(null);
   const { setResponseData } = useResponse();
-  const { selectedQuestions, setSelectedQuestions } = useQuestionsContext();
+  const { selectedQuestions } = useQuestionsContext();
+
   const validateForm = () => {
     const errors = {};
-
-    if (selectedQuestions.length == 0 && (!question || !answer)) {
-      errors.question = "La domanda è obbligatoria.";
-      errors.answer = "La risposta attesa è obbligatoria.";
-    }
+    questionAnswerPairs.forEach((pair, index) => {
+      const pairErrors = {};
+      if (!pair.question) pairErrors.question = "La domanda è obbligatoria.";
+      if (!pair.answer) pairErrors.answer = "La risposta attesa è obbligatoria.";
+      if (Object.keys(pairErrors).length > 0) errors[index] = pairErrors;
+    });
 
     if (!sessionData.llm || sessionData.llm.length === 0) {
       errors.llm = "Aggiungi almeno un LLM per continuare.";
@@ -28,6 +31,9 @@ const QnAForm = ({ sessionData }) => {
 
     return errors;
   };
+
+  const hasError = (index, field) =>
+    formErrors[index] && formErrors[index][field];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +47,8 @@ const QnAForm = ({ sessionData }) => {
     setFormErrors({});
 
     try {
-      var formatted = [];
+      const formatted = [];
+
       selectedQuestions.forEach((element) => {
         formatted.push({
           id: element.id,
@@ -49,12 +56,16 @@ const QnAForm = ({ sessionData }) => {
           expected_answer: element.expected_answer,
         });
       });
-      if (question !== "" && answer !== "") {
-        formatted.push({
-          prompt_text: question,
-          expected_answer: answer,
-        });
-      }
+
+      questionAnswerPairs.forEach((pair) => {
+        if (pair.question && pair.answer) {
+          formatted.push({
+            prompt_text: pair.question,
+            expected_answer: pair.answer,
+          });
+        }
+      });
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`,
         {
@@ -84,6 +95,24 @@ const QnAForm = ({ sessionData }) => {
     }
   };
 
+  const addQuestionAnswerPair = () => {
+    setQuestionAnswerPairs([
+      ...questionAnswerPairs,
+      { question: "", answer: "" },
+    ]);
+  };
+
+  const removeQuestionAnswerPair = (index) => {
+    setQuestionAnswerPairs(questionAnswerPairs.filter((_, i) => i !== index));
+  };
+
+  const handleInputChange = (index, e) => {
+    const { name, value } = e.target;
+    const newArray = [...questionAnswerPairs];
+    newArray[index][name] = value;
+    setQuestionAnswerPairs(newArray);
+  };
+
   return (
     <div className="card border-0 w-md-75 mx-auto p-4">
       <h3 className="card-title mb-4 text-center">Avvia un test</h3>
@@ -95,63 +124,110 @@ const QnAForm = ({ sessionData }) => {
         )}
       </div>
       <Form onSubmit={handleSubmit}>
-        <div className="row row-cols-md-2 row-cols-1">
-          <div className="col">
-            <div className="form-floating mb-4">
-              <input
-                type="text"
-                className={`form-control rounded-5 ${formErrors.question ? "is-invalid" : ""}`}
-                id="question"
-                name="question"
-                placeholder="Domanda"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-              />
-              <label htmlFor="question">Domanda</label>
-              {formErrors.question && (
-                <div className="invalid-feedback">{formErrors.question}</div>
+        {questionAnswerPairs.map((pair, index) => (
+          <div key={index}>
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className={`form-control rounded-5 ${
+                      hasError(index, "question") ? "is-invalid" : ""
+                    }`}
+                    id={`question-${index}`}
+                    name="question"
+                    placeholder={`Domanda numero ${index}`}
+                    value={pair.question}
+                    onChange={(e) => handleInputChange(index, e)}
+                  />
+                  <label htmlFor={`question-${index}`}>
+                    {`Domanda numero ${index + 1}`}
+                  </label>
+                  {hasError(index, "question") && (
+                    <div className="invalid-feedback">
+                      {formErrors[index].question}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className={`form-control rounded-5 ${
+                      hasError(index, "answer") ? "is-invalid" : ""
+                    }`}
+                    id={`answer-${index}`}
+                    name="answer"
+                    placeholder={`Risposta attesa numero ${index + 1}`}
+                    value={pair.answer}
+                    onChange={(e) => handleInputChange(index, e)}
+                  />
+                  <label htmlFor={`answer-${index}`}>
+                    {`Risposta attesa numero ${index + 1}`}
+                  </label>
+                  {hasError(index, "answer") && (
+                    <div className="invalid-feedback">
+                      {formErrors[index].answer}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {questionAnswerPairs.length > 1 && (
+                <div className="col-auto">
+                  <button
+                    className="btn btn-danger"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeQuestionAnswerPair(index);
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
               )}
             </div>
+            <hr />
           </div>
-          <div className="col">
-            <div className="form-floating mb-4">
-              <input
-                type="text"
-                className={`form-control rounded-5 ${formErrors.answer ? "is-invalid" : ""}`}
-                id="answer"
-                name="answer"
-                placeholder="Risposta attesa"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-              />
-              <label htmlFor="answer">Risposta attesa</label>
-              {formErrors.answer && (
-                <div className="invalid-feedback">{formErrors.answer}</div>
-              )}
-            </div>
-          </div>
-        </div>
+        ))}
 
         <div className="text-center">
           {formErrors.llm && (
-            <div className="alert alert-danger rounded-5">{formErrors.llm}</div>
+            <div className="alert alert-danger rounded-5">
+              {formErrors.llm}
+            </div>
           )}
 
-          <button
-            type="submit"
-            className="btn btn-primary w-50 rounded-5"
-            disabled={loading}
-          >
-            {loading ? (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : (
-              "Invia"
-            )}
-          </button>
+          <div className="row row-cols-md-2 row-cols-1 g-3">
+            <div className="col">
+              <button
+                type="submit"
+                className="btn btn-primary w-100 rounded-5"
+                disabled={loading}
+              >
+                {loading ? (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  "Invia"
+                )}
+              </button>
+            </div>
+            <div className="col">
+              <button
+                className="btn btn-outline-info w-100 rounded-5"
+                onClick={(e) => {
+                  e.preventDefault();
+                  addQuestionAnswerPair();
+                }}
+              >
+                Aggiungi una domanda
+              </button>
+            </div>
+          </div>
         </div>
       </Form>
     </div>
