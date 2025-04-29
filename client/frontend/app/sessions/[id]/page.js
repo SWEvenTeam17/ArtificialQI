@@ -71,9 +71,9 @@ export default function SessionPage({ params }) {
 
       <div className="row g-0 p-0 m-0">
         <div className="col-12 col-md-4">
-          <div className="card border-light h-100">
+          <div className="card border-0 h-100">
             <div className="card-body text-center">
-              <p className="lead text-muted">{sessionData.description}</p>
+              <h5 className="card-title text-center text-primary font-weight-bold">Gestisci LLM collegati</h5>
               <div className="row justify-content-center">
                 <div className="col-lg-7 col-12">
                   <AddLLMForm

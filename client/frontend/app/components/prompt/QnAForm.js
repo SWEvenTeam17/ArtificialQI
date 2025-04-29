@@ -85,7 +85,7 @@ const QnAForm = ({ sessionData }) => {
   };
 
   return (
-    <div className="card border-light w-md-75 mx-auto p-4">
+    <div className="card border-0 w-md-75 mx-auto p-4">
       <h3 className="card-title mb-4 text-center">Avvia un test</h3>
       <div className="text-center">
         {serverError && (
