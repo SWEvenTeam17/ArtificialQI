@@ -5,7 +5,7 @@ File che contiene i servizi riguardanti i test.
 from typing import List
 import requests, os
 from dotenv import load_dotenv
-from API.repositories import TestRepository, SessionRepository
+from API.repositories import TestRepository, SessionRepository, PromptRepository
 from API.models import Session
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
@@ -33,17 +33,27 @@ class TestService(AbstractService):
     def save_data(data: List[dict], session: Session) -> None:
         """
         Funzione che controlla i dati e salva eventuali domande
-        non ancora registrate in DB.
+        non ancora registrate in DB. Se esistono già, le riusa.
         """
         for x in data:
             if "id" not in x:
-                save = {
-                    "prompt_text": x["prompt_text"],
-                    "expected_answer": x["expected_answer"],
-                    "session": session,
-                }
-                saved_prompt = PromptService.create(save)
-                x["id"] = saved_prompt.id
+                # Controlla se esiste già un prompt identico
+                existing_prompt = PromptRepository.filter_one(
+                    prompt_text=x["prompt_text"],
+                    expected_answer=x["expected_answer"],
+                    session=session
+                )
+                if existing_prompt:
+                    x["id"] = existing_prompt.id
+                else:
+                    save = {
+                        "prompt_text": x["prompt_text"],
+                        "expected_answer": x["expected_answer"],
+                        "session": session,
+                    }
+                    saved_prompt = PromptService.create(save)
+                    x["id"] = saved_prompt.id
+
 
     @staticmethod
     def evaluate(llms: List[dict], data: List[dict]) -> List[dict]:

@@ -20,8 +20,8 @@ const QnAForm = ({ sessionData }) => {
     const errors = {};
     questionAnswerPairs.forEach((pair, index) => {
       const pairErrors = {};
-      if (!pair.question) pairErrors.question = "La domanda è obbligatoria.";
-      if (!pair.answer) pairErrors.answer = "La risposta attesa è obbligatoria.";
+      if (!pair.question && selectedQuestions.length === 0) pairErrors.question = "La domanda è obbligatoria.";
+      if (!pair.answer && selectedQuestions.length === 0) pairErrors.answer = "La risposta attesa è obbligatoria.";
       if (Object.keys(pairErrors).length > 0) errors[index] = pairErrors;
     });
 

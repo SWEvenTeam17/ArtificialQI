@@ -4,12 +4,14 @@ File che contiene la definizione della logica della classe LLMController
 
 import os
 import re
+import logging
 import requests
 from requests.exceptions import RequestException
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from sentence_transformers import SentenceTransformer
 from langchain_google_genai import ChatGoogleGenerativeAI
+from google.api_core.exceptions import GoogleAPICallError, InternalServerError
 
 
 class LLMController:
@@ -74,11 +76,17 @@ class LLMController:
                 raise FileNotFoundError(
                     "Il file .env non è presente nella cartella server\\ArtificialQI"
                 )
+
             key = os.getenv("GEMINI_API_KEY")
-            if key != "":
+            if not key:
+                logging.error("API key not found.")
+                return "API key not found."
+
+            try:
                 llm = ChatGoogleGenerativeAI(
                     model="gemini-2.0-flash", google_api_key=key
                 )
+
                 prompt = f"""
                 You are an AI evaluator. Your task is to compare two answers. 
                 The first answer is the 'expected answer', and the second answer is the 'LLM answer'.
@@ -89,14 +97,25 @@ class LLMController:
                 Expected answer: {expected_answer}
                 LLM answer: {llm_answer}
                 """
+
                 stream = llm.stream(prompt)
                 output = next(stream)
                 for chunk in stream:
                     output += chunk
+
                 match = re.search(r"\d+(\.\d+)?", output.content)
                 if match:
                     return match.group(0)
+
+                logging.warning("Valutazione non trovata nella risposta.")
                 return "Percentage not found."
-            print("API key not found.")
-            return "API key not found."
+
+            except (GoogleAPICallError, InternalServerError) as e:
+                logging.error(f"Errore durante la chiamata a Gemini: {e}")
+                return "Errore API Gemini"
+            except Exception as e:
+                logging.exception("Errore imprevisto durante la valutazione esterna.")
+                return "Errore interno durante la valutazione"
+
         return "Unsupported provider"
+
