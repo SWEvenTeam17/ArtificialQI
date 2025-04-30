@@ -20,3 +20,18 @@ class PromptRepository(AbstractRepository):
         usati in una determinata sessione.
         """
         return cls.model.objects.filter(session=session)
+    
+    @classmethod
+    def filter_one(cls, prompt_text: str, expected_answer: str, session: Session):
+        """
+        Restituisce un singolo prompt che corrisponde esattamente a
+        prompt_text, expected_answer e session. Ritorna None se non trovato.
+        """
+        return cls.model.objects.filter(
+            prompt_text=prompt_text,
+            expected_answer=expected_answer,
+            session=session
+        ).first()
+    
+    
+    

@@ -4,12 +4,9 @@ import { getCSRFToken } from "@/app/helpers/csrf";
 
 const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
   const [limit, setLimit] = useState(null);
-  // State to track if LLMData is empty
   const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(
-    !LLMData || LLMData.length === 0,
+    !LLMData || LLMData.length === 0
   );
-
-  // Update the state whenever LLMData changes
   useEffect(() => {
     setIsLLMDataEmpty(!LLMData || LLMData.length === 0);
   }, [LLMData]);
@@ -36,7 +33,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSONData,
-        },
+        }
       );
       const result = await response.json();
       setSessionData((prevSessionData) => ({
@@ -48,14 +45,12 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
   };
 
   return (
-    <Form onSubmit={submitLLM}>
-      <div>
-        {limit && (
-          <div className="alert alert-danger rounded-5" role="alert">
-            {limit}
-          </div>
-        )}
-      </div>
+    <Form onSubmit={submitLLM} className="h-100">
+      {limit && (
+        <div className="alert alert-danger rounded-5" role="alert">
+          {limit}
+        </div>
+      )}
       <select
         className="form-select mt-4 mb-4 rounded-5 text-center"
         name="selectllm"
