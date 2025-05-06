@@ -156,7 +156,7 @@ const QnAForm = ({ sessionData }) => {
   const handleJSONSubmit = async (e) => {
     e.preventDefault();
     if (!jsonFile || questionAnswerPairs.length === 0) {
-      setServerError("Carica un file JSON valido prima di inviare.");
+      setServerError("Inserire un file JSON valido prima di avviare il test.");
       return;
     }
 
