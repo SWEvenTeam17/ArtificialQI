@@ -2,7 +2,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useResponse } from "../contexts/ResponseContext";
 import { useQuestionsContext } from "../contexts/QuestionsContext";
-import Form from "next/form";
 import { getCSRFToken } from "@/app/helpers/csrf";
 
 const QnAForm = ({ sessionData }) => {
@@ -13,6 +12,8 @@ const QnAForm = ({ sessionData }) => {
   ]);
   const [formErrors, setFormErrors] = useState({});
   const [serverError, setServerError] = useState(null);
+  const [isJSON, setIsJSON] = useState(false);
+  const [jsonFile, setJsonFile] = useState(null);
   const { setResponseData } = useResponse();
   const { selectedQuestions } = useQuestionsContext();
 
@@ -20,8 +21,10 @@ const QnAForm = ({ sessionData }) => {
     const errors = {};
     questionAnswerPairs.forEach((pair, index) => {
       const pairErrors = {};
-      if (!pair.question && selectedQuestions.length === 0) pairErrors.question = "La domanda è obbligatoria.";
-      if (!pair.answer && selectedQuestions.length === 0) pairErrors.answer = "La risposta attesa è obbligatoria.";
+      if (!pair.question && selectedQuestions.length === 0)
+        pairErrors.question = "La domanda è obbligatoria.";
+      if (!pair.answer && selectedQuestions.length === 0)
+        pairErrors.answer = "La risposta attesa è obbligatoria.";
       if (Object.keys(pairErrors).length > 0) errors[index] = pairErrors;
     });
 
@@ -43,8 +46,13 @@ const QnAForm = ({ sessionData }) => {
       return;
     }
 
+    await submitToBackend(questionAnswerPairs);
+  };
+
+  const submitToBackend = async (dataToSend) => {
     setLoading(true);
     setFormErrors({});
+    setServerError(null);
 
     try {
       const formatted = [];
@@ -57,7 +65,7 @@ const QnAForm = ({ sessionData }) => {
         });
       });
 
-      questionAnswerPairs.forEach((pair) => {
+      dataToSend.forEach((pair) => {
         if (pair.question && pair.answer) {
           formatted.push({
             prompt_text: pair.question,
@@ -90,6 +98,7 @@ const QnAForm = ({ sessionData }) => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setServerError("Errore durante l'invio del form.");
     } finally {
       setLoading(false);
     }
@@ -113,92 +122,160 @@ const QnAForm = ({ sessionData }) => {
     setQuestionAnswerPairs(newArray);
   };
 
+  const handleJSONFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === "application/json") {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (
+            Array.isArray(parsed) &&
+            parsed.every(
+              (item) =>
+                typeof item.question === "string" &&
+                typeof item.answer === "string"
+            )
+          ) {
+            setQuestionAnswerPairs(parsed);
+            setServerError(null);
+          } else {
+            setServerError("Il file JSON non ha il formato corretto.");
+          }
+        } catch (error) {
+          setServerError("Errore durante la lettura del file JSON.");
+        }
+      };
+      reader.readAsText(file);
+      setJsonFile(file);
+    } else {
+      setServerError("Inserisci un file JSON valido.");
+    }
+  };
+
+  const handleJSONSubmit = async (e) => {
+    e.preventDefault();
+    if (!jsonFile || questionAnswerPairs.length === 0) {
+      setServerError("Inserire un file JSON valido prima di avviare il test.");
+      return;
+    }
+
+    await submitToBackend(questionAnswerPairs);
+  };
+
   return (
     <div className="card border-0 w-md-75 mx-auto p-4">
       <h3 className="card-title mb-4 text-center">Avvia un test</h3>
-      <div className="text-center">
-        {serverError && (
-          <div className="alert alert-danger rounded-5" role="alert">
-            {serverError}
-          </div>
-        )}
-      </div>
-      <Form onSubmit={handleSubmit}>
-        {questionAnswerPairs.map((pair, index) => (
-          <div key={index}>
-            <div className="row align-items-center">
-              <div className="col">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className={`form-control rounded-5 ${
-                      hasError(index, "question") ? "is-invalid" : ""
-                    }`}
-                    id={`question-${index}`}
-                    name="question"
-                    placeholder={`Domanda numero ${index}`}
-                    value={pair.question}
-                    onChange={(e) => handleInputChange(index, e)}
-                  />
-                  <label htmlFor={`question-${index}`}>
-                    {`Domanda numero ${index + 1}`}
-                  </label>
-                  {hasError(index, "question") && (
-                    <div className="invalid-feedback">
-                      {formErrors[index].question}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className={`form-control rounded-5 ${
-                      hasError(index, "answer") ? "is-invalid" : ""
-                    }`}
-                    id={`answer-${index}`}
-                    name="answer"
-                    placeholder={`Risposta attesa numero ${index + 1}`}
-                    value={pair.answer}
-                    onChange={(e) => handleInputChange(index, e)}
-                  />
-                  <label htmlFor={`answer-${index}`}>
-                    {`Risposta attesa numero ${index + 1}`}
-                  </label>
-                  {hasError(index, "answer") && (
-                    <div className="invalid-feedback">
-                      {formErrors[index].answer}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {questionAnswerPairs.length > 1 && (
-                <div className="col-auto">
-                  <button
-                    className="btn btn-danger"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeQuestionAnswerPair(index);
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              )}
-            </div>
-            <hr />
-          </div>
-        ))}
 
-        <div className="text-center">
+      {serverError && (
+        <div className="alert alert-danger text-center" role="alert">
+          {serverError}
+        </div>
+      )}
+
+      {isJSON ? (
+        <form onSubmit={handleJSONSubmit} className="text-center">
+          <div className="mb-3">
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleJSONFileChange}
+              className="form-control w-50 mx-auto"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary w-50 rounded-5"
+            disabled={loading}
+          >
+            {loading ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              "Invia"
+            )}
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          {questionAnswerPairs.map((pair, index) => (
+            <div key={index}>
+              <div className="row align-items-center">
+                <div className="col">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className={`form-control rounded-5 ${
+                        hasError(index, "question") ? "is-invalid" : ""
+                      }`}
+                      id={`question-${index}`}
+                      name="question"
+                      placeholder={`Domanda numero ${index}`}
+                      value={pair.question}
+                      onChange={(e) => handleInputChange(index, e)}
+                    />
+                    <label htmlFor={`question-${index}`}>
+                      {`Domanda numero ${index + 1}`}
+                    </label>
+                    {hasError(index, "question") && (
+                      <div className="invalid-feedback">
+                        {formErrors[index].question}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className={`form-control rounded-5 ${
+                        hasError(index, "answer") ? "is-invalid" : ""
+                      }`}
+                      id={`answer-${index}`}
+                      name="answer"
+                      placeholder={`Risposta attesa numero ${index + 1}`}
+                      value={pair.answer}
+                      onChange={(e) => handleInputChange(index, e)}
+                    />
+                    <label htmlFor={`answer-${index}`}>
+                      {`Risposta attesa numero ${index + 1}`}
+                    </label>
+                    {hasError(index, "answer") && (
+                      <div className="invalid-feedback">
+                        {formErrors[index].answer}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {questionAnswerPairs.length > 1 && (
+                  <div className="col-auto">
+                    <button
+                      className="btn btn-danger"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        removeQuestionAnswerPair(index);
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                )}
+              </div>
+              <hr />
+            </div>
+          ))}
+
           {formErrors.llm && (
-            <div className="alert alert-danger rounded-5">
+            <div className="alert alert-danger rounded-5 text-center">
               {formErrors.llm}
             </div>
           )}
 
-          <div className="row row-cols-md-2 row-cols-1 g-3">
+          <div className="row row-cols-md-2 row-cols-1 g-3 mt-4 mb-3">
             <div className="col">
               <button
                 type="submit"
@@ -228,8 +305,28 @@ const QnAForm = ({ sessionData }) => {
               </button>
             </div>
           </div>
-        </div>
-      </Form>
+        </form>
+      )}
+
+      <div className="form-check form-switch mt-4">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="jsonToggle"
+          checked={isJSON}
+          onChange={() => {
+            setIsJSON(!isJSON);
+            setServerError(null);
+            setFormErrors({});
+            setQuestionAnswerPairs([{ question: "", answer: "" }]);
+          }}
+        />
+        <label className="form-check-label ms-2" htmlFor="jsonToggle">
+          {isJSON
+            ? "Modalità file JSON attiva"
+            : "Passa alla modalità file JSON"}
+        </label>
+      </div>
     </div>
   );
 };
