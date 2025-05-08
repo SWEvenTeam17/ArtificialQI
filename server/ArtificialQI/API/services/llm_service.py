@@ -22,8 +22,8 @@ class LLMService(AbstractService):
         Funzione che esegue un fetch di tutti i modelli installati su Ollama.
         """
         load_dotenv()
-        url = os.getenv("OLLAMA_URL") + "/api/tags"
-        return requests.get(url, timeout=5).json().get("models", [])
+        url = os.getenv("LLM_SERVICE_URL") + "/interrogate/"
+        return requests.get(url, timeout=5).json()
 
     @classmethod
     def sync_ollama_llms(cls) -> None:
@@ -32,6 +32,6 @@ class LLMService(AbstractService):
         """
         models = cls.fetch_ollama_models()
         for model in models:
-            name = model.get("name")
-            size = model.get("details", {}).get("parameter_size")
+            name = model["name"]
+            size = model["details"]["parameter_size"]
             cls.repository.update_or_create(name=name, parameters=size)
