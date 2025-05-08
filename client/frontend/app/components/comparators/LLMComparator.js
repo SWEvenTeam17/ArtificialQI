@@ -152,7 +152,7 @@ const LLMComparator = ({ sessions }) => {
       )}
 
       {/* Grafici */}
-      {chartData.length > 0 && (
+      {selectedLLMS.firstLLM && selectedLLMS.secondLLM && chartData.length > 0 && (
         <div className="container-fluid">
           <h4 className="text-center">Valutazione Semantica</h4>
           <ResponsiveContainer width="100%" height={300}>
