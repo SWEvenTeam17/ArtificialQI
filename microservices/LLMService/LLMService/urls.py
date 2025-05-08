@@ -18,5 +18,5 @@ from django.urls import path
 from api import views
 
 urlpatterns = [
-    path('interrogate/', views.LLMView.as_view())
+    path('interrogate/', views.LLMView.as_view(), name='interrogate'),
 ]
