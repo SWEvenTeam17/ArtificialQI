@@ -13,7 +13,7 @@ export default function ManageLLM() {
   const fetchLLMList = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`
       );
       const data = await response.json();
       setLLMList(data);
@@ -35,17 +35,17 @@ export default function ManageLLM() {
           <h2 className="card-title text-center mb-4">
             LLM collegati ad ArtificialQI
           </h2>
-          <div className="row g-2 row-cols-1 row-cols-md-2">
-            {LLMList.length > 0 ? (
-              LLMList.map((llm) => (
+          {LLMList.length > 0 ? (
+            <div className="row g-2 row-cols-1 row-cols-md-2">
+              {LLMList.map((llm) => (
                 <div className="col" key={llm.id}>
                   <GeneralLLMCard llm={llm} fetchLLMList={fetchLLMList} />
                 </div>
-              ))
-            ) : (
-              <p className="text-center">Nessun LLM disponibile</p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center">Nessun LLM disponibile</p>
+          )}
         </div>
       </div>
     </div>
