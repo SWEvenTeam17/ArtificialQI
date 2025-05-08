@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LLMComparator from "@/app/components/comparators/LLMComparator";
 import QuestionComparator from "@/app/components/comparators/QuestionComparator";
+import { SessionContext } from "../components/contexts/SessionContext";
 
 export default function Compare() {
   const [selectedComparison, setSelectedComparison] = useState("LLM");
+  const {sessions} = useContext(SessionContext);
   return (
     <div className="container py-4">
       <p className="text-center fs-3 fw-semibold">
@@ -41,7 +43,7 @@ export default function Compare() {
         </div>
       </div>
       {selectedComparison === "LLM" ? (
-        <LLMComparator />
+        <LLMComparator sessions={sessions} />
       ) : (
         <QuestionComparator />
       )}

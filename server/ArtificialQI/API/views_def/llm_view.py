@@ -5,7 +5,7 @@ File che contiene le definizioni delle viste LLMView e OllamaView.
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from API.serializers import LLMSerializer
+from API.serializers import LLMSerializer, TestSerializer
 from API.services import LLMService
 from .abstract_view import AbstractView
 class LLMView(AbstractView):
@@ -33,3 +33,7 @@ class OllamaView(APIView):
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+class LLMComparisonView(APIView):
+    def get(self, request):
+        return Response(TestSerializer(LLMService.compare_llms(request.query_params.get("first_llm_id"), request.query_params.get("second_llm_id"), request.query_params.get("session_id")), many=True).data)
