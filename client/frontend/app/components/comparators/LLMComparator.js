@@ -19,6 +19,10 @@ const LLMComparator = ({ sessions }) => {
   });
   const [comparisonData, setComparisonData] = useState([]);
   const [llmNames, setLlmNames] = useState({});
+  const [averages, setAverages] = useState({
+    firstLLM: { semantic_average: 0, external_average: 0 },
+    secondLLM: { semantic_average: 0, external_average: 0 },
+  });
 
   const fetchSessionData = async (id) => {
     const response = await fetch(
@@ -39,7 +43,11 @@ const LLMComparator = ({ sessions }) => {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_comparison/?first_llm_id=${first_llm_id}&second_llm_id=${second_llm_id}&session_id=${session_id}`
     );
     const data = await response.json();
-    setComparisonData(data);
+    setComparisonData(data.common_tests);
+    setAverages({
+      firstLLM: data.first_llm_averages,
+      secondLLM: data.second_llm_averages,
+    });
   };
 
   useEffect(() => {
@@ -57,7 +65,7 @@ const LLMComparator = ({ sessions }) => {
   }, [selectedLLMS, selectedSessionData]);
 
   const groupedData = {};
-  comparisonData.forEach((item) => {
+  comparisonData?.forEach((item) => {
     const promptText = item.prompt.prompt_text;
     if (!groupedData[promptText]) {
       groupedData[promptText] = { prompt: promptText };
@@ -78,9 +86,21 @@ const LLMComparator = ({ sessions }) => {
 
   const chartData = Object.values(groupedData);
 
+  const avgChartData = [
+    {
+      name: "Valutazione Semantica",
+      [llmNames[selectedLLMS.firstLLM]]: averages.firstLLM.semantic_average,
+      [llmNames[selectedLLMS.secondLLM]]: averages.secondLLM.semantic_average,
+    },
+    {
+      name: "Valutazione Esterna",
+      [llmNames[selectedLLMS.firstLLM]]: averages.firstLLM.external_average,
+      [llmNames[selectedLLMS.secondLLM]]: averages.secondLLM.external_average,
+    },
+  ];
+
   return (
     <div className="container-fluid p-5">
-      {/* Selezione sessione */}
       <div className="row text-center justify-content-center">
         <div className="col-md-6 col-12">
           <select
@@ -101,7 +121,6 @@ const LLMComparator = ({ sessions }) => {
         </div>
       </div>
 
-      {/* Selezione LLM */}
       {selectedSessionData.length !== 0 && (
         <div className="row row-cols-md-2 row-cols-1 p-3">
           <div className="col">
@@ -151,7 +170,6 @@ const LLMComparator = ({ sessions }) => {
         </div>
       )}
 
-      {/* Grafici */}
       {selectedLLMS.firstLLM && selectedLLMS.secondLLM && chartData.length > 0 && (
         <div className="container-fluid">
           <h4 className="text-center">Valutazione Semantica</h4>
@@ -208,6 +226,33 @@ const LLMComparator = ({ sessions }) => {
                 name={llmNames[selectedLLMS.secondLLM]}
               >
                 <LabelList dataKey="llm2_external" position="right" />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+
+          <h4 className="mt-5 text-center">Medie per LLM</h4>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              layout="vertical"
+              data={avgChartData}
+              margin={{ top: 20, right: 30, left: 100, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="name" type="category" />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey={llmNames[selectedLLMS.firstLLM]}
+                fill="#8884d8"
+              >
+                <LabelList dataKey={llmNames[selectedLLMS.firstLLM]} position="right" />
+              </Bar>
+              <Bar
+                dataKey={llmNames[selectedLLMS.secondLLM]}
+                fill="#82ca9d"
+              >
+                <LabelList dataKey={llmNames[selectedLLMS.secondLLM]} position="right" />
               </Bar>
             </BarChart>
           </ResponsiveContainer>

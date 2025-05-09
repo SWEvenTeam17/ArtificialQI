@@ -36,4 +36,20 @@ class OllamaView(APIView):
         
 class LLMComparisonView(APIView):
     def get(self, request):
-        return Response(TestSerializer(LLMService.compare_llms(request.query_params.get("first_llm_id"), request.query_params.get("second_llm_id"), request.query_params.get("session_id")), many=True).data)
+        first_llm_id = request.query_params.get("first_llm_id")
+        second_llm_id = request.query_params.get("second_llm_id")
+        session_id = request.query_params.get("session_id")
+
+        result = LLMService.compare_llms(
+            int(first_llm_id),
+            int(second_llm_id),
+            int(session_id)
+        )
+
+        serialized_tests = TestSerializer(result["common_tests"], many=True).data
+
+        return Response({
+            "common_tests": serialized_tests,
+            "first_llm_averages": result["first_llm_averages"],
+            "second_llm_averages": result["second_llm_averages"]
+        }, status=status.HTTP_200_OK)
