@@ -2,7 +2,7 @@ from django.urls import path
 from API import views
 from .views_def.sessions_view import SessionsView
 from .views_def.prompt_view import PromptView
-from .views_def.llm_view import LLMView, OllamaView, LLMComparisonView
+from .views_def.llm_view import LLMView, OllamaView, LLMComparisonView, PromptComparisonView
 from .views_def.answer_view import AnswerView
 from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
@@ -24,5 +24,6 @@ urlpatterns = [
     path("llm_remaining/<int:instance_id>", SessionLLMView.as_view()),
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
     path("runtest", TestView.as_view()),
-    path("llm_comparison/", LLMComparisonView.as_view())
+    path("llm_comparison/", LLMComparisonView.as_view()),
+    path("prompt_comparison/", PromptComparisonView.as_view())
 ]

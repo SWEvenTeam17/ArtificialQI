@@ -65,10 +65,9 @@ class LLMService(AbstractService):
                 common_tests.append(x)
         
         return {"common_tests":common_tests, "first_llm_averages":cls.calculate_avg_evaluation(first_llm_tests), "second_llm_averages":cls.calculate_avg_evaluation(second_llm_tests)}
-
-
-
-    
-
-
-
+        
+    @classmethod
+    def compare_prompts(cls, llm_id: int, session_id: int):
+        llm_tests = cls.repository.get_previous_tests(llm_id=llm_id, session_id=session_id)
+        return {"tests": llm_tests, "averages":cls.calculate_avg_evaluation(llm_tests)}
+        

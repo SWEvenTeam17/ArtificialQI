@@ -45,7 +45,7 @@ export default function Compare() {
       {selectedComparison === "LLM" ? (
         <LLMComparator sessions={sessions} />
       ) : (
-        <QuestionComparator />
+        <QuestionComparator sessions={sessions} />
       )}
     </div>
   );

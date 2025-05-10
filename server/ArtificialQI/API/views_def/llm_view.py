@@ -53,3 +53,20 @@ class LLMComparisonView(APIView):
             "first_llm_averages": result["first_llm_averages"],
             "second_llm_averages": result["second_llm_averages"]
         }, status=status.HTTP_200_OK)
+
+class PromptComparisonView(APIView):
+    def get(self, request):
+        llm_id = request.query_params.get("llm_id")
+        session_id = request.query_params.get("session_id")
+
+        result = LLMService.compare_prompts(
+            int(llm_id),
+            int(session_id)
+        )
+
+        serialized_tests = TestSerializer(result["tests"], many=True).data
+
+        return Response({
+            "tests": serialized_tests,
+            "averages": result["averages"]
+        }, status=status.HTTP_200_OK)
