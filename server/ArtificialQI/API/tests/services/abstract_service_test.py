@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 from API.services.abstract_service import AbstractService
 
 class AbstractServiceTestCase:
-    service_class = None  # Deve essere sovrascritto
+    service_class = None  
     mock_repository = None
 
     @pytest.fixture(autouse=True)
