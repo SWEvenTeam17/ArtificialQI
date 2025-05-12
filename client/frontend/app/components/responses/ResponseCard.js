@@ -1,6 +1,6 @@
 const ResponseCard = ({ response }) => {
   return (
-    <div className="card text-center rounded-4 shadow-lg p-4 mb-4 w-100 transition-transform transform hover:scale-105">
+    <div className="card text-center rounded-4 p-4 mb-4 w-100 transition-transform transform hover:scale-105">
       <div className="card-body">
         <h5 className="card-title text-primary font-weight-bold">
           {response.llm_name}

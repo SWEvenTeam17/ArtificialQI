@@ -4,6 +4,8 @@ File che contiene i servizi riguardanti i test.
 
 from typing import List
 import requests, os
+from statistics import mean
+from collections import defaultdict
 from dotenv import load_dotenv
 from API.repositories import TestRepository, SessionRepository, PromptRepository
 from API.models import Session
@@ -62,6 +64,7 @@ class TestService(AbstractService):
         i dati e ritorna i risultati.
         """
         results = []
+        scores = defaultdict(lambda: {"semantic": [], "external": []})
         for x in data:
             prompt = PromptService.read(instance_id=x["id"])
             for llm in llms:
@@ -72,6 +75,8 @@ class TestService(AbstractService):
                 external_evaluation = LLMController.get_external_evaluation(
                     "google", x["expected_answer"], output
                 )
+                scores[llm.name]["semantic"].append(semantic_evaluation)
+                scores[llm.name]["external"].append(external_evaluation)
                 evaluation = EvaluationService.create(
                     {
                         "prompt": prompt,
@@ -97,7 +102,23 @@ class TestService(AbstractService):
                         "external_evaluation": external_evaluation,
                     }
                 )
-        return results
+        averages={}
+        for llm_name, scores in scores.items():
+            semantic_scores = [float(s) for s in scores["semantic"]]
+            external_scores = [float(e) for e in scores["external"]]
+
+            avg_semantic_scores = mean(semantic_scores) if semantic_scores else None
+            avg_external_scores = mean(external_scores) if external_scores else None
+
+            averages[llm_name] = {
+                "avg_semantic_scores": avg_semantic_scores,
+                "avg_external_scores": avg_external_scores
+            }
+        return {
+        "results": results,
+        "averages_by_llm": averages
+        }
+
 
     @staticmethod
     def get_formatted(unformatted_data):

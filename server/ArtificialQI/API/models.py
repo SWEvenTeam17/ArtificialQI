@@ -10,11 +10,9 @@ class LLM(models.Model):
     """
     Modello che rappresenta un LLM collegato ad ArtificialQI
     """
-
     name = models.CharField(max_length=255, unique=True)
     n_parameters = models.TextField(default="")
     # session = models.ForeignKey(Session, on_delete=models.CASCADE)
-
 
 class Session(models.Model):
     """
@@ -71,4 +69,3 @@ class Test(models.Model):
     prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
     llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
