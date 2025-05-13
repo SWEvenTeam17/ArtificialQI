@@ -38,7 +38,6 @@ class TestService(AbstractService):
                 existing_prompt = PromptRepository.filter_one(
                     prompt_text=x["prompt_text"],
                     expected_answer=x["expected_answer"],
-                    session=session
                 )
                 if existing_prompt:
                     x["id"] = existing_prompt.id
@@ -47,7 +46,6 @@ class TestService(AbstractService):
                     save = {
                         "prompt_text": x["prompt_text"],
                         "expected_answer": x["expected_answer"],
-                        "session": session,
                     }
                     saved_prompt = PromptService.create(save)
                     prompts.append(saved_prompt)
@@ -80,7 +78,7 @@ class TestService(AbstractService):
                 )
                 TestService.create(
                     {
-                        "session": prompt.session,
+                        "session": session,
                         "block": new_block,
                         "llm": llm,
                         "evaluation": evaluation,

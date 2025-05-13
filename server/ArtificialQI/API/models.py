@@ -35,7 +35,6 @@ class Prompt(models.Model):
     prompt_text = models.TextField()
     expected_answer = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
 
 
 class Answer(models.Model):

@@ -22,7 +22,7 @@ class PromptRepository(AbstractRepository):
         return cls.model.objects.filter(session=session)
     
     @classmethod
-    def filter_one(cls, prompt_text: str, expected_answer: str, session: Session):
+    def filter_one(cls, prompt_text: str, expected_answer: str):
         """
         Restituisce un singolo prompt che corrisponde esattamente a
         prompt_text, expected_answer e session. Ritorna None se non trovato.
@@ -30,7 +30,6 @@ class PromptRepository(AbstractRepository):
         return cls.model.objects.filter(
             prompt_text=prompt_text,
             expected_answer=expected_answer,
-            session=session
         ).first()
     
     
