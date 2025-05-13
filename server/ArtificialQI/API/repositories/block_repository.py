@@ -7,13 +7,11 @@ class BlockRepository(AbstractRepository):
     @staticmethod
     def add_prompt(block: Block,prompt: Prompt)->Block:
         block.prompt.add(prompt)
-        block.save()
         return block
 
     @staticmethod
     def remove_prompt(block: Block,prompt: Prompt)->Block:
         block.prompt.remove(prompt)
-        block.save()
         return block
     
     @staticmethod

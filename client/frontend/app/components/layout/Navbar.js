@@ -99,6 +99,11 @@ export default function Navbar({ sessions, fetchSessions }) {
               Confronta risultati
             </Link>
           </li>
+          <li className="nav-item me-3">
+            <Link className="nav-link" href="/question-blocks">
+              Blocchi di domande
+            </Link>
+          </li>
         </ul>
         <div
           className="offcanvas offcanvas-start"

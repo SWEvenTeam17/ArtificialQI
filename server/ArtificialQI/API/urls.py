@@ -7,6 +7,7 @@ from .views_def.answer_view import AnswerView
 from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
 from .views_def.prev_test_view import PrevTestView
+from .views_def.block_view import BlockView
 
 urlpatterns = [
     path("session_list/", SessionsView.as_view()),
@@ -14,6 +15,8 @@ urlpatterns = [
     path("previous_tests/<int:instance_id>/", PrevTestView.as_view()),
     path("prompt_list/", PromptView.as_view()),
     path("prompt_list/<int:instance_id>/", PromptView.as_view()),
+    path("question_blocks/",BlockView.as_view()),
+    path("question_blocks/<int:instance_id>/",BlockView.as_view()),
     path("answer_list/", AnswerView.as_view()),
     path("answer_list/<int:instance_id>/", AnswerView.as_view()),
     path("llm_list/", LLMView.as_view()),
