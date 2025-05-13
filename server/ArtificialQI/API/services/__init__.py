@@ -11,3 +11,4 @@ from .evaluation_service import EvaluationService
 from .session_service import SessionService
 from .test_service import TestService
 from .prompt_service import PromptService
+from .block_service import BlockService

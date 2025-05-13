@@ -59,6 +59,9 @@ class Evaluation(models.Model):
     semantic_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
     external_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
 
+class Block(models.Model):
+    name = models.CharField(max_length=255, null=False, default="Blocco senza nome", unique=True)
+    prompt = models.ManyToManyField(Prompt)
 
 class Test(models.Model):
     """
@@ -66,6 +69,8 @@ class Test(models.Model):
     """
 
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
+    block = models.ForeignKey(Block, on_delete=models.CASCADE)
     llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
+
+

@@ -1,45 +1,40 @@
-"""
-File che contiene i servizi riguardanti i test.
-"""
-
 from typing import List
 import requests, os
 from statistics import mean
 from collections import defaultdict
 from dotenv import load_dotenv
-from API.repositories import TestRepository, SessionRepository, PromptRepository
-from API.models import Session
+from API.repositories import TestRepository, SessionRepository, PromptRepository, BlockRepository
+from API.models import Session, Prompt, Block
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
 from .prompt_service import PromptService
 from .evaluation_service import EvaluationService
 
-
 class TestService(AbstractService):
     """
-    Classe che contiene i servizi riguardanti i test.
+    Classe che contiene tutti i servizi riguardanti i test.
     """
 
     repository = TestRepository
 
     @staticmethod
-    def runtest(data: List[dict], session: Session):
-        """
-        Funzione che gestisce le chiamate dei vari helper per fare i test.
-        """
-        TestService.save_data(data=data, session=session)
-        llms = session.llm.all()
-        return TestService.evaluate(llms, data)
+    def interrogate(llm_name: str, prompt: str)->str:
+        load_dotenv()
+        url = os.getenv("LLM_SERVICE_URL") +"interrogate/"
+        return requests.post(url,{"llm_name":llm_name, "prompt":prompt}).json().get("answer")
 
     @staticmethod
-    def save_data(data: List[dict], session: Session) -> None:
-        """
-        Funzione che controlla i dati e salva eventuali domande
-        non ancora registrate in DB. Se esistono già, le riusa.
-        """
+    def runtest(data: List[dict], session: Session, block_name: str)->dict:
+        prompts: List[Prompt] = []
+        new_block: Block = BlockRepository.create({"name":block_name})
+        llms = session.llm.all()
+        results = []
+        scores = defaultdict(lambda: {"semantic": [], "external": []})
+
+        #aggiungo tutti i prompt ad una lista, se non esistono li creo in DB
         for x in data:
+            #se non esiste
             if "id" not in x:
-                # Controlla se esiste già un prompt identico
                 existing_prompt = PromptRepository.filter_one(
                     prompt_text=x["prompt_text"],
                     expected_answer=x["expected_answer"],
@@ -47,6 +42,7 @@ class TestService(AbstractService):
                 )
                 if existing_prompt:
                     x["id"] = existing_prompt.id
+                    prompts.append(existing_prompt)
                 else:
                     save = {
                         "prompt_text": x["prompt_text"],
@@ -54,24 +50,22 @@ class TestService(AbstractService):
                         "session": session,
                     }
                     saved_prompt = PromptService.create(save)
+                    prompts.append(saved_prompt)
                     x["id"] = saved_prompt.id
+            #se esiste
+            else:
+                prompts.append(PromptRepository.get_by_id(x["id"]))
+        
+        #aggiungo i prompt ad un blocco
+        for prompt in prompts:
+            if prompt not in new_block.prompt.all():
+                BlockRepository.add_prompt(new_block, prompt)
 
-
-    @staticmethod
-    def evaluate(llms: List[dict], data: List[dict]) -> List[dict]:
-        """
-        Funzione che chiama le funzioni dedicate alle valutazioni, salva
-        i dati e ritorna i risultati.
-        """
-        results = []
-        scores = defaultdict(lambda: {"semantic": [], "external": []})
-        for x in data:
-            prompt = PromptService.read(instance_id=x["id"])
+        #ciclo tra i prompt, mando i dati ai LLM e chiedo le valutazioni per ogni prompt
+        for prompt in prompts:
             for llm in llms:
                 output = TestService.interrogate(llm.name, prompt.prompt_text)
-                semantic_evaluation = LLMController.get_semantic_evaluation(
-                    x["expected_answer"], output
-                )
+                semantic_evaluation = LLMController.get_semantic_evaluation(prompt.expected_answer, output)
                 external_evaluation = LLMController.get_external_evaluation(
                     "google", x["expected_answer"], output
                 )
@@ -87,7 +81,7 @@ class TestService(AbstractService):
                 TestService.create(
                     {
                         "session": prompt.session,
-                        "prompt": prompt,
+                        "block": new_block,
                         "llm": llm,
                         "evaluation": evaluation,
                     }
@@ -102,7 +96,9 @@ class TestService(AbstractService):
                         "external_evaluation": external_evaluation,
                     }
                 )
+        #istanzio una lista per le medie e i punteggi
         averages={}
+        #ciclo ogni score ottenuto, casto a float i valori e calcolo le medie, li inserisco in un dizionario sulla chiave llm_name 
         for llm_name, scores in scores.items():
             semantic_scores = [float(s) for s in scores["semantic"]]
             external_scores = [float(e) for e in scores["external"]]
@@ -115,47 +111,11 @@ class TestService(AbstractService):
                 "avg_external_scores": avg_external_scores
             }
         return {
-        "results": results,
-        "averages_by_llm": averages
-        }
+            "results": results,
+            "averages_by_llm": averages
+            }
+        
 
+        
 
-    @staticmethod
-    def get_formatted(unformatted_data):
-        """
-        Funzione che formatta i dati in maniera corretta per l'esecuzione
-        del test
-        """
-        # data = unformatted_data.get("data")
-        ret = []
-        for x in unformatted_data:
-            if "id" in x and x["id"] is not None:
-                ret.append(
-                    {
-                        "id": x["id"],
-                        "prompt_text": x["prompt_text"],
-                        "expected_answer": x["expected_answer"],
-                    }
-                )
-            else:
-                ret.append(
-                    {
-                        "prompt_text": x["prompt_text"],
-                        "expected_answer": x["expected_answer"],
-                    }
-                )
-        return ret
-
-    @staticmethod
-    def get_data(unformatted_data, id):
-        """
-        Funzione che ritorna i dati necessari all'esecuzione
-        del test
-        """
-        session = SessionRepository.get_by_id(id)
-        return TestService.get_formatted(unformatted_data), session
-    
-    def interrogate(llm_name: str, prompt: str)->str:
-        load_dotenv()
-        url = os.getenv("LLM_SERVICE_URL") +"interrogate/"
-        return requests.post(url,{"llm_name":llm_name, "prompt":prompt}).json().get("answer")
+        
