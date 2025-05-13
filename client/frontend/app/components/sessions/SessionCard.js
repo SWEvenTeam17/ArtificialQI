@@ -26,13 +26,15 @@ const SessionCard = ({ session, deleteSession, updateSession }) => {
           <>
             <input
               type="text"
-              className="form-control mb-2"
+              className="form-control rounded-5 mb-2"
+              placeholder="Nome"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
             />
             <input
               type="text"
-              className="form-control mb-2"
+              className="form-control rounded-5"
+              placeholder="Descrizione"
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
             />
@@ -53,7 +55,11 @@ const SessionCard = ({ session, deleteSession, updateSession }) => {
           {isEditing ? (
             <button
               className="btn btn-danger shadow-sm w-100 rounded-5"
-              onClick={() => setIsEditing(false)}
+              onClick={() => {
+                setIsEditing(false);
+                setEditedTitle(session.title);
+                setEditedDescription(session.description);
+              }}
             >
               <Image
                 alt={"Annulla"}
