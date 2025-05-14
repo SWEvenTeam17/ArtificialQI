@@ -8,7 +8,7 @@ se necessario.
 """
 
 from rest_framework import serializers
-from API.models import Prompt, LLM, Answer, Session, Evaluation, Test, Block
+from API.models import Prompt, LLM, Run, Session, Evaluation, Test, Block
 
 
 class LLMSerializer(serializers.ModelSerializer):
@@ -19,17 +19,6 @@ class LLMSerializer(serializers.ModelSerializer):
     class Meta:
         model = LLM
         fields = ["id", "name", "n_parameters"]
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    """
-    Serializzatore del modello Answer
-    """
-
-    class Meta:
-        model = Answer
-        fields = ["id", "prompt", "LLM", "LLM_answer", "timestamp"]
-
 
 class SessionSerializer(serializers.ModelSerializer):
     """
@@ -80,12 +69,15 @@ class BlockSerializer(serializers.ModelSerializer):
         model = Block
         fields = ['id', 'name', 'prompt']
 
+class RunSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Run
+        fields = "__all__"
+
 
 class TestSerializer(serializers.ModelSerializer):
     session = SessionSerializer(read_only=True)
-    prompt = PromptSerializer(read_only=True)
-    llm = LLMSerializer(read_only=True)
-    evaluation = EvaluationSerializer(read_only=True)
+    block = BlockSerializer(read_only=True)
 
     class Meta:
         model = Test

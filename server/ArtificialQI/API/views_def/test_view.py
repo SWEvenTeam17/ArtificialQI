@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from API.serializers import TestSerializer
 from API.services import TestService, SessionService, BlockService
+from API.models import Block
+from typing import List
 from .abstract_view import AbstractView
 class TestView(AbstractView):
     """
@@ -20,21 +22,11 @@ class TestView(AbstractView):
         """
         Override della funzione che gestisce le richieste di tipo POST.
         """
-        data = request.data.get("data")
         session = SessionService.read(request.data.get("sessionId"))
-        block_name = request.data.get("blockName")
-        if not data:
-            return Response(
-                {"error": "Domanda e risposta sono campi obbligatori"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if BlockService.is_duplicated(block_name):
-            return Response(
-                {"error": "Nome del test duplicato"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        blocks: List[Block] = BlockService.retrieve_blocks(request.data.get("blocks"))
         try:
-            test = self.service.runtest(data, session, block_name)
+            test = self.service.runtest(session=session, blocks=blocks)
+            print(test)
             return Response(test, status=status.HTTP_200_OK)
         except (ConnectionError, FileNotFoundError) as e:
             if isinstance(e, ConnectionError):

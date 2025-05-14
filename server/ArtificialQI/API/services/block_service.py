@@ -5,6 +5,7 @@ File che contiene i servizi riguardanti i blocchi.
 from API.repositories import BlockRepository, PromptRepository
 from API.models import Block
 from .abstract_service import AbstractService
+from typing import List
 
 
 class BlockService(AbstractService):
@@ -30,6 +31,14 @@ class BlockService(AbstractService):
     def is_duplicated(name: str)->bool:
         duplicated = BlockRepository.get_by_name(name=name)
         return duplicated is not None
+    
+    @staticmethod
+    def retrieve_blocks(blocks: List)->List[Block]:
+        retrieved: List[Block] = []
+        for block in blocks:
+            retrieved.append(BlockService.read(block["id"]))
+        return retrieved
+
     
 
 

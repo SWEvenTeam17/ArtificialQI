@@ -19,7 +19,7 @@ class SessionService(AbstractService):
         """
         Funzione che ritorna tutti i LLM connessi ad una sessione.
         """
-        return cls.repository.get_llm(session_id=session_id)
+        return cls.repository.get_remaining_llm(session_id=session_id)
 
     @classmethod
     def add_llm(cls, session_id: int, llm_id: int) -> LLM | str:

@@ -3,9 +3,8 @@ import { use, useState, useEffect, useContext, useCallback } from "react";
 import { SessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
-import QnAForm from "@/app/components/prompt/QnAForm";
-import PreviousTestsCard from "@/app/components/sessions/PreviousTestsCard";
-import { QuestionsContextProvider } from "@/app/components/contexts/QuestionsContext";
+import { BlocksContextProvider } from "@/app/components/contexts/BlocksContext";
+import TestForm from "@/app/components/question-blocks/TestForm";
 
 export default function SessionPage({ params }) {
   const { id } = use(params);
@@ -73,7 +72,9 @@ export default function SessionPage({ params }) {
         <div className="col-12 col-md-4">
           <div className="card border-0 h-100">
             <div className="card-body text-center">
-              <h5 className="card-title text-center text-primary font-weight-bold">Gestisci LLM collegati</h5>
+              <h5 className="card-title text-center text-primary font-weight-bold">
+                Gestisci LLM collegati
+              </h5>
               <div className="row justify-content-center">
                 <div className="col-lg-7 col-12">
                   <AddLLMForm
@@ -107,18 +108,15 @@ export default function SessionPage({ params }) {
             </div>
           </div>
         </div>
-        <QuestionsContextProvider>
+        <BlocksContextProvider>
           <div className="col-12 col-md-8">
             <div className="row row-cols-1">
               <div className="col">
-                <PreviousTestsCard id={id} />
-              </div>
-              <div className="col">
-                <QnAForm sessionData={sessionData} />
+                <TestForm sessionData={sessionData}/>
               </div>
             </div>
           </div>
-        </QuestionsContextProvider>
+        </BlocksContextProvider>
       </div>
     </div>
   );

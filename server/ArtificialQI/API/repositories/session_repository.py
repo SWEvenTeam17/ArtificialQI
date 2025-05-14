@@ -14,11 +14,15 @@ class SessionRepository(AbstractRepository):
     model = Session
 
     @classmethod
-    def get_llm(cls, session_id: int):
+    def get_remaining_llm(cls, session_id: int):
         """
         Ritorna tutti i LLM non collegati ad una determinata sessione.
         """
         return LLM.objects.exclude(session__id=session_id).all()
+    
+    @staticmethod
+    def get_llms(session: Session):
+        return list(session.llm.all())
 
     @classmethod
     def add_llm(cls, session: Session, llm: LLM) -> LLM:

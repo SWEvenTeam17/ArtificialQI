@@ -1,5 +1,6 @@
 from .abstract_repository import AbstractRepository
 from API.models import Block, Prompt
+from typing import List
 
 class BlockRepository(AbstractRepository):
     model = Block
@@ -17,6 +18,11 @@ class BlockRepository(AbstractRepository):
     @staticmethod
     def get_by_name(name: str)->Block | None:
         return Block.objects.filter(name=name).first()
+
+    @staticmethod
+    def get_prompts(block: Block) -> List[Prompt]:
+        return list(block.prompt.all())
+
     
 
     
