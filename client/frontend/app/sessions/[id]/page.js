@@ -69,14 +69,14 @@ export default function SessionPage({ params }) {
       </h1>
 
       <div className="row g-0 p-0 m-0">
-        <div className="col-12 col-md-4">
+        <div className="col-12">
           <div className="card border-0 h-100">
             <div className="card-body text-center">
               <h5 className="card-title text-center text-primary font-weight-bold">
                 Gestisci LLM collegati
               </h5>
               <div className="row justify-content-center">
-                <div className="col-lg-7 col-12">
+                <div className="col-md-6 col-12">
                   <AddLLMForm
                     LLMData={LLMData}
                     sessionData={sessionData}
@@ -86,9 +86,9 @@ export default function SessionPage({ params }) {
                 </div>
               </div>
               {sessionData.llm.length > 0 ? (
-                <div className="row row-cols-1 g-4 mb-5 mt-5">
+                <div className="row row-cols-4 g-4 mb-5 mt-5">
                   {sessionData.llm.map((llm) => (
-                    <div className="col-12" key={llm.id}>
+                    <div className="col-3" key={llm.id}>
                       <LLMCard
                         id={id}
                         llm={llm}
@@ -109,7 +109,7 @@ export default function SessionPage({ params }) {
           </div>
         </div>
         <BlocksContextProvider>
-          <div className="col-12 col-md-8">
+          <div className="col-12">
             <div className="row row-cols-1">
               <div className="col">
                 <TestForm sessionData={sessionData}/>

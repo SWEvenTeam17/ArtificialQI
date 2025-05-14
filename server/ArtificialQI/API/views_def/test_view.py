@@ -26,7 +26,6 @@ class TestView(AbstractView):
         blocks: List[Block] = BlockService.retrieve_blocks(request.data.get("blocks"))
         try:
             test = self.service.runtest(session=session, blocks=blocks)
-            print(test)
             return Response(test, status=status.HTTP_200_OK)
         except (ConnectionError, FileNotFoundError) as e:
             if isinstance(e, ConnectionError):
