@@ -4,7 +4,7 @@ from statistics import mean
 from collections import defaultdict
 from dotenv import load_dotenv
 from API.repositories import TestRepository, SessionRepository, BlockRepository
-from API.models import Session, Prompt, Block, LLM, Evaluation
+from API.models import Session, Block
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
@@ -25,66 +25,80 @@ class TestService(AbstractService):
 
     @staticmethod
     def runtest(session: Session, blocks: List[Block]):
-        llms: List[LLM] = SessionRepository.get_llms(session=session)
-        full_results = []
+        llms = SessionRepository.get_llms(session=session)
+        block_map = {}
+        all_prompts = []
 
         for block in blocks:
-            prompts: List[Prompt] = BlockRepository.get_prompts(block=block)
-            TestService.create({"session": session, "block": block})
+            prompts = BlockRepository.get_prompts(block=block)
+            test = TestService.create({"session": session, "block": block})
+            block_map[block.id] = {
+                "name": block.name,
+                "test": test,
+                "results": [],
+                "scores": defaultdict(lambda: {
+                    "semantic_sum": 0.0,
+                    "semantic_count": 0,
+                    "external_sum": 0.0,
+                    "external_count": 0
+                })
+            }
+            all_prompts.extend((block.id, prompt) for prompt in prompts)
 
-            block_results = []
-            scores = defaultdict(lambda: {"semantic": [], "external": []})
+        for llm in llms:
+            for block_id, prompt in all_prompts:
+                output = TestService.interrogate(llm.name, prompt.prompt_text)
+                semantic_eval = float(LLMController.get_semantic_evaluation(prompt.expected_answer, output))
+                external_eval = float(LLMController.get_external_evaluation("google", prompt.expected_answer, output))
 
-            for prompt in prompts:
-                for llm in llms:
-                    output = TestService.interrogate(llm.name, prompt.prompt_text)
+                evaluation = EvaluationService.create({
+                    "semantic_evaluation": semantic_eval,
+                    "external_evaluation": external_eval
+                })
 
-                    semantic_eval = LLMController.get_semantic_evaluation(prompt.expected_answer, output)
-                    external_eval = LLMController.get_external_evaluation("google", prompt.expected_answer, output)
+                run = RunService.create({
+                    "llm": llm,
+                    "prompt": prompt,
+                    "evaluation": evaluation,
+                    "llm_answer": output
+                })
 
-                    scores[llm.name]["semantic"].append(semantic_eval)
-                    scores[llm.name]["external"].append(external_eval)
+                TestRepository.add_run(block_map[block_id]["test"], run)
 
-                    evaluation: Evaluation = EvaluationService.create({
-                        "semantic_evaluation": semantic_eval,
-                        "external_evaluation": external_eval
-                    })
+                block_map[block_id]["results"].append({
+                    "llm_name": llm.name,
+                    "question": prompt.prompt_text,
+                    "expected_answer": prompt.expected_answer,
+                    "answer": output,
+                    "semantic_evaluation": semantic_eval,
+                    "external_evaluation": external_eval
+                })
 
-                    RunService.create({
-                        "llm": llm,
-                        "prompt": prompt,
-                        "evaluation": evaluation,
-                        "llm_answer": output
-                    })
+                scores = block_map[block_id]["scores"][llm.name]
+                scores["semantic_sum"] += semantic_eval
+                scores["semantic_count"] += 1
+                scores["external_sum"] += external_eval
+                scores["external_count"] += 1
 
-                    block_results.append({
-                        "llm_name": llm.name,
-                        "question": prompt.prompt_text,
-                        "expected_answer": prompt.expected_answer,
-                        "answer": output,
-                        "semantic_evaluation": semantic_eval,
-                        "external_evaluation": external_eval,
-                    })
-            averages = {}
-            for llm_name, score_list in scores.items():
-                semantic_scores = [float(s) for s in score_list["semantic"]]
-                external_scores = [float(e) for e in score_list["external"]]
-
-                avg_semantic_scores = mean(semantic_scores) if semantic_scores else None
-                avg_external_scores = mean(external_scores) if external_scores else None
-
-                averages[llm_name] = {
-                    "avg_semantic_scores": avg_semantic_scores,
-                    "avg_external_scores": avg_external_scores
+        full_results = []
+        for block_id, data in block_map.items():
+            averages = {
+                llm_name: {
+                    "avg_semantic_scores": (sc["semantic_sum"] / sc["semantic_count"])
+                                        if sc["semantic_count"] else None,
+                    "avg_external_scores": (sc["external_sum"] / sc["external_count"])
+                                        if sc["external_count"] else None
                 }
-
+                for llm_name, sc in data["scores"].items()
+            }
             full_results.append({
-                "block_id": block.id,
-                "block_name": block.name,
-                "results": block_results,
+                "block_id": block_id,
+                "block_name": data["name"],
+                "results": data["results"],
                 "averages_by_llm": averages
             })
 
-        return {
-            "results": full_results
-        }
+        return {"results": full_results}
+
+
+
