@@ -58,10 +58,10 @@ class AbstractView(APIView, ABC):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
-                self.service.create(serializer.validated_data)
-                return Response(
-                    serializer.validated_data, status=status.HTTP_201_CREATED
-                )
+                instance = self.service.create(serializer.validated_data)
+                serialized = self.serializer(instance)
+                return Response(serialized.data, status=status.HTTP_201_CREATED)
+
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -76,8 +76,16 @@ class AbstractView(APIView, ABC):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
-                self.service.update(id=instance_id, data=serializer.validated_data)
-                return Response(serializer.validated_data, status=status.HTTP_200_OK)
+                #self.service.update(id=instance_id, data=serializer.validated_data)
+                #cambiato per far funzionare il test, verificare non crei problemi
+               #cambiamo anche queste due righe con le tre sotto
+               # self.service.update(instance_id=instance_id, data=serializer.validated_data)
+
+                #return Response(serializer.validated_data, status=status.HTTP_200_OK)
+                instance = self.service.update(instance_id=instance_id, data=serializer.validated_data)
+                serialized = self.serializer(instance)
+                return Response(serialized.data, status=status.HTTP_200_OK)
+
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
