@@ -17,7 +17,7 @@ class SessionLLMView(APIView):
     serializer = LLMSerializer
     service = SessionService
 
-    def get(self, request, instance_id: int)->Response:
+    def get(self, request, instance_id: int) -> Response:
         """
         Ritorna tutti i modelli collegati ad una sessione.
         """
@@ -25,30 +25,26 @@ class SessionLLMView(APIView):
             result = self.service.get_llm(session_id=instance_id)
             serializer = self.serializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Session.DoesNotExist:
-            return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
-        except LLM.DoesNotExist:
-            return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request)->Response:
-        """
-        Collega un LLM ad una sessione.
-        """
-        try:
-            session_id = request.data.get("sessionId")
-            llm_id = request.data.get("llmId")
-            serializer = self.serializer(
-                self.service.add_llm(session_id=session_id, llm_id=llm_id)
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except Session.DoesNotExist:
-            return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
-        except LLM.DoesNotExist:
-            return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            """
+            Collega un LLM ad una sessione.
+            """
+            try:
+                session_id = request.data.get("sessionId")
+                llm_id = request.data.get("llmId")
+                serializer = self.serializer(
+                    self.service.add_llm(session_id=session_id, llm_id=llm_id)
+                )
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Session.DoesNotExist:
+                return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+            except LLM.DoesNotExist:
+                return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, session_id: int, llm_id: int)->Response:
         """

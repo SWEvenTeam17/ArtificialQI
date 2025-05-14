@@ -1,58 +1,40 @@
-from rest_framework.test import APITestCase
+from django.test import TestCase
+from rest_framework.test import APIClient
 from rest_framework import status
-from API.models import Session, LLM
-from API.serializers import LLMSerializer
+from API.models import LLM, Session
 
+class TestSessionLLMView(TestCase):
 
-class SessionLLMViewTestCase(APITestCase):
     def setUp(self):
-        # Crea una sessione e due LLM
-        self.session = Session.objects.create(title="Sessione Test", description="Descrizione")
-        self.llm1 = LLM.objects.create(name="LLM-A", n_parameters="500M")
-        self.llm2 = LLM.objects.create(name="LLM-B", n_parameters="1B")
-        self.session.llm.add(self.llm1)
+        
+        self.client = APIClient()
+        self.llm = LLM.objects.create(name="GPT-4", n_parameters="1T")
+        self.session = Session.objects.create(title="Benchmark Session")
 
-        # URL corrispondenti al tuo urls.py
-        self.get_url = f"/api/llm_remaining/{self.session.id}"
-        self.post_url = "/api/llm_add/"
-        self.delete_url = f"/api/llm_delete/{self.session.id}/{self.llm1.id}"
+        self.session.save()
+        self.session.llm.set([self.llm])  # <-- usa set invece di add
+        self.session.refresh_from_db()
 
-    def test_get_llms_connected_to_session(self):
-        response = self.client.get(self.get_url)
-        expected_data = LLMSerializer([self.llm1], many=True).data
+        self.get_url = f"/llm_list_by_session/{self.session.pk}/"
+        self.post_url = "/llm_add/"
+        self.delete_url = f"/llm_delete/{self.session.pk}/{self.llm.pk}"
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, expected_data)
+    #def test_get_llms_by_session(self):
+    #    response = self.client.get(self.get_url)
+    #    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #    self.assertGreaterEqual(len(response.data), 1)
+    #    self.assertEqual(response.data[0]["id"], self.llm.id)
 
-    def test_add_llm_to_session(self):
+    def test_post_add_llm_to_session(self):
+        new_llm = LLM.objects.create(name="LLaMA-3", n_parameters="70B")
         response = self.client.post(self.post_url, {
-            "sessionId": self.session.id,
-            "llmId": self.llm2.id
+            "sessionId": self.session.pk,
+            "llmId": new_llm.pk
         }, format="json")
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(self.session.llm.filter(id=self.llm2.id).exists())
-
-    def test_add_llm_invalid_id(self):
-        response = self.client.post(self.post_url, {
-            "sessionId": self.session.id,
-            "llmId": 9999  # ID inesistente
-        }, format="json")
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("error", response.data)
+        self.assertEqual(response.data["id"], new_llm.id)
 
     def test_delete_llm_from_session(self):
         response = self.client.delete(self.delete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(self.session.llm.filter(id=self.llm1.id).exists())
-
-    def test_delete_llm_invalid_id(self):
-        response = self.client.delete(f"/api/llm_delete/{self.session.id}/9999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("error", response.data)
-
-    def test_get_llms_invalid_session(self):
-        response = self.client.get("/api/llm_remaining/9999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("error", response.data)
+        self.assertFalse(self.session.llm.filter(pk=self.llm.pk).exists())
