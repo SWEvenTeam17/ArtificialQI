@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'ArtificialQI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if 'test' in sys.argv:
+if 'test' in sys.argv or any('pytest' in arg for arg in sys.argv):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
