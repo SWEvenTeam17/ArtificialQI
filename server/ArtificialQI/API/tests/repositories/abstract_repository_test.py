@@ -6,46 +6,46 @@ from abc import ABC, abstractmethod
 
 import pytest
 
-class AbstractRepository(ABC):
+@pytest.mark.django_db
+class TestAbstractRepository(ABC):
     
-    @property
+    @pytest.fixture
     @abstractmethod
     def repository(self):
         """Restituisce il repository che si sta testando"""
         pass
     
-    @property
+    @pytest.fixture
     @abstractmethod
     def valid_data(self):
         """Restituisce i dati validi per il test"""
         pass
 
-    def test_create(self):
-        instance = self.repository.create(self.valid_data)
+    def test_create(self, repository, valid_data):
+        instance = repository.create(valid_data)
         assert instance.pk is not None
-        original_data = self.valid_data
-        for field, value in original_data.items():
+        for field, value in valid_data.items():
             assert getattr(instance, field) == value
 
-    def test_get_all(self):
-        self.repository.create(self.valid_data)
-        results = self.repository.get_all()
-        self.assertGreaterEqual(len(results), 1)
-        for field, value in self.valid_data.items():
+    def test_get_all(self, repository, valid_data):
+        repository.create(valid_data)
+        results = repository.get_all()
+        assert len(results) >= 1
+        for field, value in valid_data.items():
             assert getattr(results[0], field) == value
 
-    def test_get_by_id(self):
-        instance = self.repository.create(self.valid_data)
-        retrieved = self.repository.get_by_id(instance.pk)
+    def test_get_by_id(self, repository, valid_data):
+        instance = repository.create(valid_data)
+        retrieved = repository.get_by_id(instance.pk)
         assert retrieved.pk == instance.pk
 
-    def test_update(self):
-        instance = self.repository.create(self.valid_data)
-        updated = self.repository.update(instance.pk, {"LLM_answer": "Updated Answer"})
+    def test_update(self, repository, valid_data):
+        instance = repository.create(valid_data)
+        updated = repository.update(instance.pk, {"LLM_answer": "Updated Answer"})
         assert updated.LLM_answer == "Updated Answer"
 
-    def test_delete(self):
-        instance = self.repository.create(self.valid_data)
-        result = self.repository.delete(instance.pk)
+    def test_delete(self, repository, valid_data):
+        instance = repository.create(valid_data)
+        result = repository.delete(instance.pk)
         assert result is True
-        assert self.repository.get_by_id(instance.pk) is None
+        assert repository.get_by_id(instance.pk) is None

@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'ArtificialQI.wsgi.application'
 import sys
 "Aggiunto database temporaneo per eseguire i test"
 
-if 'test' in sys.argv:
+if 'test' in sys.argv or any('pytest' in arg for arg in sys.argv):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
