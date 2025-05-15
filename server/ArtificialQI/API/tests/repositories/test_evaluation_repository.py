@@ -1,9 +1,14 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
+
 from API.models import Answer, Prompt, LLM, Session, Evaluation
 from API.repositories.evaluation_repository import EvaluationRepository
-from API.tests.repositories.abstract_repository import AbstractRepository
-from django.test import TestCase
+from API.tests.repositories.abstract_repository_test import AbstractRepository
+import pytest
 
-class EvaluationRepositoryTest(AbstractRepository, TestCase):
+class EvaluationRepositoryTest(AbstractRepository):
 
     def setUp(self):
         self.llm = LLM.objects.create(name="llama3.2", n_parameters="3B")

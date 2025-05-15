@@ -1,9 +1,14 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
+
 from API.models import Answer, Prompt, LLM, Session
 from API.repositories.session_repository import SessionRepository
-from API.tests.repositories.abstract_repository import AbstractRepository
-from django.test import TestCase
+from API.tests.repositories.abstract_repository_test import AbstractRepository
+import pytest
 
-class AnswerRepositoryTest(AbstractRepository, TestCase):
+class AnswerRepositoryTest(AbstractRepository):
 
     def setUp(self):
         self.llm  = LLM.objects.create(name="llama3.2", n_parameters="3B")
@@ -24,11 +29,11 @@ class AnswerRepositoryTest(AbstractRepository, TestCase):
         # creazione session
         session = self.repository.create(self.valid_data)
         # verifica che il campo llm di session sia vuoto
-        self.assertEqual(self.repository.get_by_id(session.id).llm.count(), 0)
+        assert self.repository.get_by_id(session.id).llm.count() != 0
         # test: aggiunta llm
         self.repository.add_llm(session, self.llm)
         # verifica che llm sia presente in session
-        self.assertIn(self.llm, self.repository.get_by_id(session.id).llm.all())
+        assert self.llm in self.repository.get_by_id(session.id).llm.all()
     
     def test_get_llm(self):
         # creazione session e aggiunta llm
@@ -37,8 +42,8 @@ class AnswerRepositoryTest(AbstractRepository, TestCase):
         # test
         results = self.repository.get_llm(session.id)
         # verifica che llm usato non sia nella lista e che quello non usato sia in list
-        self.assertNotIn(session.llm, results)
-        self.assertIn(self.llm2, results)
+        assert session.llm not in results
+        assert self.llm2 in results
     
     def test_delete_llm(self):
         # creazione session e aggiunta llm
@@ -47,4 +52,4 @@ class AnswerRepositoryTest(AbstractRepository, TestCase):
         #test
         self.repository.delete_llm(session, self.llm)
         # verifica che llm non sia più collegato
-        self.assertEqual(self.repository.get_by_id(session.id).llm.count(), 0)
+        assert self.repository.get_by_id(session.id).llm.count() == 0

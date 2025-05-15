@@ -1,5 +1,10 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
 from abc import ABC, abstractmethod
-from django.test import TestCase
+
+import pytest
 
 class AbstractRepository(ABC):
     
@@ -17,30 +22,30 @@ class AbstractRepository(ABC):
 
     def test_create(self):
         instance = self.repository.create(self.valid_data)
-        self.assertIsNotNone(instance.pk)
+        assert instance.pk is not None
         original_data = self.valid_data
         for field, value in original_data.items():
-            self.assertEqual(getattr(instance, field), value)
+            assert getattr(instance, field) == value
 
     def test_get_all(self):
         self.repository.create(self.valid_data)
         results = self.repository.get_all()
         self.assertGreaterEqual(len(results), 1)
         for field, value in self.valid_data.items():
-            self.assertEqual(getattr(results[0], field), value)
+            assert getattr(results[0], field) == value
 
     def test_get_by_id(self):
         instance = self.repository.create(self.valid_data)
         retrieved = self.repository.get_by_id(instance.pk)
-        self.assertEqual(retrieved.pk, instance.pk)
+        assert retrieved.pk == instance.pk
 
     def test_update(self):
         instance = self.repository.create(self.valid_data)
         updated = self.repository.update(instance.pk, {"LLM_answer": "Updated Answer"})
-        self.assertEqual(updated.LLM_answer, "Updated Answer")
+        assert updated.LLM_answer == "Updated Answer"
 
     def test_delete(self):
         instance = self.repository.create(self.valid_data)
         result = self.repository.delete(instance.pk)
-        self.assertTrue(result)
-        self.assertIsNone(self.repository.get_by_id(instance.pk))
+        assert result is True
+        assert self.repository.get_by_id(instance.pk) is None
