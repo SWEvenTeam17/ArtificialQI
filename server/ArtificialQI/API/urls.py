@@ -6,6 +6,7 @@ from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
 from .views_def.prev_test_view import PrevTestView
 from .views_def.block_view import BlockView
+from .views import common_blocks_view
 
 urlpatterns = [
     path("session_list/", SessionsView.as_view()),
@@ -15,6 +16,7 @@ urlpatterns = [
     path("prompt_list/<int:instance_id>/", PromptView.as_view()),
     path("question_blocks/",BlockView.as_view()),
     path("question_blocks/<int:instance_id>/",BlockView.as_view()),
+    path("common_blocks/", common_blocks_view, name="common_blocks"),
     path("llm_list/", LLMView.as_view()),
     path("llm_list/<int:instance_id>/", LLMView.as_view()),
     path("llm_list/load_ollama/", OllamaView.as_view()),

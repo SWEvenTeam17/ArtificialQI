@@ -3,7 +3,7 @@ File che contiene i servizi riguardanti i blocchi.
 """
 
 from API.repositories import BlockRepository, PromptRepository
-from API.models import Block
+from API.models import Block, LLM
 from .abstract_service import AbstractService
 from typing import List
 
@@ -38,6 +38,11 @@ class BlockService(AbstractService):
         for block in blocks:
             retrieved.append(BlockService.read(block["id"]))
         return retrieved
+    
+    def common_blocks(first_llm: LLM, second_llm: LLM)->List[Block]:
+        first_llm_blocks = Block.objects.filter(prompt__run__llm__id=first_llm.id).distinct()
+        second_llm_blocks = Block.objects.filter(prompt__run__llm__id=second_llm.id).distinct()
+        common_blocks = first_llm_blocks.intersection(second_llm_blocks)
 
     
 

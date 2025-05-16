@@ -51,7 +51,7 @@ export default function TestResults({ testResults }) {
           </div>
 
           <h5 className="mt-5">Media valutazioni per LLM</h5>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={300} margin={{ top: 0, right: 0, left: 20, bottom: 0 }}>
             <BarChart
               layout="vertical"
               data={Object.entries(block.averages_by_llm).map(
@@ -61,7 +61,8 @@ export default function TestResults({ testResults }) {
                   external: scores.avg_external_scores,
                 })
               )}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              margin={{ top: 5, right: 30, left: 
+                30, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" domain={[0, 1]} />
