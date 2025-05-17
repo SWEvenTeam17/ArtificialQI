@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from API.models import LLM, Session
+import unittest
 
 class TestSessionLLMView(TestCase):
 
@@ -19,11 +20,12 @@ class TestSessionLLMView(TestCase):
         self.post_url = "/llm_add/"
         self.delete_url = f"/llm_delete/{self.session.pk}/{self.llm.pk}"
 
-    #def test_get_llms_by_session(self):
-    #    response = self.client.get(self.get_url)
-    #    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #    self.assertGreaterEqual(len(response.data), 1)
-    #    self.assertEqual(response.data[0]["id"], self.llm.id)
+    @unittest.skip("test non ancora funzionante")
+    def test_get_llms_by_session(self):
+        response = self.client.get(self.get_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["id"], self.llm.id)
 
     def test_post_add_llm_to_session(self):
         new_llm = LLM.objects.create(name="LLaMA-3", n_parameters="70B")

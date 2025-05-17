@@ -27,6 +27,8 @@ class SessionLLMView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Session.DoesNotExist:
             return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+        except LLM.DoesNotExist:
+            return Response({"error": "LLM not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
