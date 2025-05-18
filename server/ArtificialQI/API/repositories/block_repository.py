@@ -1,5 +1,5 @@
 from .abstract_repository import AbstractRepository
-from API.models import Block, Prompt
+from API.models import Block, Prompt, LLM
 from typing import List
 
 class BlockRepository(AbstractRepository):
@@ -22,6 +22,14 @@ class BlockRepository(AbstractRepository):
     @staticmethod
     def get_prompts(block: Block) -> List[Prompt]:
         return list(block.prompt.all())
+    
+    @staticmethod
+    def filter_by_llm(llm: LLM)->List[Block]:
+        return list(Block.objects.filter(prompt__run__llm__id=llm.id))
+    
+    @staticmethod
+    def filter_by_ids(id: List[int])->List[Block]:
+        return list(Block.objects.filter(id__in=id))
 
     
 

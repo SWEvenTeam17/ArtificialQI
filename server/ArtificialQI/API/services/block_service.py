@@ -39,10 +39,15 @@ class BlockService(AbstractService):
             retrieved.append(BlockService.read(block["id"]))
         return retrieved
     
-    def common_blocks(first_llm: LLM, second_llm: LLM)->List[Block]:
-        first_llm_blocks = Block.objects.filter(prompt__run__llm__id=first_llm.id).distinct()
-        second_llm_blocks = Block.objects.filter(prompt__run__llm__id=second_llm.id).distinct()
-        common_blocks = first_llm_blocks.intersection(second_llm_blocks)
+    def get_common_blocks(first_llm: LLM, second_llm: LLM)->List[Block]:
+        #Prendo tutti gli id dei blocchi a cui hanno risposto i LLM passati come parametri
+        blocks_ids_first = list(map(lambda b: b.id, BlockRepository.filter_by_llm(first_llm)))
+        blocks_ids_second = list(map(lambda b: b.id, BlockRepository.filter_by_llm(second_llm)))
+
+        #Eseguo intersezione tra i due per capire gli ID comuni, poi eseguo il fetch di tutti i blocchi in comune
+        common_block_ids = set(blocks_ids_first).intersection(set(blocks_ids_second))
+        return BlockRepository.filter_by_ids(common_block_ids)
+        
 
     
 
