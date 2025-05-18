@@ -1,42 +1,60 @@
-from django.test import TestCase
+import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
 from API.models import LLM, Session
-import unittest
 
-class TestSessionLLMView(TestCase):
+@pytest.fixture
+def client():
+    return APIClient()
 
-    def setUp(self):
-        
-        self.client = APIClient()
-        self.llm = LLM.objects.create(name="GPT-4", n_parameters="1T")
-        self.session = Session.objects.create(title="Benchmark Session")
+@pytest.fixture
+def llm(db):
+    return LLM.objects.create(name="GPT-4", n_parameters="1T")
 
-        self.session.save()
-        self.session.llm.set([self.llm])  # <-- usa set invece di add
-        self.session.refresh_from_db()
+@pytest.fixture
+def session(db, llm):
+    session = Session.objects.create(title="Benchmark Session")
+    session.llm.set([llm])
+    session.save()
+    session.refresh_from_db()
+    return session
 
-        self.get_url = f"/llm_list_by_session/{self.session.pk}/"
-        self.post_url = "/llm_add/"
-        self.delete_url = f"/llm_delete/{self.session.pk}/{self.llm.pk}"
+@pytest.fixture
+def get_url(session):
+    return f"/llm_list_by_session/{session.pk}/"
 
-    @unittest.skip("test non ancora funzionante")
-    def test_get_llms_by_session(self):
-        response = self.client.get(self.get_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["id"], self.llm.id)
+@pytest.fixture
+def post_url():
+    return "/llm_add/"
 
-    def test_post_add_llm_to_session(self):
-        new_llm = LLM.objects.create(name="LLaMA-3", n_parameters="70B")
-        response = self.client.post(self.post_url, {
-            "sessionId": self.session.pk,
-            "llmId": new_llm.pk
-        }, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["id"], new_llm.id)
+@pytest.fixture
+def delete_url(session, llm):
+    return f"/llm_delete/{session.pk}/{llm.pk}"
 
-    def test_delete_llm_from_session(self):
-        response = self.client.delete(self.delete_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(self.session.llm.filter(pk=self.llm.pk).exists())
+@pytest.mark.skip(reason="test non ancora funzionante")
+def test_get_llms_by_session(client, get_url, session, llm):
+    # Assicura che il llm sia associato alla sessione
+    session.refresh_from_db()
+    llms = list(session.llm.all())
+    assert llm in llms
+
+    response = client.get(get_url)
+    assert response.status_code == status.HTTP_200_OK
+    # La risposta deve essere una lista di dizionari serializzati
+    assert isinstance(response.data, list)
+    ids = [item["id"] for item in response.data]
+    assert llm.id in ids
+
+def test_post_add_llm_to_session(client, session, post_url):
+    new_llm = LLM.objects.create(name="LLaMA-3", n_parameters="70B")
+    response = client.post(post_url, {
+        "sessionId": session.pk,
+        "llmId": new_llm.pk
+    }, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["id"] == new_llm.id
+
+def test_delete_llm_from_session(client, delete_url, session, llm):
+    response = client.delete(delete_url)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert not session.llm.filter(pk=llm.pk).exists()

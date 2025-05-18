@@ -1,48 +1,56 @@
-from django.test import TestCase
+import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
 from API.models import Session
 
-class TestSessionsView(TestCase):
+@pytest.fixture
+def client():
+    return APIClient()
 
+@pytest.fixture
+def session(db):
+    return Session.objects.create(
+        title="Sessione Test",
+        description="Questa è una sessione di prova"
+    )
 
-    def setUp(self):
-        self.client = APIClient()
-        self.session = Session.objects.create(
-            title="Sessione Test",
-            description="Questa è una sessione di prova"
-        )
-        self.base_url = "/session_list/"
-        self.detail_url = f"/session_list/{self.session.pk}/"
+@pytest.fixture
+def base_url():
+    return "/session_list/"
 
-    def test_get_all_sessions(self):
-        response = self.client.get(self.base_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+@pytest.fixture
+def detail_url(session):
+    return f"/session_list/{session.pk}/"
 
-    def test_get_session_by_id(self):
-        response = self.client.get(self.detail_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["id"], self.session.id)
+def test_get_all_sessions(client, base_url, session):
+    response = client.get(base_url)
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) >= 1
 
-    def test_post_valid_session(self):
-        data = {
-            "title": "Nuova Sessione",
-            "description": "Descrizione della sessione"
-        }
-        response = self.client.post(self.base_url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["title"], "Nuova Sessione")
+def test_get_session_by_id(client, detail_url, session):
+    response = client.get(detail_url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["id"] == session.id
 
-    def test_put_valid_session(self):
-        updated_data = {
-            "title": "Sessione Aggiornata",
-            "description": "Descrizione modificata"
-        }
-        response = self.client.put(self.detail_url, updated_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], "Sessione Aggiornata")
+@pytest.mark.django_db
+def test_post_valid_session(client, base_url):
+    data = {
+        "title": "Nuova Sessione",
+        "description": "Descrizione della sessione"
+    }
+    response = client.post(base_url, data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["title"] == "Nuova Sessione"
 
-    def test_delete_session(self):
-        response = self.client.delete(self.detail_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+def test_put_valid_session(client, detail_url, session):
+    updated_data = {
+        "title": "Sessione Aggiornata",
+        "description": "Descrizione modificata"
+    }
+    response = client.put(detail_url, updated_data, format="json")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["title"] == "Sessione Aggiornata"
+
+def test_delete_session(client, detail_url):
+    response = client.delete(detail_url)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
