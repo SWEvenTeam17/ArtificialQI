@@ -20,7 +20,7 @@ class PromptRepository(AbstractRepository):
         usati in una determinata sessione.
         """
         return cls.model.objects.filter(session=session)
-    
+
     @classmethod
     def filter_one(cls, prompt_text: str, expected_answer: str):
         """
@@ -31,14 +31,10 @@ class PromptRepository(AbstractRepository):
             prompt_text=prompt_text,
             expected_answer=expected_answer,
         ).first()
-    
+
     @classmethod
     def get_or_create(cls, prompt_text: str, expected_answer: str) -> Prompt:
         instance, _ = cls.model.objects.get_or_create(
-            prompt_text=prompt_text,
-            expected_answer=expected_answer
+            prompt_text=prompt_text, expected_answer=expected_answer
         )
         return instance
-    
-    
-    

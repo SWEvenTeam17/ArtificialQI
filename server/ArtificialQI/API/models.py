@@ -10,9 +10,11 @@ class LLM(models.Model):
     """
     Modello che rappresenta un LLM collegato ad ArtificialQI
     """
+
     name = models.CharField(max_length=255, unique=True)
     n_parameters = models.TextField(default="")
     # session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
 
 class Session(models.Model):
     """
@@ -26,6 +28,7 @@ class Session(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     llm = models.ManyToManyField(LLM)
 
+
 class Prompt(models.Model):
     """
     Modello che rappresenta una coppia domanda/risposta attesa.
@@ -35,17 +38,23 @@ class Prompt(models.Model):
     expected_answer = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+
 class Evaluation(models.Model):
     """
     Modello che rappresenta una valutazione data da ArtificialQI
     ad una determinata risposta di un determinato modello.
     """
+
     semantic_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
     external_evaluation = models.DecimalField(max_digits=5, decimal_places=2)
 
+
 class Block(models.Model):
-    name = models.CharField(max_length=255, null=False, default="Blocco senza nome", unique=True)
+    name = models.CharField(
+        max_length=255, null=False, default="Blocco senza nome", unique=True
+    )
     prompt = models.ManyToManyField(Prompt)
+
 
 class Run(models.Model):
     llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
@@ -53,14 +62,12 @@ class Run(models.Model):
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
     llm_answer = models.TextField()
 
+
 class Test(models.Model):
     """
     Modello che rappresenta un test richiesto da un utente.
     """
+
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
     run = models.ManyToManyField(Run)
-
-
-
-

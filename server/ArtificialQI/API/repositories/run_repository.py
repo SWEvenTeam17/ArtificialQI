@@ -17,7 +17,11 @@ class RunRepository(AbstractRepository):
     model = Run
 
     @classmethod
-    def get_common_runs(cls, first_llm: LLM, second_llm: LLM, tables_to_join: List[str] )->List[Run]:
-        return list(cls.model.objects.filter(
-            llm__id__in=[first_llm.id, second_llm.id]
-        ).select_related(*tables_to_join))
+    def get_common_runs(
+        cls, first_llm: LLM, second_llm: LLM, tables_to_join: List[str]
+    ) -> List[Run]:
+        return list(
+            cls.model.objects.filter(
+                llm__id__in=[first_llm.id, second_llm.id]
+            ).select_related(*tables_to_join)
+        )

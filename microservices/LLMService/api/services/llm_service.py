@@ -4,10 +4,11 @@ from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from typing import List, Dict, Any
 
+
 class LLMService:
-    
+
     @staticmethod
-    def get_llm(name: str)->OllamaLLM | None:
+    def get_llm(name: str) -> OllamaLLM | None:
         load_dotenv()
         try:
             response = requests.get(f"{os.getenv("OLLAMA_URL")}/api/version", timeout=5)
@@ -15,21 +16,21 @@ class LLMService:
             return OllamaLLM(model=name, base_url=os.getenv("OLLAMA_URL"))
         except RequestException:
             return None
-    
+
     @staticmethod
-    def interrogate(llm: OllamaLLM, prompt: str)->str:
+    def interrogate(llm: OllamaLLM, prompt: str) -> str:
         stream = llm.stream(prompt)
         output = next(stream)
         for chunk in stream:
             output += chunk
         return output
-    
-    @staticmethod 
-    def get_ollama_llms()->List[Dict[str,Any]]:
+
+    @staticmethod
+    def get_ollama_llms() -> List[Dict[str, Any]]:
         load_dotenv()
-        url = os.getenv("OLLAMA_URL")+"/api/tags"
+        url = os.getenv("OLLAMA_URL") + "/api/tags"
         try:
-            result = requests.get(url).json().get("models", [])   
+            result = requests.get(url).json().get("models", [])
             return result
         except RequestException:
             return None

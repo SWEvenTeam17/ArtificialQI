@@ -10,15 +10,18 @@ from API.services import TestService, SessionService, BlockService
 from API.models import Block
 from typing import List
 from .abstract_view import AbstractView
+
+
 class TestView(AbstractView):
     """
     Classe che contiene la definizione della vista dedicata
     alla gestione dei test precedentemente eseguiti in una sessione..
     """
+
     serializer = TestSerializer
     service = TestService
 
-    def post(self, request)->Response:
+    def post(self, request) -> Response:
         """
         Override della funzione che gestisce le richieste di tipo POST.
         """
@@ -37,6 +40,6 @@ class TestView(AbstractView):
                     {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
         return Response(
-        {"error": "Errore sconosciuto."},
-        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            {"error": "Errore sconosciuto."},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )

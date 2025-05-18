@@ -49,7 +49,7 @@ class LLMController:
         """
         Funzione che ritorna la valutazione semantica di una risposta
         di un LLM.
-        Pulisce input e output rendendo tutto in minuscolo e 
+        Pulisce input e output rendendo tutto in minuscolo e
         togliendo l'ultimo punto nella stringa
         """
 
@@ -118,4 +118,3 @@ class LLMController:
                 return "Errore interno durante la valutazione"
 
         return "Unsupported provider"
-
