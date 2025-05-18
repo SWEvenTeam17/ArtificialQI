@@ -7,6 +7,7 @@ import { getCSRFToken } from "@/app/helpers/csrf";
 const QnAForm = ({ sessionData }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [blockName, setBlockName] = useState("");
   const [questionAnswerPairs, setQuestionAnswerPairs] = useState([
     { question: "", answer: "" },
   ]);
@@ -30,6 +31,10 @@ const QnAForm = ({ sessionData }) => {
 
     if (!sessionData.llm || sessionData.llm.length === 0) {
       errors.llm = "Aggiungi almeno un LLM per continuare.";
+    }
+
+    if (!blockName.trim()) {
+      errors.blockName = "Il nome del test è obbligatorio.";
     }
 
     return errors;
@@ -85,12 +90,17 @@ const QnAForm = ({ sessionData }) => {
           body: JSON.stringify({
             data: formatted,
             sessionId: sessionData.id,
+            blockName: blockName.trim(),
           }),
         }
       );
 
       const data = await response.json();
-      if (response.status === 503 || response.status === 500) {
+      if (
+        response.status === 503 ||
+        response.status === 500 ||
+        response.status === 400
+      ) {
         setServerError(data.error);
       } else {
         setResponseData(data);
@@ -98,7 +108,7 @@ const QnAForm = ({ sessionData }) => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setServerError("Errore durante l'invio del form.");
+      setServerError(error);
     } finally {
       setLoading(false);
     }
@@ -274,8 +284,28 @@ const QnAForm = ({ sessionData }) => {
               {formErrors.llm}
             </div>
           )}
-
-          <div className="row row-cols-md-2 row-cols-1 g-3 mt-4 mb-3">
+          <div className="row row-cols-1">
+            <div className="col-12">
+              <div className="form-floating">
+                <input
+                  type="text"
+                  className={`form-control rounded-5 ${formErrors.blockName ? "is-invalid" : ""}`}
+                  id={`block_name`}
+                  name="block_name"
+                  value={blockName}
+                  onChange={(e) => setBlockName(e.target.value)}
+                  placeholder={`Inserisci un nome per questo test`}
+                />
+                <label htmlFor={`block_name`}>
+                  Inserisci un nome per questo test
+                </label>
+                {formErrors.blockName && (
+                  <div className="invalid-feedback">{formErrors.blockName}</div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="row row-cols-md-2 row-cols-1 g-3 mt-2 mb-3">
             <div className="col">
               <button
                 type="submit"

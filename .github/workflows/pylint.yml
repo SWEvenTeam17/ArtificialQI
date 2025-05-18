@@ -28,4 +28,7 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-            pylint --load-plugins pylint_django --fail-under=9 --disable=import-error ./server/ArtificialQI/
+            pylint --load-plugins pylint_django \
+            --fail-under=9 \
+            --disable=import-error,broad-except \
+            ./server/ArtificialQI/

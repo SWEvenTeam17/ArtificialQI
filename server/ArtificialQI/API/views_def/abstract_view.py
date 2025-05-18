@@ -76,7 +76,7 @@ class AbstractView(APIView, ABC):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
-                self.service.update(id=instance_id, data=serializer.validated_data)
+                self.service.update(instance_id=instance_id, data=serializer.validated_data)
                 return Response(serializer.validated_data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

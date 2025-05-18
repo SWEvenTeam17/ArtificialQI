@@ -94,6 +94,16 @@ export default function Navbar({ sessions, fetchSessions }) {
               Gestisci LLM
             </Link>
           </li>
+          <li className="nav-item me-3">
+            <Link className="nav-link" href="/compare">
+              Confronta risultati
+            </Link>
+          </li>
+          <li className="nav-item me-3">
+            <Link className="nav-link" href="/question-blocks">
+              Blocchi di domande
+            </Link>
+          </li>
         </ul>
         <div
           className="offcanvas offcanvas-start"
