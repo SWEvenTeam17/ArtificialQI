@@ -20,6 +20,7 @@ class LLMSerializer(serializers.ModelSerializer):
         model = LLM
         fields = ["id", "name", "n_parameters"]
 
+
 class SessionSerializer(serializers.ModelSerializer):
     """
     Serializzatore del modello Sessione
@@ -59,15 +60,18 @@ class PromptSerializer(serializers.ModelSerializer):
             "evaluation_set",
         ]
 
+
 class BlockSerializer(serializers.ModelSerializer):
     """
     Serializer per il modello Block.
     """
+
     prompt = PromptSerializer(many=True, required=False)
 
     class Meta:
         model = Block
-        fields = ['id', 'name', 'prompt']
+        fields = ["id", "name", "prompt"]
+
 
 class RunSerializer(serializers.ModelSerializer):
     class Meta:

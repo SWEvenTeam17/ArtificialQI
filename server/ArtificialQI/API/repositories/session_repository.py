@@ -19,7 +19,7 @@ class SessionRepository(AbstractRepository):
         Ritorna tutti i LLM non collegati ad una determinata sessione.
         """
         return LLM.objects.exclude(session__id=session_id).all()
-    
+
     @staticmethod
     def get_llms(session: Session):
         return list(session.llm.all())

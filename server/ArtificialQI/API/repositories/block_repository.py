@@ -1,36 +1,61 @@
-from .abstract_repository import AbstractRepository
-from API.models import Block, Prompt, LLM
+"""
+File che contiene la definizione del repository
+che gestisce le istanze dei blocchi in DB.
+"""
+
 from typing import List
+from API.models import Block, Prompt, LLM
+from .abstract_repository import AbstractRepository
+
 
 class BlockRepository(AbstractRepository):
+    """
+    Classe che contiene la definizione del repository
+    che gestisce le istanze dei blocchi in DB.
+    """
+
     model = Block
 
     @staticmethod
-    def add_prompt(block: Block,prompt: Prompt)->Block:
+    def add_prompt(block: Block, prompt: Prompt) -> Block:
+        """
+        Aggiunge un prompt ad un blocco.
+        """
         block.prompt.add(prompt)
         return block
 
     @staticmethod
-    def remove_prompt(block: Block,prompt: Prompt)->Block:
+    def remove_prompt(block: Block, prompt: Prompt) -> Block:
+        """
+        Rimuove un prompt da un blocco.
+        """
         block.prompt.remove(prompt)
         return block
-    
+
     @staticmethod
-    def get_by_name(name: str)->Block | None:
+    def get_by_name(name: str) -> Block | None:
+        """
+        Trova un blocco tramite il suo nome.
+        """
         return Block.objects.filter(name=name).first()
 
     @staticmethod
     def get_prompts(block: Block) -> List[Prompt]:
+        """
+        Ritorna tutti i prompt di un blocco sotto forma di lista.
+        """
         return list(block.prompt.all())
-    
+
     @staticmethod
-    def filter_by_llm(llm: LLM)->List[Block]:
+    def filter_by_llm(llm: LLM) -> List[Block]:
+        """
+        Ritorna tutti i blocchi eseguiti da un LLM sotto forma di lista.
+        """
         return list(Block.objects.filter(prompt__run__llm__id=llm.id))
-    
+
     @staticmethod
-    def filter_by_ids(id: List[int])->List[Block]:
-        return list(Block.objects.filter(id__in=id))
-
-    
-
-    
+    def filter_by_ids(ids: List[int]) -> List[Block]:
+        """
+        Filtra i blocchi prendendo quelli con id all'interno della lista di id passata.
+        """
+        return list(Block.objects.filter(id__in=ids))

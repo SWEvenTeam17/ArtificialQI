@@ -1,7 +1,12 @@
 from django.urls import path
 from .views_def.sessions_view import SessionsView
 from .views_def.prompt_view import PromptView
-from .views_def.llm_view import LLMView, OllamaView, LLMComparisonView, PromptComparisonView
+from .views_def.llm_view import (
+    LLMView,
+    OllamaView,
+    LLMComparisonView,
+    PromptComparisonView,
+)
 from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
 from .views_def.prev_test_view import PrevTestView
@@ -13,8 +18,8 @@ urlpatterns = [
     path("previous_tests/<int:instance_id>/", PrevTestView.as_view()),
     path("prompt_list/", PromptView.as_view()),
     path("prompt_list/<int:instance_id>/", PromptView.as_view()),
-    path("question_blocks/",BlockView.as_view()),
-    path("question_blocks/<int:instance_id>/",BlockView.as_view()),
+    path("question_blocks/", BlockView.as_view()),
+    path("question_blocks/<int:instance_id>/", BlockView.as_view()),
     path("llm_list/", LLMView.as_view()),
     path("llm_list/<int:instance_id>/", LLMView.as_view()),
     path("llm_list/load_ollama/", OllamaView.as_view()),
@@ -23,5 +28,5 @@ urlpatterns = [
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
     path("runtest", TestView.as_view()),
     path("llm_comparison/", LLMComparisonView.as_view()),
-    path("prompt_comparison/", PromptComparisonView.as_view())
+    path("prompt_comparison/", PromptComparisonView.as_view()),
 ]
