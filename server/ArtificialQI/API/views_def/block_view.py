@@ -9,6 +9,7 @@ from API.repositories import RunRepository
 from .abstract_view import AbstractView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 
 class BlockView(AbstractView):
@@ -41,6 +42,8 @@ class BlockView(AbstractView):
             return Response(data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class BlockTestView(APIView):
 
     def get(self, request) -> Response:
         first_llm = LLMService.read(int(request.GET.get("first_llm_id")))

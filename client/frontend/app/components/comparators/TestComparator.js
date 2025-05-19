@@ -36,7 +36,7 @@ const TestComparator = ({ sessions }) => {
 
   const fetchBlockComparisonData = async (firstLLM, secondLLM) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/compare/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`,
     );
     const data = await response.json();
     setBlockComparisonData(data.common_blocks);
