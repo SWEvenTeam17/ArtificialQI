@@ -50,6 +50,10 @@ class Evaluation(models.Model):
 
 
 class Block(models.Model):
+    """
+    Modello che rappresenta un blocco di domande, è associato con i prompt tramite relazione N:N.
+    """
+
     name = models.CharField(
         max_length=255, null=False, default="Blocco senza nome", unique=True
     )
@@ -57,6 +61,10 @@ class Block(models.Model):
 
 
 class Run(models.Model):
+    """
+    Rappresenta una singola istanza del test.
+    """
+
     llm = models.ForeignKey(LLM, on_delete=models.CASCADE)
     prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
@@ -66,6 +74,8 @@ class Run(models.Model):
 class Test(models.Model):
     """
     Modello che rappresenta un test richiesto da un utente.
+    Rappresenta la sessione di test, il blocco di domande inviato ed è collegato
+    a Run tramite relazione N:N.
     """
 
     session = models.ForeignKey(Session, on_delete=models.CASCADE)

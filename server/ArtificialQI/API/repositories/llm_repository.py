@@ -2,7 +2,7 @@
 Repository che gestisce le istanze dei LLM in DB.
 """
 
-from API.models import LLM, Test, Session
+from API.models import LLM, Test
 from .abstract_repository import AbstractRepository
 
 
@@ -27,6 +27,6 @@ class LLMRepository(AbstractRepository):
 
     @classmethod
     def get_previous_tests(cls, llm_id: int, session_id=None):
-        if session_id != None:
+        if session_id is not None:
             return Test.objects.filter(llm_id=llm_id, session_id=session_id)
         return Test.objects.filter(llm_id=llm_id)

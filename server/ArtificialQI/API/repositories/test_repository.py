@@ -15,10 +15,16 @@ class TestRepository(AbstractRepository):
 
     @staticmethod
     def add_run(test: Test, run: Run) -> Test:
+        """
+        Funzione che aggiunge una run ad un test.
+        """
         test.run.add(run)
         return test
 
     @staticmethod
     def remove_run(test: Test, run: Run) -> Test:
+        """
+        Funzione che rimuove una run da un test.
+        """
         test.run.remove(run)
         return test

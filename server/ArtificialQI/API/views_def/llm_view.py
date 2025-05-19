@@ -5,7 +5,7 @@ File che contiene le definizioni delle viste LLMView e OllamaView.
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from API.serializers import LLMSerializer, TestSerializer
+from API.serializers import LLMSerializer
 from API.services import LLMService
 from .abstract_view import AbstractView
 
