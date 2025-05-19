@@ -13,7 +13,7 @@ const PreviousTestsCard = ({ id }) => {
 
   const fetchPreviousTests = useCallback(async () => {
     let response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${id}/`,
     );
     let data = await response.json();
     setPreviousTests(data);
@@ -33,7 +33,7 @@ const PreviousTestsCard = ({ id }) => {
           "Content-Type": "application/json",
           "X-CSRFToken": getCSRFToken(),
         },
-      }
+      },
     );
     setPreviousTests((prevTests) => {
       return prevTests.filter((test) => test.id !== testId);
@@ -50,7 +50,10 @@ const PreviousTestsCard = ({ id }) => {
         <h5 className="card-title text-center text-primary fw-bold">
           Test precedenti
         </h5>
-        <ul className="list-group list-group-flush" style={{ maxHeight: "300px", overflowY: "auto" }}>
+        <ul
+          className="list-group list-group-flush"
+          style={{ maxHeight: "300px", overflowY: "auto" }}
+        >
           {previousTests.map((pTest) => (
             <li
               key={pTest.id}

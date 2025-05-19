@@ -12,10 +12,15 @@ const SessionCard = ({ session, deleteSession, updateSession }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(session.title);
-  const [editedDescription, setEditedDescription] = useState(session.description);
+  const [editedDescription, setEditedDescription] = useState(
+    session.description,
+  );
 
   const handleSave = () => {
-    updateSession(session.id, { title: editedTitle, description: editedDescription });
+    updateSession(session.id, {
+      title: editedTitle,
+      description: editedDescription,
+    });
     setIsEditing(false);
   };
 
@@ -61,12 +66,7 @@ const SessionCard = ({ session, deleteSession, updateSession }) => {
                 setEditedDescription(session.description);
               }}
             >
-              <Image
-                alt={"Annulla"}
-                width={32}
-                height={32}
-                src={cancelIcon}
-              />
+              <Image alt={"Annulla"} width={32} height={32} src={cancelIcon} />
             </button>
           ) : (
             <button
@@ -90,12 +90,7 @@ const SessionCard = ({ session, deleteSession, updateSession }) => {
               className="btn btn-success shadow-sm w-100 rounded-5"
               onClick={handleSave}
             >
-              <Image
-                alt={"Salva"}
-                width={32}
-                height={32}
-                src={doneIcon}
-              />
+              <Image alt={"Salva"} width={32} height={32} src={doneIcon} />
             </button>
           ) : (
             <button

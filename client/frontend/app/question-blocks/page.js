@@ -10,7 +10,7 @@ export default function QuestionBlocks() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
       {
         method: "GET",
-      }
+      },
     );
     let parsed = await response.json();
     setQuestionBlocks(parsed);
@@ -24,7 +24,7 @@ export default function QuestionBlocks() {
         headers: {
           "X-CSRFToken": getCSRFToken(),
         },
-      }
+      },
     );
 
     if (response.status === 204) {

@@ -50,15 +50,17 @@ export default function RootLayout({ children }) {
 
   const updateSession = async (id, updatedData) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}/`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify(updatedData),
         },
-        body: JSON.stringify(updatedData),
-      });
+      );
       if (response.ok) {
         fetchSessions();
       }
@@ -76,7 +78,9 @@ export default function RootLayout({ children }) {
         </header>
         <main>
           <Navbar sessions={sessions} fetchSessions={fetchSessions} />
-          <SessionContext.Provider value={{ sessions, deleteSession, updateSession }}>
+          <SessionContext.Provider
+            value={{ sessions, deleteSession, updateSession }}
+          >
             {children}
           </SessionContext.Provider>
         </main>

@@ -5,7 +5,7 @@ import { getCSRFToken } from "@/app/helpers/csrf";
 const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
   const [limit, setLimit] = useState(null);
   const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(
-    !LLMData || LLMData.length === 0
+    !LLMData || LLMData.length === 0,
   );
   useEffect(() => {
     setIsLLMDataEmpty(!LLMData || LLMData.length === 0);
@@ -33,7 +33,7 @@ const AddLLMForm = ({ LLMData, sessionData, setSessionData, fetchLLMData }) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSONData,
-        }
+        },
       );
       const result = await response.json();
       setSessionData((prevSessionData) => ({

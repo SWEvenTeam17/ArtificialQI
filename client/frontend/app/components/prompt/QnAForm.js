@@ -92,7 +92,7 @@ const QnAForm = ({ sessionData }) => {
             sessionId: sessionData.id,
             blockName: blockName.trim(),
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -144,7 +144,7 @@ const QnAForm = ({ sessionData }) => {
             parsed.every(
               (item) =>
                 typeof item.question === "string" &&
-                typeof item.answer === "string"
+                typeof item.answer === "string",
             )
           ) {
             setQuestionAnswerPairs(parsed);

@@ -18,7 +18,7 @@ export default function SessionPage({ params }) {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`,
         {
           cache: "no-store",
-        }
+        },
       );
       const data = await response.json();
       setSessionData(data);
@@ -112,7 +112,7 @@ export default function SessionPage({ params }) {
           <div className="col-12">
             <div className="row row-cols-1">
               <div className="col">
-                <TestForm sessionData={sessionData}/>
+                <TestForm sessionData={sessionData} />
               </div>
             </div>
           </div>

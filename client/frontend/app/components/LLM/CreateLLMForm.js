@@ -51,7 +51,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSONData,
-        }
+        },
       );
 
       const responseData = await response.json();
@@ -74,7 +74,7 @@ const CreateLLMForm = ({ fetchLLMList }) => {
       {
         method: "POST",
         headers: { "X-CSRFToken": getCSRFToken() },
-      }
+      },
     );
     if (response.status === 200) {
       fetchLLMList();

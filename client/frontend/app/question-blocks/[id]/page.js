@@ -10,7 +10,7 @@ export default function QuestionBlockInspect({ params }) {
   const fetchBlockData = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`,
       );
       if (!response.ok) throw new Error("Errore nel recupero del blocco");
       const parsed = await response.json();
@@ -28,12 +28,12 @@ export default function QuestionBlockInspect({ params }) {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${promptId}/`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       if (response.status === 204) {
         const updatedPrompts = blockData.prompt.filter(
-          (prompt) => prompt.id !== promptId
+          (prompt) => prompt.id !== promptId,
         );
         setBlockData({ ...blockData, prompt: updatedPrompts });
       } else {

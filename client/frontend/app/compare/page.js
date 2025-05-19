@@ -5,10 +5,10 @@ import QuestionComparator from "@/app/components/comparators/QuestionComparator"
 import { SessionContext } from "../components/contexts/SessionContext";
 
 export default function Compare() {
-  const {sessions} = useContext(SessionContext);
+  const { sessions } = useContext(SessionContext);
   return (
     <div className="container-fluid">
-        <TestComparator sessions={sessions} />
+      <TestComparator sessions={sessions} />
     </div>
   );
 }
