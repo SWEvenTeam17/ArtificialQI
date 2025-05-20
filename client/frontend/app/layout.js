@@ -1,6 +1,5 @@
 "use client";
 import Script from "next/script";
-import Navbar from "./components/layout/Navbar";
 import "./bootstrap.css";
 import { SessionContextProvider } from "./components/contexts/SessionContext";
 import NavbarContainer from "./components/containers/layout/navbar/NavbarContainer";

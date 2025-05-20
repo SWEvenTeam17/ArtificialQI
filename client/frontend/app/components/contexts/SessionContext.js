@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
+import { getCSRFToken } from "@/app/helpers/csrf";
 
 const SessionContext = createContext();
 
