@@ -1,6 +1,6 @@
 "use client";
 import { use, useState, useEffect, useContext, useCallback } from "react";
-import { SessionContext } from "@/app/components/contexts/SessionContext";
+import {useSessionContext } from "@/app/components/contexts/SessionContext";
 import AddLLMForm from "@/app/components/LLM/AddLLMForm";
 import LLMCard from "@/app/components/LLM/LLMCard";
 import { BlocksContextProvider } from "@/app/components/contexts/BlocksContext";
@@ -8,7 +8,7 @@ import TestForm from "@/app/components/question-blocks/TestForm";
 
 export default function SessionPage({ params }) {
   const { id } = use(params);
-  const { sessions } = useContext(SessionContext);
+  const { sessions } = useSessionContext;
   const [sessionData, setSessionData] = useState(null);
   const [LLMData, setLLMData] = useState(null);
 

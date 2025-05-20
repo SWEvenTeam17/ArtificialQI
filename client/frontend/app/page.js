@@ -1,10 +1,10 @@
 "use client";
 import { useContext } from "react";
-import { SessionContext } from "./components/contexts/SessionContext";
+import { SessionContext, useSessionContext } from "./components/contexts/SessionContext";
 import SessionCard from "./components/sessions/SessionCard";
 
 export default function Home() {
-  const { sessions, deleteSession, updateSession } = useContext(SessionContext);
+  const { sessions, deleteSession, updateSession } = useSessionContext();
 
   return (
     <div className="container">
