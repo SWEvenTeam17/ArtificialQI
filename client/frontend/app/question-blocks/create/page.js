@@ -33,9 +33,9 @@ export default function CreateQuestionBlock() {
   const handleSubmit = async (e) => {
     setFormErrors("");
     // Reset previous invalid styles
-    Object.values(inputRefs.current).forEach(ref => {
+    Object.values(inputRefs.current).forEach((ref) => {
       if (ref) {
-        ref.classList.remove('is-invalid');
+        ref.classList.remove("is-invalid");
       }
     });
 
@@ -49,31 +49,35 @@ export default function CreateQuestionBlock() {
 
     if (!blockName) {
       setFormErrors("Il nome del blocco è obbligatorio.");
-      if (inputRefs.current['block_name']) {
-        inputRefs.current['block_name'].classList.add('is-invalid');
+      if (inputRefs.current["block_name"]) {
+        inputRefs.current["block_name"].classList.add("is-invalid");
       }
       isValid = false;
     }
 
-    const updatedQuestionAnswerPairs = questionAnswerPairs.map((pair, index) => {
-      const questionId = `question-${index}`;
-      const answerId = `answer-${index}`;
-      if (!pair.question) {
-        currentErrors[questionId] = `La domanda numero ${index + 1} deve essere compilata.`;
-        if (inputRefs.current[questionId]) {
-          inputRefs.current[questionId].classList.add('is-invalid');
+    const updatedQuestionAnswerPairs = questionAnswerPairs.map(
+      (pair, index) => {
+        const questionId = `question-${index}`;
+        const answerId = `answer-${index}`;
+        if (!pair.question) {
+          currentErrors[questionId] =
+            `La domanda numero ${index + 1} deve essere compilata.`;
+          if (inputRefs.current[questionId]) {
+            inputRefs.current[questionId].classList.add("is-invalid");
+          }
+          isValid = false;
         }
-        isValid = false;
-      }
-      if (!pair.answer) {
-        currentErrors[answerId] = `La risposta numero ${index + 1} deve essere compilata.`;
-        if (inputRefs.current[answerId]) {
-          inputRefs.current[answerId].classList.add('is-invalid');
+        if (!pair.answer) {
+          currentErrors[answerId] =
+            `La risposta numero ${index + 1} deve essere compilata.`;
+          if (inputRefs.current[answerId]) {
+            inputRefs.current[answerId].classList.add("is-invalid");
+          }
+          isValid = false;
         }
-        isValid = false;
-      }
-      return pair;
-    });
+        return pair;
+      },
+    );
 
     if (!isValid) {
       if (!formErrors && Object.keys(currentErrors).length > 0) {
@@ -102,16 +106,16 @@ export default function CreateQuestionBlock() {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (response.status === 201) {
         e.target.reset();
         setQuestionAnswerPairs([{ question: "", answer: "" }]);
         // Reset invalid styles after successful submission
-        Object.values(inputRefs.current).forEach(ref => {
+        Object.values(inputRefs.current).forEach((ref) => {
           if (ref) {
-            ref.classList.remove('is-invalid');
+            ref.classList.remove("is-invalid");
           }
         });
         setFormErrors("");
@@ -123,8 +127,8 @@ export default function CreateQuestionBlock() {
         const errorData = await response.json().catch(() => null);
         if (errorData?.error === "Nome duplicato") {
           setFormErrors("Esiste già un blocco con questo nome.");
-          if (inputRefs.current['block_name']) {
-            inputRefs.current['block_name'].classList.add('is-invalid');
+          if (inputRefs.current["block_name"]) {
+            inputRefs.current["block_name"].classList.add("is-invalid");
           }
         } else {
           setFormErrors("Errore durante la creazione del blocco.");
@@ -157,7 +161,7 @@ export default function CreateQuestionBlock() {
               <div className="col-12 col-md-6">
                 <div className="form-floating">
                   <input
-                    ref={(el) => (inputRefs.current['block_name'] = el)}
+                    ref={(el) => (inputRefs.current["block_name"] = el)}
                     id="block_name"
                     name="block_name"
                     className="form-control rounded-5"
@@ -175,7 +179,9 @@ export default function CreateQuestionBlock() {
                   >
                     <div className="form-floating">
                       <input
-                        ref={(el) => (inputRefs.current[`question-${index}`] = el)}
+                        ref={(el) =>
+                          (inputRefs.current[`question-${index}`] = el)
+                        }
                         type="text"
                         className="form-control rounded-5"
                         id={`question-${index}`}
@@ -194,7 +200,9 @@ export default function CreateQuestionBlock() {
                   >
                     <div className="form-floating">
                       <input
-                        ref={(el) => (inputRefs.current[`answer-${index}`] = el)}
+                        ref={(el) =>
+                          (inputRefs.current[`answer-${index}`] = el)
+                        }
                         type="text"
                         className="form-control rounded-5"
                         id={`answer-${index}`}

@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o!^%j8j8&4uwuf%#^q_jof(d7)jx84#+l9(j*zezj0ykl77n4c'
+SECRET_KEY = "django-insecure-o!^%j8j8&4uwuf%#^q_jof(d7)jx84#+l9(j*zezj0ykl77n4c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,40 +29,32 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.staticfiles',
-    'api',
-    'rest_framework'
-]
+INSTALLED_APPS = ["django.contrib.staticfiles", "api", "rest_framework"]
 
-MIDDLEWARE = [
-]
+MIDDLEWARE = []
 
-ROOT_URLCONF = 'LLMService.urls'
+ROOT_URLCONF = "LLMService.urls"
 
-TEMPLATES = [
-]
+TEMPLATES = []
 
-WSGI_APPLICATION = 'LLMService.wsgi.application'
+WSGI_APPLICATION = "LLMService.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-}
+DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-]
+AUTH_PASSWORD_VALIDATORS = []
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -71,34 +63,34 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
-    'DEFAULT_PERMISSION_CLASSES': [],
-    'UNAUTHENTICATED_USER': None,
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',  # <--- importante!
-    )
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
+    "UNAUTHENTICATED_USER": None,
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",  # <--- importante!
+    ),
 }
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Puoi mettere qui eventuali cartelle custom di template
-        'APP_DIRS': True,  # <--- importante per usare i template di DRF
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # <--- NECESSARIO
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],  # Puoi mettere qui eventuali cartelle custom di template
+        "APP_DIRS": True,  # <--- importante per usare i template di DRF
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",  # <--- NECESSARIO
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },

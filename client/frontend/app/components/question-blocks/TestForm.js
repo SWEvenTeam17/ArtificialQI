@@ -13,15 +13,18 @@ const TestForm = ({ sessionData }) => {
     setLoading(true);
     try {
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
       );
       let data = await response.json();
       const filteredData = data.filter(
-        (block) => Array.isArray(block.prompt) && block.prompt.length > 0
+        (block) => Array.isArray(block.prompt) && block.prompt.length > 0,
       );
       setQuestionBlocks(filteredData);
     } catch (error) {
-      console.error("Errore durante il recupero dei blocchi di domande:", error);
+      console.error(
+        "Errore durante il recupero dei blocchi di domande:",
+        error,
+      );
     } finally {
       setLoading(false);
     }
@@ -50,7 +53,7 @@ const TestForm = ({ sessionData }) => {
             sessionId: sessionData.id,
             blocks: selectedBlocks,
           }),
-        }
+        },
       );
       const data = await response.json();
       setTestResults(data);

@@ -32,7 +32,7 @@ class AbstractView(APIView, ABC):
     def service(self) -> type[AbstractService]:
         """Le sottoclassi devono definire un service"""
 
-    def get(self, request, instance_id: int = None)->Response:
+    def get(self, request, instance_id: int = None) -> Response:
         """
         Metodo che risponde alle richieste di tipo GET.
         Ritorna tutte le istanze oppure una sola se un id è specificato.
@@ -48,7 +48,7 @@ class AbstractView(APIView, ABC):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request)->Response:
+    def post(self, request) -> Response:
         """
         Metodo che risponde alle richieste di tipo POST.
         Valida i dati tramite il serializer corretto
@@ -66,7 +66,7 @@ class AbstractView(APIView, ABC):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, instance_id: int = None)->Response:
+    def put(self, request, instance_id: int = None) -> Response:
         """
         Metodo che risponde alle richieste di tipo PUT/PATCH.
         Valida i dati tramite il serializer corretto
@@ -76,13 +76,15 @@ class AbstractView(APIView, ABC):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             try:
-                self.service.update(instance_id=instance_id, data=serializer.validated_data)
+                self.service.update(
+                    instance_id=instance_id, data=serializer.validated_data
+                )
                 return Response(serializer.validated_data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, instance_id: int = None)->Response:
+    def delete(self, request, instance_id: int = None) -> Response:
         """
         Metodo che risponde alle richieste di tipo DELETE.
         Rimuove l'istanza corrispondende in DB.

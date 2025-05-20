@@ -11,10 +11,10 @@ name: ESLint
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ["develop"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "develop" ]
+    branches: ["develop"]
 
 jobs:
   eslint:
@@ -32,12 +32,12 @@ jobs:
         working-directory: ./client/frontend
         run: |
           npm install
-          
+
       - name: Format code with Prettier
         run: npx prettier . --write
         working-directory: ./client/frontend
         continue-on-error: true
-        
+
       - name: Run ESLint
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"

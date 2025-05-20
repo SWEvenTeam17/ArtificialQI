@@ -43,7 +43,11 @@ export default function ResultsPage() {
                   <YAxis dataKey="llm_name" type="category" />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="media_semantica" fill="#8884d8" name="Media Semantica" />
+                  <Bar
+                    dataKey="media_semantica"
+                    fill="#8884d8"
+                    name="Media Semantica"
+                  />
                 </BarChart>
               </div>
               <div className="col">
@@ -60,7 +64,11 @@ export default function ResultsPage() {
                   <YAxis dataKey="llm_name" type="category" />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="media_esterna" fill="#82ca9d" name="Media Esterna" />
+                  <Bar
+                    dataKey="media_esterna"
+                    fill="#82ca9d"
+                    name="Media Esterna"
+                  />
                 </BarChart>
               </div>
             </div>

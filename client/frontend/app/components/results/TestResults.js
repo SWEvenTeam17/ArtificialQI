@@ -25,24 +25,31 @@ export default function TestResults({ testResults }) {
                   <div className="card-body">
                     <h5 className="card-title text-primary">{res.llm_name}</h5>
                     <p className="mb-1">
-                      <strong>Domanda:</strong><br />
+                      <strong>Domanda:</strong>
+                      <br />
                       {res.question}
                     </p>
                     <p className="mb-1">
-                      <strong>Risposta:</strong><br />
+                      <strong>Risposta:</strong>
+                      <br />
                       <span className="text-dark">{res.answer}</span>
                     </p>
                     <p className="mb-1">
-                      <strong>Risposta attesa:</strong><br />
+                      <strong>Risposta attesa:</strong>
+                      <br />
                       {res.expected_answer}
                     </p>
                     <p className="mb-1">
                       <strong>Valutazione semantica:</strong>{" "}
-                      <span className="badge text-dark">{res.semantic_evaluation}</span>
+                      <span className="badge text-dark">
+                        {res.semantic_evaluation}
+                      </span>
                     </p>
                     <p className="mb-0">
                       <strong>Valutazione esterna:</strong>{" "}
-                      <span className="badge text-dark">{res.external_evaluation}</span>
+                      <span className="badge text-dark">
+                        {res.external_evaluation}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -51,7 +58,11 @@ export default function TestResults({ testResults }) {
           </div>
 
           <h5 className="mt-5">Media valutazioni per LLM</h5>
-          <ResponsiveContainer width="100%" height={300} margin={{ top: 0, right: 0, left: 20, bottom: 0 }}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+            margin={{ top: 0, right: 0, left: 20, bottom: 0 }}
+          >
             <BarChart
               layout="vertical"
               data={Object.entries(block.averages_by_llm).map(
@@ -59,10 +70,9 @@ export default function TestResults({ testResults }) {
                   name: llm,
                   semantic: scores.avg_semantic_scores,
                   external: scores.avg_external_scores,
-                })
+                }),
               )}
-              margin={{ top: 5, right: 30, left: 
-                30, bottom: 5 }}
+              margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" domain={[0, 1]} />

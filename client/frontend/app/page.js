@@ -15,7 +15,11 @@ export default function Home() {
       <div className="row row-cols-md-2 row-cols-1 mt-5 g-2">
         {sessions.map((session) => (
           <div className="col" key={session.id}>
-            <SessionCard session={session} deleteSession={deleteSession} updateSession={updateSession} />
+            <SessionCard
+              session={session}
+              deleteSession={deleteSession}
+              updateSession={updateSession}
+            />
           </div>
         ))}
       </div>

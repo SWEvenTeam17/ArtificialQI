@@ -22,7 +22,7 @@ const TestComparator = ({ sessions }) => {
 
   const fetchSessionData = async (id) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`,
     );
     const data = await response.json();
     setSelectedSessionData(data);
@@ -36,17 +36,14 @@ const TestComparator = ({ sessions }) => {
 
   const fetchBlockComparisonData = async (firstLLM, secondLLM) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/compare/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`,
     );
     const data = await response.json();
     setBlockComparisonData(data.common_blocks);
   };
 
   useEffect(() => {
-    if (
-      selectedLLMS.firstLLM &&
-      selectedLLMS.secondLLM
-    ) {
+    if (selectedLLMS.firstLLM && selectedLLMS.secondLLM) {
       fetchBlockComparisonData(selectedLLMS.firstLLM, selectedLLMS.secondLLM);
     }
   }, [selectedLLMS]);
@@ -165,7 +162,9 @@ const TestComparator = ({ sessions }) => {
               </BarChart>
             </ResponsiveContainer>
 
-            <h4 className="mt-5 text-center">Valutazione per Blocco - Esterna</h4>
+            <h4 className="mt-5 text-center">
+              Valutazione per Blocco - Esterna
+            </h4>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart
                 layout="vertical"
