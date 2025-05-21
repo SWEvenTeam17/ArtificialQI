@@ -81,3 +81,4 @@ class Test(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
     run = models.ManyToManyField(Run)
+    timestamp = models.DateTimeField(auto_now_add=True)

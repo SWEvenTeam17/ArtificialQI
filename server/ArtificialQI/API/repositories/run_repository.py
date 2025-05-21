@@ -25,3 +25,7 @@ class RunRepository(AbstractRepository):
                 llm__id__in=[first_llm.id, second_llm.id]
             ).select_related(*tables_to_join)
         )
+    
+    @classmethod
+    def get_by_prompt(cls, prompt_id: int):
+        return cls.model.objects.filter(prompt__id=prompt_id).select_related("llm", "prompt", "evaluation")

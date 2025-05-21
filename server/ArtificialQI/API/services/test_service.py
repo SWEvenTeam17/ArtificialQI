@@ -9,7 +9,7 @@ from collections import defaultdict
 import requests
 from dotenv import load_dotenv
 from API.repositories import TestRepository, SessionRepository, BlockRepository
-from API.models import Session, Block
+from API.models import Session, Block, Test
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
@@ -101,6 +101,7 @@ class TestService(AbstractService):
 
                 block_map[block_id]["results"].append(
                     {
+                        "run_id": run.id,
                         "llm_name": llm.name,
                         "question": prompt.prompt_text,
                         "expected_answer": prompt.expected_answer,
@@ -143,3 +144,61 @@ class TestService(AbstractService):
             )
 
         return {"results": full_results}
+    
+    @staticmethod
+    def format_results(test: Test) -> Dict[str, any]:
+        block = test.block
+        runs = test.run.all().select_related("llm", "prompt", "evaluation")
+        results = []
+        scores = {}
+
+        for run in runs:
+            llm_name = run.llm.name
+            if llm_name not in scores:
+                scores[llm_name] = {
+                    "semantic_sum": 0.0,
+                    "semantic_count": 0,
+                    "external_sum": 0.0,
+                    "external_count": 0,
+                }
+            semantic_eval = float(run.evaluation.semantic_evaluation)
+            external_eval = float(run.evaluation.external_evaluation)
+
+            results.append({
+                "run_id": run.id,
+                "llm_name": llm_name,
+                "question": run.prompt.prompt_text,
+                "expected_answer": run.prompt.expected_answer,
+                "answer": run.llm_answer,
+                "semantic_evaluation": semantic_eval,
+                "external_evaluation": external_eval,
+            })
+
+            scores[llm_name]["semantic_sum"] += semantic_eval
+            scores[llm_name]["semantic_count"] += 1
+            scores[llm_name]["external_sum"] += external_eval
+            scores[llm_name]["external_count"] += 1
+
+        averages = {
+            llm_name: {
+                "avg_semantic_scores": (
+                    scores[llm_name]["semantic_sum"] / scores[llm_name]["semantic_count"]
+                    if scores[llm_name]["semantic_count"] else None
+                ),
+                "avg_external_scores": (
+                    scores[llm_name]["external_sum"] / scores[llm_name]["external_count"]
+                    if scores[llm_name]["external_count"] else None
+                ),
+            }
+            for llm_name in scores
+        }
+
+        return {
+            "results": [{
+                "block_id": block.id,
+                "block_name": block.name,
+                "results": results,
+                "averages_by_llm": averages,
+            }]
+        }
+
