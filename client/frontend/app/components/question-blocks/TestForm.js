@@ -144,7 +144,7 @@ const TestForm = ({ sessionData }) => {
         </div>
       )}
     </>
-  ) : null;
+  ) : (<p className="text-center fs-3">È necessario creare dei blocchi di domande per eseguire un test.</p>);
 };
 
 export default TestForm;

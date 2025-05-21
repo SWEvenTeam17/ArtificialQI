@@ -4,26 +4,7 @@ import delteIcon from "/public/images/icon.png";
 import Image from "next/image";
 
 const LLMCard = ({ id, llm, fetchLLMData, setSessionData }) => {
-  const deleteLLM = async (llmId) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_delete/${id}/${llmId}`,
-      {
-        method: "DELETE",
-        headers: { "X-CSRFToken": getCSRFToken() },
-      },
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    if (response.status !== 204) {
-      await response.json();
-    }
-    setSessionData((prevSessionData) => ({
-      ...prevSessionData,
-      llm: prevSessionData.llm.filter((llm) => llm.id !== llmId),
-    }));
-    fetchLLMData();
-  };
+  
 
   return (
     <div className="card rounded-5">

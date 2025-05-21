@@ -38,7 +38,6 @@ export default function SessionCardPresentational({
         ) : (
           <Link
             href={`/sessions/${session.id}`}
-            onClick={() => router.push(`/sessions/${session.id}`)}
             className="text-decoration-none text-dark"
           >
             <h4 className="card-title text-primary">{session.title}</h4>
