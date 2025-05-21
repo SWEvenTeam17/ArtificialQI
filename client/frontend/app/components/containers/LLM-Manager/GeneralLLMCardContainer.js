@@ -2,7 +2,7 @@ import React from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
 import GeneralLLMCardPresentational from "../../presentations/LLM-Manager/GeneralLLMCardPresentational";
 
-export default function GeneralLLMCardContainer({llm, fetchLLMList}) {
+export default function GeneralLLMCardContainer({ llm, fetchLLMList }) {
   const deleteLLM = async (id) => {
     let data = {
       id: id,
@@ -22,5 +22,5 @@ export default function GeneralLLMCardContainer({llm, fetchLLMList}) {
       console.error(error);
     }
   };
-  return(<GeneralLLMCardPresentational deleteLLM={deleteLLM} llm={llm}/>)
+  return <GeneralLLMCardPresentational deleteLLM={deleteLLM} llm={llm} />;
 }

@@ -18,7 +18,7 @@ export const SessionContextProvider = ({ children }) => {
   const fetchSessions = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/`,
       );
       const data = await response.json();
       setSessions(data);
@@ -42,7 +42,7 @@ export const SessionContextProvider = ({ children }) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSONData,
-        }
+        },
       );
       fetchSessions();
     } catch (error) {
@@ -61,7 +61,7 @@ export const SessionContextProvider = ({ children }) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(updatedData),
-        }
+        },
       );
       if (response.ok) {
         fetchSessions();

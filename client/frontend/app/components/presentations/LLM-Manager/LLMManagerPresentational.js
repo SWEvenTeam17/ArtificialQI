@@ -7,7 +7,7 @@ export default function LLMManagerPresentational({ fetchLLMList, LLMList }) {
         <h2 className="card-title text-center">Gestisci LLM</h2>
         <div className="row mb-5 justify-content-center">
           <div className="col-12 col-md-6">
-            <CreateLLMFormContainer fetchLLMList={fetchLLMList}/>
+            <CreateLLMFormContainer fetchLLMList={fetchLLMList} />
           </div>
         </div>
         <h2 className="card-title text-center mb-4">
@@ -17,7 +17,10 @@ export default function LLMManagerPresentational({ fetchLLMList, LLMList }) {
           <div className="row g-2 row-cols-1 row-cols-md-2">
             {LLMList.map((llm) => (
               <div className="col" key={llm.id}>
-                <GeneralLLMCardContainer llm={llm} fetchLLMList={fetchLLMList} />
+                <GeneralLLMCardContainer
+                  llm={llm}
+                  fetchLLMList={fetchLLMList}
+                />
               </div>
             ))}
           </div>

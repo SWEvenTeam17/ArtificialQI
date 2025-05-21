@@ -1,7 +1,16 @@
 import React from "react";
-import Form from 'next/form';
+import Form from "next/form";
 
-export default function CreateBlockFormPresentational({handleSubmit,questionAnswerPairs, formErrors, toastRef, inputRefs, handleInputChange, addQuestionAnswerPair, removeQuestionAnswerPair}) {
+export default function CreateBlockFormPresentational({
+  handleSubmit,
+  questionAnswerPairs,
+  formErrors,
+  toastRef,
+  inputRefs,
+  handleInputChange,
+  addQuestionAnswerPair,
+  removeQuestionAnswerPair,
+}) {
   return (
     <div className="container">
       <div className="card bg-light border-light rounded-5 m-5">

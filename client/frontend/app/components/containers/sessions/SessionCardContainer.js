@@ -9,7 +9,7 @@ export default function SessionCardContainer({ session }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(session.title);
   const [editedDescription, setEditedDescription] = useState(
-    session.description
+    session.description,
   );
 
   const handleSave = () => {

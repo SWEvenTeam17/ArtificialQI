@@ -11,7 +11,7 @@ export const LLMManagerContainer = () => {
   const fetchLLMList = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`,
       );
       const data = await response.json();
       setLLMList(data);
@@ -20,6 +20,6 @@ export const LLMManagerContainer = () => {
     }
   };
   return (
-    <LLMManagerPresentational fetchLLMList={fetchLLMList} LLMList={LLMList}/>
+    <LLMManagerPresentational fetchLLMList={fetchLLMList} LLMList={LLMList} />
   );
 };

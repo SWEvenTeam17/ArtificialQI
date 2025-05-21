@@ -51,7 +51,10 @@ export default function QuestionBlocks() {
         {questionBlocks.map((block, index) => {
           return (
             <div className="col" key={index}>
-              <QuestionBlockContainer block={block} onDelete={deleteQuestionBlock} />
+              <QuestionBlockContainer
+                block={block}
+                onDelete={deleteQuestionBlock}
+              />
             </div>
           );
         })}

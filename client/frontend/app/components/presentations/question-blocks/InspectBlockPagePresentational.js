@@ -1,7 +1,12 @@
 import React from "react";
 import PromptCardContainer from "../../containers/question-blocks/PromptCardContainer";
 
-export default function InspectBlockPagePresentational({loading, error, blockData, setBlockdata}) {
+export default function InspectBlockPagePresentational({
+  loading,
+  error,
+  blockData,
+  setBlockdata,
+}) {
   if (loading) {
     return (
       <div className="text-center mt-5">
@@ -31,7 +36,11 @@ export default function InspectBlockPagePresentational({loading, error, blockDat
       <div className="row row-cols-1 row-cols-md-2 g-4">
         {blockData.prompt?.map((prompt, index) => (
           <div className="col" key={index}>
-            <PromptCardContainer blockData={blockData} setBlockData={setBlockdata} prompt={prompt}/>
+            <PromptCardContainer
+              blockData={blockData}
+              setBlockData={setBlockdata}
+              prompt={prompt}
+            />
           </div>
         ))}
       </div>

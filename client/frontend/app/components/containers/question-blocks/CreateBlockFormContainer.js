@@ -102,7 +102,7 @@ export default function CreateBlockFormContainer() {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (response.status === 201) {

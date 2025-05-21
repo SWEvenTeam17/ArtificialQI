@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PromptCardPresentational({prompt, deletePrompt}) {
+export default function PromptCardPresentational({ prompt, deletePrompt }) {
   return (
     <div className="card shadow-sm h-100 border-primary">
       <div className="card-body">

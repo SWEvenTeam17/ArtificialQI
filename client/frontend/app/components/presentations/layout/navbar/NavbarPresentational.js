@@ -7,7 +7,7 @@ export default function NavbarPresentational({
   title,
   setTitle,
   description,
-  setDescription
+  setDescription,
 }) {
   return (
     <nav className="navbar bg-body-tertiary">

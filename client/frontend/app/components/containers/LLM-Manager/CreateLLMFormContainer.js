@@ -2,7 +2,7 @@ import React from "react";
 import CreateLLMFormPresentational from "../../presentations/LLM-Manager/CreateLLMFormPresentational";
 import { useState } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-export default function CreateLLMFormContainer({fetchLLMList}) {
+export default function CreateLLMFormContainer({ fetchLLMList }) {
   const [formErrors, setFormErrors] = useState({});
   const [conflict, setConflict] = useState(null);
   const [name, setName] = useState("");
@@ -51,7 +51,7 @@ export default function CreateLLMFormContainer({fetchLLMList}) {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSONData,
-        }
+        },
       );
 
       const responseData = await response.json();
@@ -74,7 +74,7 @@ export default function CreateLLMFormContainer({fetchLLMList}) {
       {
         method: "POST",
         headers: { "X-CSRFToken": getCSRFToken() },
-      }
+      },
     );
     if (response.status === 200) {
       fetchLLMList();
@@ -82,5 +82,17 @@ export default function CreateLLMFormContainer({fetchLLMList}) {
       setOllamaError("Connessione con il server Ollama fallita.");
     }
   };
-  return <CreateLLMFormPresentational name={name} formErrors={formErrors} conflict={conflict} ollamaError={ollamaError} setName={setName} setParameters={setParameters} createLLM={createLLM} parameters={parameters} loadOllamaModels={loadOllamaModels} />;
+  return (
+    <CreateLLMFormPresentational
+      name={name}
+      formErrors={formErrors}
+      conflict={conflict}
+      ollamaError={ollamaError}
+      setName={setName}
+      setParameters={setParameters}
+      createLLM={createLLM}
+      parameters={parameters}
+      loadOllamaModels={loadOllamaModels}
+    />
+  );
 }

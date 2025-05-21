@@ -1,8 +1,8 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import InspectBlockPagePresentational from '../../presentations/question-blocks/InspectBlockPagePresentational';
+import React from "react";
+import { useState, useEffect } from "react";
+import InspectBlockPagePresentational from "../../presentations/question-blocks/InspectBlockPagePresentational";
 
-export default function InspectBlockPageContainer({id}) {
+export default function InspectBlockPageContainer({ id }) {
   const [blockData, setBlockData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +26,11 @@ export default function InspectBlockPageContainer({id}) {
     fetchBlockData();
   }, []);
   return (
-    <InspectBlockPagePresentational blockData={blockData} setBlockdata={setBlockData} loading={loading} error={error}/>
-  )
+    <InspectBlockPagePresentational
+      blockData={blockData}
+      setBlockdata={setBlockData}
+      loading={loading}
+      error={error}
+    />
+  );
 }
