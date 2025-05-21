@@ -1,7 +1,7 @@
 import React from "react";
 import { BlocksContextProvider } from "../../contexts/BlocksContext";
 import SessionLLMPanelContainer from "../../containers/sessions/SessionLLMPanelContainer";
-import TestForm from "../../question-blocks/TestForm";
+import TestFormContainer from "../../containers/sessions/TestFormContainer";
 
 export default function SessionContentPresentational({sessionData}) {
   if (sessionData === null) {
@@ -38,7 +38,7 @@ export default function SessionContentPresentational({sessionData}) {
           <div className="col-12">
             <div className="row row-cols-1">
               <div className="col">
-                <TestForm sessionData={sessionData} />
+                <TestFormContainer sessionData={sessionData} />
               </div>
             </div>
           </div>
