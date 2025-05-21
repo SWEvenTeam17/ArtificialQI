@@ -6,5 +6,6 @@ class RunView(AbstractView):
     """
     Classe che contiene le definizioni delle viste dedicate alla gestione delle run.
     """
+
     serializer = RunSerializer
     service = RunService
