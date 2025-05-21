@@ -9,6 +9,7 @@ from .views_def.session_llm_view import SessionLLMView
 from .views_def.test_view import TestView
 from .views_def.prev_test_view import PrevTestView
 from .views_def.block_view import BlockView, BlockTestView
+from .views_def.run_view import RunPromptView
 
 urlpatterns = [
     path("session_list/", SessionsView.as_view()),
@@ -26,4 +27,5 @@ urlpatterns = [
     path("llm_remaining/<int:instance_id>", SessionLLMView.as_view()),
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
     path("runtest", TestView.as_view()),
+    path("prompt_runs", RunPromptView.as_view()),
 ]

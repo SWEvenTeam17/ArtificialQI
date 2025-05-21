@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect, use } from "react";
+import TestResults from "@/app/components/results/TestResults";
 
 export default function QuestionBlockInspect({ params }) {
   const { id } = use(params);
   const [blockData, setBlockData] = useState(null);
+  const [testResults, setTestResults] = useState(null);
+  const [uniqueId, setUniqueId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -42,6 +45,15 @@ export default function QuestionBlockInspect({ params }) {
     } catch (err) {
       console.error("Errore nella richiesta:", err);
     }
+  };
+
+  const handleView = async (promptId) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?prompt_id=${promptId}`
+    );
+    const data = await response.json();
+    setUniqueId(promptId);
+    setTestResults(data);
   };
 
   useEffect(() => {
@@ -89,6 +101,12 @@ export default function QuestionBlockInspect({ params }) {
               </div>
               <div className="card-footer text-end">
                 <button
+                  className="btn btn-outline-primary btn-sm me-2"
+                  onClick={() => handleView(prompt.id)}
+                >
+                  Visualizza run
+                </button>
+                <button
                   className="btn btn-outline-danger btn-sm"
                   onClick={() => deletePrompt(prompt.id)}
                 >
@@ -99,6 +117,7 @@ export default function QuestionBlockInspect({ params }) {
           </div>
         ))}
       </div>
+      {testResults && <TestResults key={uniqueId} testResults={testResults} />}
     </div>
   );
 }

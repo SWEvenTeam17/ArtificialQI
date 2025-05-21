@@ -101,6 +101,7 @@ class TestService(AbstractService):
 
                 block_map[block_id]["results"].append(
                     {
+                        "run_id": run.id,
                         "llm_name": llm.name,
                         "question": prompt.prompt_text,
                         "expected_answer": prompt.expected_answer,
@@ -164,6 +165,7 @@ class TestService(AbstractService):
             external_eval = float(run.evaluation.external_evaluation)
 
             results.append({
+                "run_id": run.id,
                 "llm_name": llm_name,
                 "question": run.prompt.prompt_text,
                 "expected_answer": run.prompt.expected_answer,

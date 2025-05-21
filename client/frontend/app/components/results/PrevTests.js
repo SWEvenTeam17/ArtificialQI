@@ -1,5 +1,8 @@
 "use client";
 
+import { getCSRFToken } from "@/app/helpers/csrf";
+import { useState } from "react";
+
 function formatTimestamp(ts) {
     const date = new Date(ts);
     return date.toLocaleString("it-IT", {
@@ -12,7 +15,23 @@ function formatTimestamp(ts) {
     });
 }
 
-export default function PrevTests({ prevTests, onTestClick }) {
+export default function PrevTests({ prevTests, setPrevTests, onTestClick }) {
+    const handleDelete = async (testId) => {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${testId}/`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-type": "application/json",
+                    "X-CSRFToken": getCSRFToken(),
+                },
+            }
+        );
+        if (response.ok) {
+            setPrevTests(prevTests.filter((test) => test.id !== testId));
+        }
+    }
+
     return (
         <>
             <h3 className="text-center text-primary">Test precedenti</h3>
@@ -41,6 +60,17 @@ export default function PrevTests({ prevTests, onTestClick }) {
                                         <br />
                                         <span className="text-dark">{formatTimestamp(test.timestamp)}</span>
                                     </p>
+                                </div>
+                                <div className="card-footer text-end">
+                                    <button
+                                        className="btn btn-outline-danger btn-sm"
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleDelete(test.id);
+                                        }}
+                                    >
+                                        Elimina
+                                    </button>
                                 </div>
                             </div>
                         </div>

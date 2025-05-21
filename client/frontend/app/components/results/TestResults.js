@@ -1,4 +1,6 @@
 "use client";
+import { getCSRFToken } from "@/app/helpers/csrf";
+import { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,9 +13,32 @@ import {
 } from "recharts";
 
 export default function TestResults({ testResults }) {
+  const [results, setResults] = useState(testResults.results);
+
+  const handleDeleteRun = async (runId) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?run_id=${runId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      }
+    );
+    if (response.ok) {
+      setResults((prevResults) =>
+        prevResults.map((block) => ({
+          ...block,
+          results: block.results.filter((res) => res.run_id !== runId),
+        }))
+      );
+    }
+  };
+
   return (
     <div className="mt-5">
-      {testResults.results.map((block, index) => (
+      {results.map((block, index) => (
         <div key={index} className="mb-5">
           <h3 className="text-center text-primary">{block.block_name}</h3>
 
@@ -51,6 +76,14 @@ export default function TestResults({ testResults }) {
                         {res.external_evaluation}
                       </span>
                     </p>
+                  </div>
+                  <div className="card-footer text-end">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleDeleteRun(res.run_id)}
+                    >
+                      Elimina run
+                    </button>
                   </div>
                 </div>
               </div>

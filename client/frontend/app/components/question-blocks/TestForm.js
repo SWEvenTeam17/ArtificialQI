@@ -179,7 +179,11 @@ const TestForm = ({ sessionData }) => {
       )}
       {activeView === "prev" && (
         <div className="mt-4">
-          <PrevTests prevTests={prevTests} onTestClick={handlePrevTestClick} />
+          <PrevTests
+            prevTests={prevTests}
+            setPrevTests={setPrevTests}
+            onTestClick={handlePrevTestClick}
+          />
         </div>
       )}
     </>

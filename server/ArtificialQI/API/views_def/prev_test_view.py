@@ -37,3 +37,12 @@ class PrevTestView(APIView):
             return Response({"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, instance_id: int) -> Response:
+        try:
+            TestService.delete(instance_id=instance_id)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Test.DoesNotExist:
+            return Response({"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
