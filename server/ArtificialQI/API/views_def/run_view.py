@@ -1,7 +1,3 @@
-"""
-File che contiene la classe PromptView.
-"""
-
 from API.serializers import RunSerializer
 from API.services import RunService
 from .abstract_view import AbstractView
@@ -9,17 +5,15 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-
 class RunView(AbstractView):
     """
-    Classe che contiene le definizioni delle viste dedicate alla gestione dei Prompt.
+    Classe che contiene le definizioni delle viste dedicate alla gestione delle run.
     """
-
     serializer = RunSerializer
     service = RunService
 
 class RunPromptView(APIView):
-
+    service = RunService
     def get(self, request):
         prompt_id = request.GET.get("prompt_id")
         if not prompt_id:
