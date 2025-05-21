@@ -1,4 +1,3 @@
-import GeneralLLMCard from "../../LLM/GeneralLLMCard";
 import CreateLLMFormContainer from "../../containers/LLM-Manager/CreateLLMFormContainer";
 import GeneralLLMCardContainer from "../../containers/LLM-Manager/GeneralLLMCardContainer";
 export default function LLMManagerPresentational({ fetchLLMList, LLMList }) {

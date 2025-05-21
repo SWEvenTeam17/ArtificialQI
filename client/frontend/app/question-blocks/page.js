@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import QuestionBlockCard from "../components/question-blocks/questionBlockCard";
+import QuestionBlockContainer from "../components/containers/question-blocks/QuestionBlockContainer";
 import Link from "next/link";
 import { getCSRFToken } from "../helpers/csrf";
+
 export default function QuestionBlocks() {
   const [questionBlocks, setQuestionBlocks] = useState([]);
   const fetchQuestionBlocks = async () => {
@@ -50,7 +51,7 @@ export default function QuestionBlocks() {
         {questionBlocks.map((block, index) => {
           return (
             <div className="col" key={index}>
-              <QuestionBlockCard block={block} onDelete={deleteQuestionBlock} />
+              <QuestionBlockContainer block={block} onDelete={deleteQuestionBlock} />
             </div>
           );
         })}
