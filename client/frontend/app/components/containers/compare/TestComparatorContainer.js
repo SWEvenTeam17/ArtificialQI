@@ -31,6 +31,7 @@ export default function TestComparatorContainer({ sessions }) {
     );
     const data = await response.json();
     setBlockComparisonData(data.common_blocks);
+    console.log(data);
   };
 
   useEffect(() => {
