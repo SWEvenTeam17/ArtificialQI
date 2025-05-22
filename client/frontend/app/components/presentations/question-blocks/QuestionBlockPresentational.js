@@ -1,7 +1,6 @@
-"use client";
+import React from "react";
 import Link from "next/link";
-
-let QuestionBlockCard = ({ block, onDelete }) => {
+export default function QuestionBlockPresentational({ block, onDelete }) {
   return (
     <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">
       <Link
@@ -47,6 +46,4 @@ let QuestionBlockCard = ({ block, onDelete }) => {
       </Link>
     </div>
   );
-};
-
-export default QuestionBlockCard;
+}
