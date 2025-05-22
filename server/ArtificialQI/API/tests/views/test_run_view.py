@@ -1,112 +1,74 @@
 import pytest
 from rest_framework.test import APIClient
 from unittest.mock import patch
-from API.models import LLM, Prompt, Run, Evaluation
 
-RUN_URL = "/runs/"
-RUN_DETAIL_URL = lambda pk: f"/runs/{pk}/"
+RUNPROMPT_URL = "/prompt_runs"
 
 @pytest.fixture
 def api_client():
     return APIClient()
 
-@pytest.fixture
-def llm(db):
-    return LLM.objects.create(name="GPT-4", n_parameters="1T")
+# --- GET: prompt_id mancante ---
+def test_runpromptview_get_missing_prompt_id(api_client):
+    response = api_client.get(RUNPROMPT_URL)
+    assert response.status_code == 400
+    assert response.data["error"] == "Missing prompt_id."
 
-@pytest.fixture
-def prompt(db):
-    return Prompt.objects.create(prompt_text="prompt test", expected_answer="risposta attesa")
+# --- GET: prompt_id non intero ---
+def test_runpromptview_get_invalid_prompt_id(api_client):
+    response = api_client.get(RUNPROMPT_URL, {"prompt_id": "abc"})
+    assert response.status_code == 400
+    assert response.data["error"] == "Invalid prompt_id."
 
-@pytest.fixture
-def evaluation(db):
-    return Evaluation.objects.create(semantic_evaluation=4.5, external_evaluation=3.0)
+# --- GET: prompt non trovato ---
+@patch("API.views_def.run_view.RunService.get_formatted_by_prompt")
+def test_runpromptview_get_prompt_not_found(mock_get, api_client):
+    mock_get.return_value = None
+    response = api_client.get(RUNPROMPT_URL, {"prompt_id": "1"})
+    assert response.status_code == 404
+    assert response.data["error"] == "Prompt not found."
+    mock_get.assert_called_once_with(prompt_id=1)
 
-@pytest.fixture
-def run_obj(db, llm, prompt, evaluation):
-    return Run.objects.create(llm=llm, prompt=prompt, evaluation=evaluation, llm_answer="Risposta generata")
+# --- GET: successo ---
+@patch("API.views_def.run_view.RunService.get_formatted_by_prompt")
+def test_runpromptview_get_success(mock_get, api_client):
+    mock_get.return_value = [{"run": 1}]
+    response = api_client.get(RUNPROMPT_URL, {"prompt_id": "1"})
+    assert response.status_code == 200
+    assert response.data == [{"run": 1}]
+    mock_get.assert_called_once_with(prompt_id=1)
 
-@pytest.mark.django_db
-class TestRunView:
+# --- DELETE: run_id mancante ---
+def test_runpromptview_delete_missing_run_id(api_client):
+    response = api_client.delete(RUNPROMPT_URL)
+    assert response.status_code == 400
+    assert response.data["error"] == "Missing run_id."
 
-    @patch("API.views_def.run_view.RunService")
-    def test_get_all_runs(self, mock_service, api_client, run_obj, llm, prompt, evaluation):
-        run_dict = {
-            "id": run_obj.id,
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        mock_service.read_all.return_value = [run_dict]
-        response = api_client.get(RUN_URL)
-        assert response.status_code == 200
-        assert isinstance(response.data, list)
-        assert response.data[0]["llm"] == llm.id
+# --- DELETE: run_id non intero ---
+def test_runpromptview_delete_invalid_run_id(api_client):
+    response = api_client.delete(f"{RUNPROMPT_URL}?run_id=abc")
+    assert response.status_code == 400
+    assert response.data["error"] == "Invalid run_id."
 
-    @patch("API.views_def.run_view.RunService")
-    def test_get_run_by_id(self, mock_service, api_client, run_obj, llm, prompt, evaluation):
-        run_dict = {
-            "id": run_obj.id,
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        mock_service.read.return_value = run_dict
-        response = api_client.get(RUN_DETAIL_URL(run_obj.id))
-        assert response.status_code == 200
-        assert response.data["llm"] == llm.id
+# --- DELETE: successo ---
+@patch("API.views_def.run_view.RunService.delete")
+def test_runpromptview_delete_success(mock_delete, api_client):
+    response = api_client.delete(f"{RUNPROMPT_URL}?run_id=5")
+    assert response.status_code == 204
+    mock_delete.assert_called_once_with(5)
 
-    @patch("API.views_def.run_view.RunService")
-    def test_post_run_valid(self, mock_service, api_client, llm, prompt, evaluation):
-        run_dict = {
-            "id": 1,
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        mock_service.create.return_value = run_dict
-        data = {
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        response = api_client.post(RUN_URL, data=data, format="json")
-        assert response.status_code == 201
-        assert response.data["llm"] == llm.id
+# --- DELETE: ValueError (run non trovato) ---
+@patch("API.views_def.run_view.RunService.delete", side_effect=ValueError("Run not found"))
+def test_runpromptview_delete_not_found(mock_delete, api_client):
+    response = api_client.delete(f"{RUNPROMPT_URL}?run_id=5")
+    assert response.status_code == 404
+    assert response.data["error"] == "Run not found"
+    mock_delete.assert_called_once_with(5)
 
-    @patch("API.views_def.run_view.RunService")
-    def test_post_run_invalid(self, mock_service, api_client):
-        invalid_data = {"llm": 1}
-        response = api_client.post(RUN_URL, data=invalid_data, format="json")
-        assert response.status_code == 400
-        assert "prompt" in response.data or "evaluation" in response.data
-
-    @patch("API.views_def.run_view.RunService")
-    def test_put_run(self, mock_service, api_client, run_obj, llm, prompt, evaluation):
-        run_dict = {
-            "id": run_obj.id,
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        mock_service.update.return_value = run_dict
-        data = {
-            "llm": llm.id,
-            "prompt": prompt.id,
-            "evaluation": evaluation.id,
-            "llm_answer": "Risposta generata"
-        }
-        response = api_client.put(RUN_DETAIL_URL(run_obj.id), data=data, format="json")
-        assert response.status_code == 200
-        assert response.data["llm"] == llm.id
-
-    @patch("API.views_def.run_view.RunService")
-    def test_delete_run(self, mock_service, api_client, run_obj):
-        mock_service.delete.return_value = None
-        response = api_client.delete(RUN_DETAIL_URL(run_obj.id))
-        assert response.status_code == 204
+# --- DELETE: generic Exception ---
+@patch("API.views_def.run_view.RunService.delete", side_effect=Exception("Errore generico"))
+def test_runpromptview_delete_generic_error(mock_delete, api_client):
+    response = api_client.delete(f"{RUNPROMPT_URL}?run_id=5")
+    assert response.status_code == 400
+    assert response.data["error"] == "Errore generico"
+    mock_delete.assert_called_once_with(5)
