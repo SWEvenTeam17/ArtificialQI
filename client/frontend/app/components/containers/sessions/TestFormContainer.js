@@ -97,6 +97,7 @@ export default function TestFormContainer({ sessionData }) {
       addBlock={addBlock}
       submitToBackend={submitToBackend}
       prevTests={prevTests}
+      setPrevTests={setPrevTests}
       activeView={activeView}
       showPrevTests={showPrevTests}
       handlePrevTestClick={handlePrevTestClick}

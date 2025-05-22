@@ -1,5 +1,7 @@
 import React from 'react'
+import { useState } from 'react';
 import TestResultsPresentational from '../../presentations/sessions/TestResultsPresentational'
+import { getCSRFToken } from '@/app/helpers/csrf';
 export default function TestResultsContainer({testResults}) {
   const [results, setResults] = useState(testResults.results);
   
@@ -24,6 +26,6 @@ export default function TestResultsContainer({testResults}) {
       }
     };
   return (
-    <TestResultsPresentational handleDeleteRun={handleDeleteRun} testResults={testResults}/>
+    <TestResultsPresentational results={results} handleDeleteRun={handleDeleteRun} testResults={testResults}/>
   )
 }

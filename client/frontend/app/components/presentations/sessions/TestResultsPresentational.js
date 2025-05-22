@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function TestResultsPresentational({ testResults }) {
+export default function TestResultsPresentational({ testResults, results, handleDeleteRun }) {
   return (
     <div className="mt-5">
       {results.map((block, index) => (

@@ -1,4 +1,4 @@
-import PrevTests from "../results/PrevTests";
+import PrevTests from "../../results/PrevTests";
 import React from "react";
 import TestResultsContainer from "../../containers/sessions/TestResultsContainer";
 
@@ -11,6 +11,7 @@ export default function TestFormPresentational({
   removeBlock,
   addBlock,
   submitToBackend,
+  setPrevTests,
   prevTests,
   activeView,
   showPrevTests,
