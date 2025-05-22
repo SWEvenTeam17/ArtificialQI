@@ -10,6 +10,7 @@ export default function SessionCardPresentational({
   session,
   editedTitle,
   editedDescription,
+  deleteSession,
   setIsEditing,
   setEditedTitle,
   setEditedDescription,
