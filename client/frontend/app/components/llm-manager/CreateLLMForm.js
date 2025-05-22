@@ -1,7 +1,10 @@
 import React from "react";
 import Form from "next/form";
 import { useCreateLLMFormHook } from "../hooks/LLM-Manager/CreateLLMFormHook";
-export default function CreateLLMForm({ fetchLLMList }) {
+import { useLLMManagerContext } from "../contexts/LLMManagerContext";
+export default function CreateLLMForm() {
+  const { fetchLLMList } = useLLMManagerContext();
+
   const {
     name,
     parameters,

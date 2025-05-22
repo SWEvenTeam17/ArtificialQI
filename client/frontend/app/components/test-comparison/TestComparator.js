@@ -11,9 +11,7 @@ export default function TestComparatorContainer() {
           <SessionSelector />
         </div>
       </div>
-
       {selectedSessionData.length !== 0 && <LLMSelector />}
-
       {selectedLLMS.firstLLM &&
         selectedLLMS.secondLLM &&
         chartData.length > 0 && <LLMComparisonChart />}

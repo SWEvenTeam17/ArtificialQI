@@ -1,8 +1,11 @@
 import React from "react";
+import { useLLMManagerContext } from "../contexts/LLMManagerContext";
 import delteIcon from "/public/images/icon.png";
 import Image from "next/image";
 
-export default function GeneralLLMCardPresentational({ llm, deleteLLM }) {
+export default function GeneralLLMCard({ llm }) {
+  const { deleteLLM } = useLLMManagerContext();
+  
   return (
     <div className="card shadow-sm border-light rounded-5 h-100 justify-content-center text-center">
       <div className="card-body">

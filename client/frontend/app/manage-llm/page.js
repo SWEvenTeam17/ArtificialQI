@@ -1,10 +1,9 @@
 "use client";
-import { LLMManagerContainer } from "../components/containers/LLM-Manager/LLMManagerContainer";
-
+import LLMManager from "../components/llm-manager/LLMManager";
 export default function ManageLLM() {
   return (
     <div className="container">
-      <LLMManagerContainer />
+      <LLMManager />
     </div>
   );
 }
