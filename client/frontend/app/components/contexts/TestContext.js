@@ -5,6 +5,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 
 import { getCSRFToken } from "@/app/helpers/csrf";
@@ -87,48 +88,49 @@ export const TestContextProvider = ({ children, sessionId }) => {
   }, [sessionId]);
 
   const deleteLLM = async (llmId) => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_delete/${sessionId}/${llmId}`,
-        {
-          method: "DELETE",
-          headers: { "X-CSRFToken": getCSRFToken() },
-        },
-      );
-      if (!response.ok) {
-        throw new Error(response.statusText);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_delete/${sessionId}/${llmId}`,
+      {
+        method: "DELETE",
+        headers: { "X-CSRFToken": getCSRFToken() },
       }
-      if (response.status !== 204) {
-        await response.json();
-      }
-      setSessionData((prevSessionData) => ({
-        ...prevSessionData,
-        llm: prevSessionData.llm.filter((llm) => llm.id !== llmId),
-      }));
-      fetchRemainingLLMs();
-    };
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    if (response.status !== 204) {
+      await response.json();
+    }
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      llm: prevSessionData.llm.filter((llm) => llm.id !== llmId),
+    }));
+    fetchRemainingLLMs();
+  };
 
   useEffect(() => {
     fetchSessionData();
     fetchRemainingLLMs();
   }, [fetchSessionData, fetchRemainingLLMs]);
 
+  const contextValue = useMemo(
+    () => ({
+      sessionData,
+      remainingLLMs,
+      limit,
+      isLLMDataEmpty,
+      setSessionData,
+      setRemainingLLMs,
+      fetchSessionData,
+      fetchRemainingLLMs,
+      submitLLM,
+      setLimit,
+      deleteLLM,
+    }),
+    [sessionData, remainingLLMs, limit, isLLMDataEmpty]
+  );
+
   return (
-    <TestContext.Provider
-      value={{
-        sessionData,
-        remainingLLMs,
-        limit,
-        isLLMDataEmpty,
-        setSessionData,
-        setRemainingLLMs,
-        fetchSessionData,
-        fetchRemainingLLMs,
-        submitLLM,
-        setLimit,
-        deleteLLM
-      }}
-    >
-      {children}
-    </TestContext.Provider>
+    <TestContext.Provider value={contextValue}>{children}</TestContext.Provider>
   );
 };
