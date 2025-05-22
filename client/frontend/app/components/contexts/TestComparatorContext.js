@@ -1,8 +1,19 @@
-import { useState, useEffect } from "react";
+"use client";
 
-import TestComparatorPresentational from "../../presentations/compare/TestComparatorPresentational";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+} from "react";
 
-export default function TestComparatorContainer({ sessions }) {
+const TestComparatorContext = createContext();
+
+export const useTestComparatorContext = () => {
+  return useContext(TestComparatorContext);
+};
+
+export const TestComparatorContextProvider = ({ children }) => {
   const [selectedSessionData, setSelectedSessionData] = useState([]);
   const [selectedLLMS, setSelectedLLMS] = useState({
     firstLLM: "",
@@ -52,15 +63,22 @@ export default function TestComparatorContainer({ sessions }) {
       block.llms[selectedLLMS.secondLLM].external_avg,
   }));
   return (
-    <TestComparatorPresentational
-      sessions={sessions}
-      setSelectedSessionData={setSelectedSessionData}
-      fetchSessionData={fetchSessionData}
-      setSelectedLLMS={setSelectedLLMS}
-      selectedSessionData={selectedSessionData}
-      selectedLLMS={selectedLLMS}
-      chartData={chartData}
-      llmNames={llmNames}
-    />
+    <TestComparatorContext.Provider
+      value={{
+        selectedSessionData,
+        setSelectedSessionData,
+        selectedLLMS,
+        setSelectedLLMS,
+        llmNames,
+        setLlmNames,
+        blockComparisonData,
+        setBlockComparisonData,
+        fetchSessionData,
+        fetchBlockComparisonData,
+        chartData
+      }}
+    >
+      {children}
+    </TestComparatorContext.Provider>
   );
-}
+};
