@@ -1,4 +1,4 @@
-import CreateLLMFormContainer from "../../containers/LLM-Manager/CreateLLMFormContainer";
+import CreateLLMForm from "../../llm-manager/CreateLLMForm";
 import GeneralLLMCardContainer from "../../containers/LLM-Manager/GeneralLLMCardContainer";
 export default function LLMManagerPresentational({ fetchLLMList, LLMList }) {
   return (
@@ -7,7 +7,7 @@ export default function LLMManagerPresentational({ fetchLLMList, LLMList }) {
         <h2 className="card-title text-center">Gestisci LLM</h2>
         <div className="row mb-5 justify-content-center">
           <div className="col-12 col-md-6">
-            <CreateLLMFormContainer fetchLLMList={fetchLLMList} />
+            <CreateLLMForm fetchLLMList={fetchLLMList} />
           </div>
         </div>
         <h2 className="card-title text-center mb-4">
