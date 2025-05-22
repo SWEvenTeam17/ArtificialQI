@@ -6,7 +6,6 @@ from API.models import Block, Session
 
 
 class TestTestService(AbstractServiceTestCase):
-
     service_class = TestService
 
     @patch("API.services.test_service.requests.post")
@@ -34,54 +33,75 @@ class TestTestService(AbstractServiceTestCase):
     @patch("API.services.test_service.SessionRepository.get_llms")
     @patch("API.services.test_service.TestService.create")
     def test_runtest(
-        self,
-        mock_test_create,
-        mock_get_llms,
-        mock_get_prompts,
-        mock_interrogate,
-        mock_semantic_eval,
-        mock_external_eval,
-        mock_eval_create,
-        mock_run_create,
-        mock_add_run,
-    ):
-        """Test runtest elabora correttamente le risposte e calcola medie"""
-        session = MagicMock(spec=Session)
-        block = MagicMock(spec=Block)
-        block.id = 1
-        block.name = "Block 1"
+      self,
+      mock_test_create,
+      mock_get_llms,
+      mock_get_prompts,
+      mock_interrogate,
+      mock_semantic_eval,
+      mock_external_eval,
+      mock_eval_create,
+      mock_run_create,
+      mock_add_run,
+     ):
+      """Test runtest elabora correttamente le risposte e calcola medie"""
+      # Configurazione degli oggetti mock
+      session = MagicMock(spec=Session)
+      block = MagicMock(spec=Block)
+      block.id = 1
+      block.name = "Block 1"
 
-        llm = MagicMock()
-        llm.name = "LLM-1"
-        prompt = MagicMock()
-        prompt.prompt_text = "Domanda?"
-        prompt.expected_answer = "Risposta attesa"
+      llm = MagicMock()
+      llm.name = "LLM-1"
+    
+      prompt = MagicMock()
+      prompt.prompt_text = "Domanda?"
+      prompt.expected_answer = "Risposta attesa"
 
-        mock_get_llms.return_value = [llm]
-        mock_get_prompts.return_value = [prompt]
-        mock_test_create.return_value = "test-obj"
-        mock_eval_create.return_value = "evaluation-obj"
-        mock_run_create.return_value = "run-obj"
+      # Crea mock completi per gli oggetti restituiti
+      test_mock = MagicMock()
+      evaluation_mock = MagicMock()
+      run_mock = MagicMock()
+      run_mock.id = 123  # Aggiungi l'attributo id necessario
 
-        result = self.service_class.runtest(session, [block])
+      # Configura i return value
+      mock_get_llms.return_value = [llm]
+      mock_get_prompts.return_value = [prompt]
+      mock_test_create.return_value = test_mock
+      mock_eval_create.return_value = evaluation_mock
+      mock_run_create.return_value = run_mock
 
-        mock_get_llms.assert_called_once_with(session=session)
-        mock_get_prompts.assert_called_once_with(block=block)
-        mock_test_create.assert_called_once()
-        mock_interrogate.assert_called_once_with("LLM-1", "Domanda?")
-        mock_semantic_eval.assert_called_once_with("Risposta attesa", "Risposta LLM")
-        mock_external_eval.assert_called_once_with("google", "Risposta attesa", "Risposta LLM")
-        mock_eval_create.assert_called_once()
-        mock_run_create.assert_called_once()
-        mock_add_run.assert_called_once_with("test-obj", "run-obj")
+      # Esegui il test
+      result = self.service_class.runtest(session, [block])
 
-        assert "results" in result
-        assert len(result["results"]) == 1
-        block_result = result["results"][0]
-        assert block_result["block_id"] == 1
-        assert block_result["block_name"] == "Block 1"
-        assert len(block_result["results"]) == 1
-        assert "averages_by_llm" in block_result
-        assert "LLM-1" in block_result["averages_by_llm"]
-        assert block_result["averages_by_llm"]["LLM-1"]["avg_semantic_scores"] == 0.8
-        assert block_result["averages_by_llm"]["LLM-1"]["avg_external_scores"] == 0.9
+      # Verifiche
+      mock_get_llms.assert_called_once_with(session=session)
+      mock_get_prompts.assert_called_once_with(block=block)
+      mock_test_create.assert_called_once_with({"session": session, "block": block})
+      mock_interrogate.assert_called_once_with("LLM-1", "Domanda?")
+      mock_semantic_eval.assert_called_once_with("Risposta attesa", "Risposta LLM")
+      mock_external_eval.assert_called_once_with("google", "Risposta attesa", "Risposta LLM")
+    
+      # Verifica che create sia chiamato con i parametri corretti
+      mock_eval_create.assert_called_once_with({
+        "semantic_evaluation": 0.8,
+        "external_evaluation": 0.9
+      })
+    
+      mock_run_create.assert_called_once_with({
+        "llm": llm,
+        "prompt": prompt,
+        "evaluation": evaluation_mock,
+        "llm_answer": "Risposta LLM"
+      })
+    
+      mock_add_run.assert_called_once_with(test_mock, run_mock)
+
+      # Verifica la struttura del risultato
+      assert isinstance(result, dict)
+      assert len(result["results"]) == 1
+      assert result["results"][0]["block_id"] == 1
+      assert result["results"][0]["block_name"] == "Block 1"
+      assert len(result["results"][0]["results"]) == 1
+      assert result["results"][0]["averages_by_llm"]["LLM-1"]["avg_semantic_scores"] == 0.8
+      assert result["results"][0]["averages_by_llm"]["LLM-1"]["avg_external_scores"] == 0.9
