@@ -1,13 +1,16 @@
-import React from "react";
+import React, { act } from "react";
 import TestFormPresentational from "../../presentations/sessions/TestFormPresentational";
 import { useState, useCallback, useEffect } from "react";
 import { useBlocksContext } from "../../contexts/BlocksContext";
 import { getCSRFToken } from "@/app/helpers/csrf";
+
 export default function TestFormContainer({ sessionData }) {
   const [questionBlocks, setQuestionBlocks] = useState([]);
   const { selectedBlocks, addBlock, removeBlock } = useBlocksContext();
   const [testResults, setTestResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [prevTests, setPrevTests] = useState([]);
+  const [activeView, setActiveView] = useState(null); // null | "prev" | "results"
 
   const fetchQuestionBlocks = useCallback(async () => {
     setLoading(true);
@@ -56,12 +59,32 @@ export default function TestFormContainer({ sessionData }) {
         }
       );
       const data = await response.json();
+      setActiveView("results");
       setTestResults(data);
     } catch (error) {
       console.error("Errore durante l'esecuzione del test:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const showPrevTests = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/`
+    );
+    const data = await response.json();
+    setPrevTests(data);
+    setActiveView("prev");
+  };
+
+  const handlePrevTestClick = async (test) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/?test_id=${test.id}`
+    );
+    const data = await response.json();
+    console.log(data);
+    setTestResults(data);
+    setActiveView("results");
   };
   return (
     <TestFormPresentational
@@ -73,6 +96,10 @@ export default function TestFormContainer({ sessionData }) {
       removeBlock={removeBlock}
       addBlock={addBlock}
       submitToBackend={submitToBackend}
+      prevTests={prevTests}
+      activeView={activeView}
+      showPrevTests={showPrevTests}
+      handlePrevTestClick={handlePrevTestClick}
     />
   );
 }

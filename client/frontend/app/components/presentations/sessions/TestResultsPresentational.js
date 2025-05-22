@@ -13,7 +13,7 @@ import {
 export default function TestResultsPresentational({ testResults }) {
   return (
     <div className="mt-5">
-      {testResults.results.map((block, index) => (
+      {results.map((block, index) => (
         <div key={index} className="mb-5">
           <h3 className="text-center text-primary">{block.block_name}</h3>
 
@@ -51,6 +51,14 @@ export default function TestResultsPresentational({ testResults }) {
                         {res.external_evaluation}
                       </span>
                     </p>
+                  </div>
+                  <div className="card-footer text-end">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleDeleteRun(res.run_id)}
+                    >
+                      Elimina run
+                    </button>
                   </div>
                 </div>
               </div>

@@ -1,11 +1,14 @@
 import React from "react";
-import PromptCardContainer from "../../containers/question-blocks/PromptCardContainer";
+import TestResults from "../../results/TestResults";
 
 export default function InspectBlockPagePresentational({
+  blockData,
   loading,
   error,
-  blockData,
-  setBlockdata,
+  deletePrompt,
+  handleView,
+  testResults,
+  uniqueId,
 }) {
   if (loading) {
     return (
@@ -36,14 +39,35 @@ export default function InspectBlockPagePresentational({
       <div className="row row-cols-1 row-cols-md-2 g-4">
         {blockData.prompt?.map((prompt, index) => (
           <div className="col" key={index}>
-            <PromptCardContainer
-              blockData={blockData}
-              setBlockData={setBlockdata}
-              prompt={prompt}
-            />
+            <div className="card shadow-sm h-100 border-primary">
+              <div className="card-body">
+                <h5 className="card-title">Domanda #{prompt.id}</h5>
+                <p className="card-text">
+                  <strong>Domanda:</strong> {prompt.prompt_text}
+                </p>
+                <p className="card-text">
+                  <strong>Risposta attesa:</strong> {prompt.expected_answer}
+                </p>
+              </div>
+              <div className="card-footer text-end">
+                <button
+                  className="btn btn-outline-primary btn-sm me-2"
+                  onClick={() => handleView(prompt.id)}
+                >
+                  Visualizza run
+                </button>
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => deletePrompt(prompt.id)}
+                >
+                  Elimina prompt
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
+      {testResults && <TestResults key={uniqueId} testResults={testResults} />}
     </div>
   );
 }
