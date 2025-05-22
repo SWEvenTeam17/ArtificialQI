@@ -1,5 +1,7 @@
 import React from "react";
 import TestResults from "../../results/TestResults";
+import TestResultsPresentational from "../sessions/TestResultsPresentational";
+import TestResultsContainer from "../../containers/sessions/TestResultsContainer";
 
 export default function InspectBlockPagePresentational({
   blockData,
@@ -67,7 +69,7 @@ export default function InspectBlockPagePresentational({
           </div>
         ))}
       </div>
-      {testResults && <TestResults key={uniqueId} testResults={testResults} />}
+      {testResults && <TestResultsContainer key={uniqueId} testResults={testResults} />}
     </div>
   );
 }
