@@ -1,167 +1,87 @@
+import unittest
 from unittest.mock import patch, MagicMock
-import pytest
 from API.services.test_service import TestService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
-from API.models import Session
+from API.models import Block, Session
+
 
 class TestTestService(AbstractServiceTestCase):
+
     service_class = TestService
 
-    @patch('API.services.test_service.PromptRepository')
-    @patch('API.services.test_service.PromptService')
-    
-    def test_save_data_new_prompt(self, mock_prompt_service, mock_prompt_repo):
-        # Setup
-        mock_session = MagicMock(spec=Session)
-        test_data = [{
-            "prompt_text": "Test question?",
-            "expected_answer": "Test answer"
-        }]
-        
-        # Mock: no existing prompt found
-        mock_prompt_repo.filter_one.return_value = None
-        mock_prompt_service.create.return_value = MagicMock(id=1)
-        
-        # Test
-        TestService.save_data(data=test_data, session=mock_session)
-        
-        # Assert
-        mock_prompt_repo.filter_one.assert_called_once_with(
-            prompt_text="Test question?",
-            expected_answer="Test answer",
-            session=mock_session
-        )
-        mock_prompt_service.create.assert_called_once_with({
-            "prompt_text": "Test question?",
-            "expected_answer": "Test answer",
-            "session": mock_session,
-        })
-        assert test_data[0]["id"] == 1
-
-    @patch('API.services.test_service.PromptRepository')
-    
-    def test_save_data_existing_prompt(self, mock_prompt_repo):
-        # Setup
-        mock_session = MagicMock(spec=Session)
-        mock_existing_prompt = MagicMock(id=42)
-        test_data = [{
-            "prompt_text": "Existing question?",
-            "expected_answer": "Existing answer"
-        }]
-        
-        # Mock: existing prompt found
-        mock_prompt_repo.filter_one.return_value = mock_existing_prompt
-        
-        # Test
-        TestService.save_data(data=test_data, session=mock_session)
-        
-        # Assert
-        mock_prompt_repo.filter_one.assert_called_once_with(
-            prompt_text="Existing question?",
-            expected_answer="Existing answer",
-            session=mock_session
-        )
-        assert test_data[0]["id"] == 42
-
-    @patch('API.services.test_service.requests.post')
-    @patch('API.services.test_service.os.getenv')
-   
+    @patch("API.services.test_service.requests.post")
+    @patch("API.services.test_service.os.getenv", return_value="http://fake-llm-service/")
     def test_interrogate(self, mock_getenv, mock_post):
-        # Setup
-        mock_getenv.return_value = "http://llm-service/"
-        mock_response = MagicMock()
-        mock_response.json.return_value = {"answer": "Test response"}
-        mock_post.return_value = mock_response
-        
-        # Test
-        result = TestService.interrogate("test-llm", "Test question?")
-        
-        # Assert
+        """Test interrogate chiama correttamente il microservizio"""
+        mock_post.return_value.json.return_value = {"answer": "test response"}
+
+        response = self.service_class.interrogate("GPT-4", "Che ore sono?")
+
         mock_getenv.assert_called_once_with("LLM_SERVICE_URL")
         mock_post.assert_called_once_with(
-            "http://llm-service/interrogate/",
-            {"llm_name": "test-llm", "prompt": "Test question?"}
+            "http://fake-llm-service/interrogate/",
+            {"llm_name": "GPT-4", "prompt": "Che ore sono?"}
         )
-        assert result == "Test response"
+        assert response == "test response"
 
-    @patch('API.services.test_service.LLMController')
-    @patch('API.services.test_service.EvaluationService')
-    @patch('API.services.test_service.PromptService')
-    @patch('API.services.test_service.TestService.interrogate')
-   
-    def test_evaluate(self, mock_interrogate, mock_prompt_service, mock_eval_service, mock_llm_controller):
-        # Setup
-        mock_llm1 = MagicMock()
-        mock_llm1.name = "llm1" 
-        mock_llm2 = MagicMock()
-        mock_llm2.name = "llm2"
-        mock_llms = [mock_llm1, mock_llm2]
-    
-        test_data = [{
-         "id": 1,
-         "prompt_text": "Q1",
-         "expected_answer": "A1"
-         }]
-        
-        # Mocks
-        mock_prompt = MagicMock()
-        mock_prompt.prompt_text = "Q1"
-        mock_prompt.session = MagicMock()
-        mock_prompt_service.read.return_value = mock_prompt
-        
-        mock_interrogate.return_value = "LLM response"
-        mock_llm_controller.get_semantic_evaluation.return_value = 0.85
-        mock_llm_controller.get_external_evaluation.return_value = 0.9
-        mock_eval_service.create.return_value = MagicMock()
-        
-        # Test
-        results = TestService.evaluate(mock_llms, test_data)
-        
-        # Assert
-        assert len(results) == 2  
-        assert results[0]["llm_name"] == "llm1"
-        assert results[0]["question"] == "Q1"
-        assert results[0]["expected_answer"] == "A1"
-        assert results[0]["answer"] == "LLM response"
-        assert results[0]["semantic_evaluation"] == 0.85
-        assert results[0]["external_evaluation"] == 0.9
+    @patch("API.services.test_service.TestRepository.add_run")
+    @patch("API.services.test_service.RunService.create")
+    @patch("API.services.test_service.EvaluationService.create")
+    @patch("API.services.test_service.LLMController.get_external_evaluation", return_value=0.9)
+    @patch("API.services.test_service.LLMController.get_semantic_evaluation", return_value=0.8)
+    @patch("API.services.test_service.TestService.interrogate", return_value="Risposta LLM")
+    @patch("API.services.test_service.BlockRepository.get_prompts")
+    @patch("API.services.test_service.SessionRepository.get_llms")
+    @patch("API.services.test_service.TestService.create")
+    def test_runtest(
+        self,
+        mock_test_create,
+        mock_get_llms,
+        mock_get_prompts,
+        mock_interrogate,
+        mock_semantic_eval,
+        mock_external_eval,
+        mock_eval_create,
+        mock_run_create,
+        mock_add_run,
+    ):
+        """Test runtest elabora correttamente le risposte e calcola medie"""
+        session = MagicMock(spec=Session)
+        block = MagicMock(spec=Block)
+        block.id = 1
+        block.name = "Block 1"
 
-    def test_get_formatted(self):
-        # Test with ID
-        input_data = [{
-            "id": 1,
-            "prompt_text": "Question?",
-            "expected_answer": "Answer"
-        }]
-        result = TestService.get_formatted(input_data)
-        assert result == input_data
-        
-        # Test without ID
-        input_data = [{
-            "prompt_text": "New question?",
-            "expected_answer": "New answer"
-        }]
-        expected = [{
-            "prompt_text": "New question?",
-            "expected_answer": "New answer"
-        }]
-        result = TestService.get_formatted(input_data)
-        assert result == expected
+        llm = MagicMock()
+        llm.name = "LLM-1"
+        prompt = MagicMock()
+        prompt.prompt_text = "Domanda?"
+        prompt.expected_answer = "Risposta attesa"
 
-    @patch('API.services.test_service.SessionRepository')
-    @patch('API.services.test_service.TestService.get_formatted')
-    
-    def test_get_data(self, mock_get_formatted, mock_session_repo):
-        # Setup
-        mock_session = MagicMock()
-        mock_session_repo.get_by_id.return_value = mock_session
-        mock_get_formatted.return_value = ["formatted_data"]
-        
-        # Test
-        formatted_data, session = TestService.get_data("raw_data", 123)
-        
-        # Assert
-        mock_session_repo.get_by_id.assert_called_once_with(123)
-        mock_get_formatted.assert_called_once_with("raw_data")
-        assert formatted_data == ["formatted_data"]
-        assert session == mock_session
+        mock_get_llms.return_value = [llm]
+        mock_get_prompts.return_value = [prompt]
+        mock_test_create.return_value = "test-obj"
+        mock_eval_create.return_value = "evaluation-obj"
+        mock_run_create.return_value = "run-obj"
+
+        result = self.service_class.runtest(session, [block])
+
+        mock_get_llms.assert_called_once_with(session=session)
+        mock_get_prompts.assert_called_once_with(block=block)
+        mock_test_create.assert_called_once()
+        mock_interrogate.assert_called_once_with("LLM-1", "Domanda?")
+        mock_semantic_eval.assert_called_once_with("Risposta attesa", "Risposta LLM")
+        mock_external_eval.assert_called_once_with("google", "Risposta attesa", "Risposta LLM")
+        mock_eval_create.assert_called_once()
+        mock_run_create.assert_called_once()
+        mock_add_run.assert_called_once_with("test-obj", "run-obj")
+
+        assert "results" in result
+        assert len(result["results"]) == 1
+        block_result = result["results"][0]
+        assert block_result["block_id"] == 1
+        assert block_result["block_name"] == "Block 1"
+        assert len(block_result["results"]) == 1
+        assert "averages_by_llm" in block_result
+        assert "LLM-1" in block_result["averages_by_llm"]
+        assert block_result["averages_by_llm"]["LLM-1"]["avg_semantic_scores"] == 0.8
+        assert block_result["averages_by_llm"]["LLM-1"]["avg_external_scores"] == 0.9
