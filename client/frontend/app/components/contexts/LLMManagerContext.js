@@ -28,25 +28,28 @@ export function LLMManagerContextProvider({ children }) {
     }
   }, []);
 
-  const deleteLLM = async (id) => {
-    let data = {
-      id: id,
-    };
-    const JSONData = JSON.stringify(data);
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/${id}/`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
-        },
-        body: JSONData,
-      });
-      fetchLLMList();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const deleteLLM = useCallback(
+    async (id) => {
+      let data = {
+        id: id,
+      };
+      const JSONData = JSON.stringify(data);
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/${id}/`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSONData,
+        });
+        fetchLLMList();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [fetchLLMList]
+  );
 
   useEffect(() => {
     fetchLLMList();
@@ -55,9 +58,8 @@ export function LLMManagerContextProvider({ children }) {
   const value = useMemo(
     () => ({
       LLMList,
-      setLLMList,
       fetchLLMList,
-      deleteLLM
+      deleteLLM,
     }),
     [LLMList, fetchLLMList, deleteLLM]
   );

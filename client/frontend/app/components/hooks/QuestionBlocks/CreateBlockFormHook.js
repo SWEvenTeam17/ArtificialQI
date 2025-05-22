@@ -1,8 +1,7 @@
-import React from "react";
-import CreateBlockFormPresentational from "../../presentations/question-blocks/CreateBlockFormPresentational";
 import { useState, useRef } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-export default function CreateBlockFormContainer() {
+
+export const useCreateBlockFormHook = () => {
   const [questionAnswerPairs, setQuestionAnswerPairs] = useState([
     { question: "", answer: "" },
   ]);
@@ -102,7 +101,7 @@ export default function CreateBlockFormContainer() {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(data),
-        },
+        }
       );
 
       if (response.status === 201) {
@@ -135,16 +134,15 @@ export default function CreateBlockFormContainer() {
       setFormErrors("Errore di rete durante la creazione del blocco.");
     }
   };
-  return (
-    <CreateBlockFormPresentational
-      inputRefs={inputRefs}
-      handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
-      toastRef={toastRef}
-      addQuestionAnswerPair={addQuestionAnswerPair}
-      removeQuestionAnswerPair={removeQuestionAnswerPair}
-      formErrors={formErrors}
-      questionAnswerPairs={questionAnswerPairs}
-    />
-  );
-}
+
+  return {
+    questionAnswerPairs,
+    formErrors,
+    toastRef,
+    inputRefs,
+    handleSubmit,
+    handleInputChange,
+    addQuestionAnswerPair,
+    removeQuestionAnswerPair,
+  };
+};
