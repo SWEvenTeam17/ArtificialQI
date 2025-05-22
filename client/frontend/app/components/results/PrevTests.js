@@ -1,7 +1,6 @@
 "use client";
 
 import { getCSRFToken } from "@/app/helpers/csrf";
-import { useState } from "react";
 
 function formatTimestamp(ts) {
     const date = new Date(ts);
@@ -33,10 +32,10 @@ export default function PrevTests({ prevTests, setPrevTests, onTestClick }) {
     }
 
     return (
-        <>
+        <div className="container p-5">
             <h3 className="text-center text-primary">Test precedenti</h3>
             {prevTests.length === 0 ? (
-                <p>Nessun test precedente trovato.</p>
+                <p className="fs-5 text-center p-5">Nessun test precedente trovato.</p>
             ) : (
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-2">
                     {prevTests.map((test) => (
@@ -77,6 +76,6 @@ export default function PrevTests({ prevTests, setPrevTests, onTestClick }) {
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 }
