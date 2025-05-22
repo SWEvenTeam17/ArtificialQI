@@ -1,4 +1,5 @@
-
+import sys
+sys.path.append("C:/Users/Alessandro/OneDrive/Desktop/progetto swe/ArtificialQI/server")
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from rest_framework import serializers
@@ -7,23 +8,29 @@ import pytest
 
 # Dummy serializer base
 class DummySerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=False)
+    def to_internal_value(self, data):
+        return data  # accetta qualsiasi input
 
-    def create(self, validated_data):
-        return validated_data
+    def to_representation(self, instance):
+        return instance  # restituisce qualsiasi cosa
 
-    def update(self, instance, validated_data):
-        return validated_data
+    def is_valid(self, raise_exception=False):
+        self._validated_data = self.initial_data
+        return True
+
+    @property
+    def validated_data(self):
+        return getattr(self, '_validated_data', self.initial_data)
 
 # Dummy service base
 class DummyService:
     @staticmethod
     def read_all():
-        return ["data1", "data2"]
+        return [{"value": "data1"}, {"value": "data2"}]
 
     @staticmethod
     def read(instance_id):
-        return f"data{instance_id}"
+        return {"value": f"data{instance_id}"}
 
     @staticmethod
     def create(data):
@@ -49,20 +56,20 @@ def test_get_all():
     request = factory.get("/")
     response = view(request)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data == ["data1", "data2"]
+    assert response.data == [{"value": "data1"}, {"value": "data2"}]
 
 def test_get_by_id():
     request = factory.get("/")
     response = DummyView().get(request, instance_id=1)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data == "data1"
+    assert response.data == {"value": "data1"}
 
 def test_get_by_id_as_view():
     view = DummyView.as_view()
     request = factory.get("/")
     response = view(request, instance_id=1)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data == "data1"
+    assert response.data == {"value": "data1"}
 
 def test_post_valid():
     view = DummyView.as_view()
@@ -97,15 +104,16 @@ def test_delete_without_instance_id():
     response = DummyView().delete(request)  # nessun instance_id
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
-
 # --- ERROR CASES ---
 
 # Serializer non valido
 class InvalidSerializer(DummySerializer):
-    def __init__(self, data=None, many=False):
-        super().__init__(data, many)
-        self._is_valid = False
-        self.errors = {"error": "invalid"}
+    def is_valid(self, raise_exception=False):
+        return False
+
+    @property
+    def errors(self):
+        return {"error": "invalid"}
 
 class InvalidView(AbstractView):
     serializer = InvalidSerializer
@@ -162,7 +170,6 @@ def test_delete_service_exception():
     response = FailingView().delete(request, instance_id=1)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
-
 
 # Service che solleva eccezione in read_all e read
 class FailingGetService(DummyService):

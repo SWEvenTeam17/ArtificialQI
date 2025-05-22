@@ -31,7 +31,7 @@ class BlockView(AbstractView):
         """
         data: dict = {
             "name": request.data.get("name"),
-            "questions": request.data.get("questions"),
+            "questions": request.data.get("questions")        
         }
         try:
             result = self.service.create(data=data)
