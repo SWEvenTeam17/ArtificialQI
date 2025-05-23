@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import BlockListHook from "../hooks/QuestionBlocks/BlockListHook";
+import useBlockListHook from "../hooks/QuestionBlocks/BlockListHook";
 
 export default function QuestionBlockCard({ block }) {
-  const { onDelete } = BlockListHook();
+  const { onDelete } = useBlockListHook();
   
   return (
     <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">

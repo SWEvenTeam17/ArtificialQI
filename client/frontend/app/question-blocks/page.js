@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import QuestionBlockCard from "../components/question-blocks/QuestionBlockCard";
-import BlockListHook from "../components/hooks/QuestionBlocks/BlockListHook";
+import useBlockListHook from "../components/hooks/QuestionBlocks/BlockListHook";
 
 export default function QuestionBlocks() {
-  const { questionBlocks } = BlockListHook();
+  const { questionBlocks } = useBlockListHook();
 
   return (
     <div className="container-fluid">

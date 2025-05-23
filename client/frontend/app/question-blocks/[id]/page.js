@@ -1,5 +1,5 @@
 "use client";
-import InspectBlockPage from "@/app/components/containers/question-blocks/InspectBlockPage";
+import InspectBlockPage from "@/app/components/question-blocks/inspect-block/InspectBlockPage";
 import { use } from "react";
 
 export default function QuestionBlockInspect({ params }) {

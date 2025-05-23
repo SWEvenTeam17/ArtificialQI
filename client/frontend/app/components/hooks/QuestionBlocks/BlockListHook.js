@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
 
-export default function BlockListHook() {
+export default function useBlockListHook() {
   const [questionBlocks, setQuestionBlocks] = useState([]);
 
   const fetchQuestionBlocks = useCallback(async () => {
