@@ -73,7 +73,11 @@ class AbstractView(APIView, ABC):
         e aggiorna una istanza del Model in DB utilizzando
         il service corrispondente.
         """
-        serializer = self.serializer(data=request.data)
+        instance = self.service.read(instance_id)
+        if not instance:
+            return Response({"error": "Sessione non trovata"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.serializer(instance, data=request.data)
         if serializer.is_valid():
             try:
                 self.service.update(

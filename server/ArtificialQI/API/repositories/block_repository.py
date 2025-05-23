@@ -5,6 +5,7 @@ che gestisce le istanze dei blocchi in DB.
 
 from typing import List
 from API.models import Block, Prompt, LLM
+from django.db.models import Count, Q
 from .abstract_repository import AbstractRepository
 
 
@@ -68,7 +69,11 @@ class BlockRepository(AbstractRepository):
         return (
             Block.objects
             .filter(
-                prompt__run__llm__in=[first_llm, second_llm]
+                Q(prompt__run__llm=first_llm) | Q(prompt__run__llm=second_llm)
             )
+            .annotate(
+                llm_count=Count('prompt__run__llm', distinct=True)
+            )
+            .filter(llm_count=2)
             .distinct()
         )

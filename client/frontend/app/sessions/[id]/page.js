@@ -10,7 +10,7 @@ export default function SessionPage({ params }) {
 
   return (
     <SessionPageContextProvider sessionId={id}>
-      <SessionContentContainer id={id} />
+      <SessionContentContainer />
     </SessionPageContextProvider>
   );
 }

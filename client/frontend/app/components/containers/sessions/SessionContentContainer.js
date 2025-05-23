@@ -2,9 +2,8 @@ import React from "react";
 import { useTestContext } from "../../contexts/SessionPageContext";
 import SessionLLMPanelContainer from "./SessionLLMPanelContainer";
 import TestFormContainer from "./TestFormContainer";
-export default function SessionContentContainer({ id }) {
-  const { sessionData, setSessionData, remainingLLMs, fetchRemainingLLMs } =
-    useTestContext();
+export default function SessionContentContainer() {
+  const { sessionData } = useTestContext();
   if (sessionData === null) {
     return (
       <div
