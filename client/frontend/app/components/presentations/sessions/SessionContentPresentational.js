@@ -1,5 +1,4 @@
 import React from "react";
-import { BlocksContextProvider } from "../../contexts/BlocksContext";
 import SessionLLMPanelContainer from "../../containers/sessions/SessionLLMPanelContainer";
 import TestFormContainer from "../../containers/sessions/TestFormContainer";
 
@@ -34,7 +33,6 @@ export default function SessionContentPresentational({sessionData}) {
             <SessionLLMPanelContainer/>
           </div>
         </div>
-        <BlocksContextProvider>
           <div className="col-12">
             <div className="row row-cols-1">
               <div className="col">
@@ -42,7 +40,6 @@ export default function SessionContentPresentational({sessionData}) {
               </div>
             </div>
           </div>
-        </BlocksContextProvider>
       </div>
     </div>
   );

@@ -16,9 +16,15 @@ export default function TestFormPresentational({
   activeView,
   showPrevTests,
   handlePrevTestClick,
+  error,
 }) {
   return questionBlocks.length > 0 ? (
     <>
+      {error && (
+        <div className="alert alert-danger text-center" role="alert">
+          {error}
+        </div>
+      )}
       <div className="card border-0">
         <div className="card-body">
           <h5 className="card-title text-center text-primary fw-bold">

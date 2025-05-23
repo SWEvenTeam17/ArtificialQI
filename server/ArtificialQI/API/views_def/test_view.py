@@ -22,9 +22,6 @@ class TestView(AbstractView):
     service = TestService
 
     def post(self, request) -> Response:
-        """
-        Override della funzione che gestisce le richieste di tipo POST.
-        """
         session = SessionService.read(request.data.get("sessionId"))
         blocks: List[Block] = BlockService.retrieve_blocks(request.data.get("blocks"))
         try:
@@ -39,7 +36,8 @@ class TestView(AbstractView):
                 return Response(
                     {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
-        return Response(
-            {"error": "Errore sconosciuto."},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+        except Exception as e:
+            return Response(
+                {"error": f"Errore inatteso: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

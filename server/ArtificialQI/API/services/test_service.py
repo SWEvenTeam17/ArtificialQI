@@ -75,11 +75,13 @@ class TestService(AbstractService):
                         prompt.expected_answer, output
                     )
                 )
-                external_eval = float(
-                    LLMController.get_external_evaluation(
-                        "google", prompt.expected_answer, output
-                    )
+                external_eval_raw = LLMController.get_external_evaluation(
+                    "google", prompt.expected_answer, output
                 )
+                try:
+                    external_eval = float(external_eval_raw)
+                except ValueError:
+                    external_eval = external_eval_raw  # lascia la stringa di errore
 
                 evaluation = EvaluationService.create(
                     {

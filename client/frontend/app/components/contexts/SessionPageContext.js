@@ -16,7 +16,7 @@ export const useTestContext = () => {
   return useContext(TestContext);
 };
 
-export const TestContextProvider = ({ children, sessionId }) => {
+export const SessionPageContextProvider = ({ children, sessionId }) => {
   const [sessionData, setSessionData] = useState(null);
   const [remainingLLMs, setRemainingLLMs] = useState(null);
   const [limit, setLimit] = useState(null);

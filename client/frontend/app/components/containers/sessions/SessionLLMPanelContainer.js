@@ -1,6 +1,6 @@
 import React from 'react'
 import SessionLLMPanelPresentational from '../../presentations/sessions/SessionLLMPanelPresentational'
-import { useTestContext } from '../../contexts/TestContext'
+import { useTestContext } from '../../contexts/SessionPageContext'
 
 export default function SessionLLMPanelContainer() {
   const {submitLLM, isLLMDataEmpty, remainingLLMs, sessionData, limit, deleteLLM } = useTestContext();
