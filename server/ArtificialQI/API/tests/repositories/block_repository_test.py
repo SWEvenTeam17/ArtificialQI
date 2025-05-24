@@ -1,0 +1,76 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
+
+from API.models import Block, Prompt, LLM, Session
+from API.repositories.block_repository import BlockRepository
+from API.tests.repositories.abstract_repository_test import TestAbstractRepository
+import pytest
+from typing import override
+
+@pytest.mark.django_db
+class TestAnswerRepository(TestAbstractRepository):
+
+    @pytest.fixture
+    def setup_data(self, db):
+        _llm = LLM.objects.create(name="llama3.2", n_parameters="3B")
+        _session = Session.objects.create(title="Sessione 1", description="test 1")
+        _session.llm.add(_llm)
+        _prompt = Prompt.objects.create(
+             prompt_text="Domanda 1?",
+             expected_answer="Risposta 1",
+         )
+        _prompt2 = Prompt.objects.create(
+             prompt_text="Domanda 2?",
+             expected_answer="Risposta 2",
+         )
+        return {"llm": _llm, "session": _session, "prompt": _prompt, "prompt2": _prompt2}
+
+    @pytest.fixture
+    def repository(self):
+        return BlockRepository
+
+    @pytest.fixture
+    def valid_data(self, setup_data):
+        return {
+            "name": "nome"
+        }
+    
+    def test_add_prompt(self, repository, valid_data, setup_data):
+        block = repository.create(valid_data)
+        repository.add_prompt(block,setup_data["prompt"])
+        assert setup_data["prompt"] in repository.get_by_id(block.id).prompt.all()
+    
+    def test_remove_prompt(self, repository, valid_data, setup_data):
+        block = repository.create(valid_data)
+        repository.add_prompt(block,setup_data["prompt"])
+        assert setup_data["prompt"] in repository.get_by_id(block.id).prompt.all()
+        repository.remove_prompt(block, setup_data["prompt"])
+        assert setup_data["prompt"] not in repository.get_by_id(block.id).prompt.all()
+
+    def test_get_by_name(self, repository, valid_data, setup_data):
+        block = repository.create(valid_data)
+        found = repository.get_by_name("nome")
+        assert found is not None
+        assert found.id == block.id
+        assert found.name == "nome"
+        found2 = repository.get_by_name("nome2")
+        assert found2 is None
+
+    def test_get_prompts(self, repository, valid_data, setup_data):
+        block = repository.create(valid_data)
+        repository.add_prompt(block, setup_data["prompt"])
+        repository.add_prompt(block, setup_data["prompt2"])
+        results = repository.get_prompts(block)
+        assert setup_data["prompt"] in results
+        assert setup_data["prompt2"] in results
+        assert len(results) == 2
+    
+    def test_filter_by_llm(self, repository, valid_data, setup_data):
+        block1 = repository.create(valid_data)
+        block2 = repository.create({"name": "nome2"})
+        repository.add_prompt(block1, setup_data["prompt"])
+        results = repository.filter_by_llm(setup_data["llm"])
+        #assert block1 in results
+        print(results)

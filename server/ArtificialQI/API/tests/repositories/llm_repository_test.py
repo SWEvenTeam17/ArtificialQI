@@ -3,7 +3,7 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import Answer, Prompt, LLM, Session
+from API.models import LLM
 from API.repositories.llm_repository import LLMRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest

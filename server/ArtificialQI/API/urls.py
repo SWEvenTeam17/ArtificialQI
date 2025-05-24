@@ -20,8 +20,6 @@ urlpatterns = [
     path("llm_list/<int:instance_id>/", LLMView.as_view()),
     path("llm_list_by_session/<int:instance_id>/", SessionLLMView.as_view()),
     path("llm_list/load_ollama/", OllamaView.as_view()),
-    path("llm_comparison/", LLMComparisonView.as_view()),
-    path("prompt_comparison/", PromptComparisonView.as_view()),
     path("llm_add/", SessionLLMView.as_view()),
     path("llm_remaining/<int:instance_id>", SessionLLMView.as_view()),
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
