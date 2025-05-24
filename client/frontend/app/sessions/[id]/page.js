@@ -1,6 +1,6 @@
 "use client";
 import { SessionPageContextProvider } from "@/app/components/contexts/SessionPageContext";
-import SessionContentContainer from "@/app/components/containers/sessions/SessionContentContainer";
+import SessionContent from "@/app/components/sessions/session-content/SessionContent";
 import { use } from "react";
 
 
@@ -10,7 +10,7 @@ export default function SessionPage({ params }) {
 
   return (
     <SessionPageContextProvider sessionId={id}>
-      <SessionContentContainer />
+      <SessionContent />
     </SessionPageContextProvider>
   );
 }

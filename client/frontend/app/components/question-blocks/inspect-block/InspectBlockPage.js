@@ -1,6 +1,6 @@
 import React from "react";
 import { useInspectBlockHook } from "@/app/components/hooks/QuestionBlocks/InspectBlockHook";
-import TestResultsContainer from "../../containers/sessions/TestResultsContainer";
+import TestResultsContainer from "../../containers/sessions/TestResults";
 import BlockHeader from "./BlockHeader";
 import PromptList from "./PromptList";
 

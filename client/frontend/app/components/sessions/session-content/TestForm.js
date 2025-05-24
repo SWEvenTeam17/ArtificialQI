@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-import TestResultsContainer from "./TestResultsContainer";
+import TestResults from "./TestResults";
 import PrevTests from "../../results/PrevTests";
-export default function TestFormContainer({ sessionData }) {
+export default function TestForm({ sessionData }) {
   const [questionBlocks, setQuestionBlocks] = useState([]);
   const [testResults, setTestResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [prevTests, setPrevTests] = useState([]);
   const [activeView, setActiveView] = useState(null);
   const [selectedBlocks, setSelectedBlocks] = useState([]);
-  const [error, setError] = useState(null); // 🔴 Nuovo stato per l'errore
+  const [error, setError] = useState(null);
 
   const addBlock = async (id) => {
     try {
@@ -134,7 +134,7 @@ export default function TestFormContainer({ sessionData }) {
           {error}
         </div>
       )}
-      <div className="card border-0">
+      <div className="card border-0 mb-5">
         <div className="card-body">
           <h5 className="card-title text-center text-primary fw-bold">
             Blocchi di domande disponibili
@@ -218,7 +218,7 @@ export default function TestFormContainer({ sessionData }) {
       {testResults && activeView === "results" && (
         <div className="card mt-4">
           <div className="card-body">
-            <TestResultsContainer testResults={testResults} />
+            <TestResults testResults={testResults} />
           </div>
         </div>
       )}

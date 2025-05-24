@@ -1,7 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-export default function TestResultsContainer({ testResults }) {
+import {
+  ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+} from "recharts";
+export default function TestResults({ testResults }) {
   const [results, setResults] = useState(testResults.results);
 
   const handleDeleteRun = async (runId) => {

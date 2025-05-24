@@ -1,8 +1,8 @@
 import React from "react";
 import { useTestContext } from "../../contexts/SessionPageContext";
-import SessionLLMPanelContainer from "./SessionLLMPanelContainer";
-import TestFormContainer from "./TestFormContainer";
-export default function SessionContentContainer() {
+import SessionLLMPanel from "./SessionLLMPanel";
+import TestForm from "./TestForm";
+export default function SessionContent() {
   const { sessionData } = useTestContext();
   if (sessionData === null) {
     return (
@@ -31,13 +31,13 @@ export default function SessionContentContainer() {
       <div className="row g-0 p-0 m-0">
         <div className="col-12">
           <div className="card border-0 h-100">
-            <SessionLLMPanelContainer />
+            <SessionLLMPanel />
           </div>
         </div>
         <div className="col-12">
           <div className="row row-cols-1">
             <div className="col">
-              <TestFormContainer sessionData={sessionData} />
+              <TestForm sessionData={sessionData} />
             </div>
           </div>
         </div>

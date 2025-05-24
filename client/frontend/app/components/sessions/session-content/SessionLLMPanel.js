@@ -3,7 +3,7 @@ import { useTestContext } from "../../contexts/SessionPageContext";
 import Form from "next/form";
 import delteIcon from "/public/images/icon.png";
 import Image from "next/image";
-export default function SessionLLMPanelContainer() {
+export default function SessionLLMPanel() {
   const {
     submitLLM,
     isLLMDataEmpty,
