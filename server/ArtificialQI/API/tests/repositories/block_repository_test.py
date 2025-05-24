@@ -3,7 +3,7 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import Block, Prompt, LLM, Session
+from API.models import Block, Prompt, LLM, Session, Evaluation, Run
 from API.repositories.block_repository import BlockRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
@@ -15,6 +15,7 @@ class TestAnswerRepository(TestAbstractRepository):
     @pytest.fixture
     def setup_data(self, db):
         _llm = LLM.objects.create(name="llama3.2", n_parameters="3B")
+        _llm2 = LLM.objects.create(name="gemma", n_parameters="4B")
         _session = Session.objects.create(title="Sessione 1", description="test 1")
         _session.llm.add(_llm)
         _prompt = Prompt.objects.create(
@@ -25,7 +26,11 @@ class TestAnswerRepository(TestAbstractRepository):
              prompt_text="Domanda 2?",
              expected_answer="Risposta 2",
          )
-        return {"llm": _llm, "session": _session, "prompt": _prompt, "prompt2": _prompt2}
+        _evaluation = Evaluation.objects.create(semantic_evaluation = 90, external_evaluation = 95)
+        _evaluation = Evaluation.objects.create(semantic_evaluation = 98, external_evaluation = 99)
+        _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
+        _run2 = Run.objects.create(llm = _llm2, prompt = _prompt2, evaluation = _evaluation, llm_answer = "Risposta run 2")
+        return {"llm": _llm, "session": _session, "prompt": _prompt, "prompt2": _prompt2, _run: "run", _run2: "run2"}
 
     @pytest.fixture
     def repository(self):
@@ -71,6 +76,16 @@ class TestAnswerRepository(TestAbstractRepository):
         block1 = repository.create(valid_data)
         block2 = repository.create({"name": "nome2"})
         repository.add_prompt(block1, setup_data["prompt"])
+        repository.add_prompt(block2, setup_data["prompt2"])
         results = repository.filter_by_llm(setup_data["llm"])
-        #assert block1 in results
-        print(results)
+        assert block1 in results
+        assert block2 not in results
+    
+    def test_filter_by_ids(self, repository, valid_data, setup_data):
+        block1 = repository.create(valid_data)
+        block2 = repository.create({"name": "nome2"})
+        repository.add_prompt(block1, setup_data["prompt"])
+        repository.add_prompt(block2, setup_data["prompt2"])
+        results = repository.filter_by_ids([1])
+        assert block1 in results
+        assert block2 not in results

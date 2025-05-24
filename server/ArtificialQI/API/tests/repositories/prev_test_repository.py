@@ -3,14 +3,14 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import LLM, Prompt, Session, Evaluation, Block, Run, Test
-from API.repositories.llm_repository import LLMRepository
+from API.models import Prompt, LLM, Session, Run, Evaluation, Block
+from API.repositories.prev_test_repository import PrevTestRepository
 from API.repositories.block_repository import BlockRepository
-from API.repositories.test_repository import TestRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
 
-class TestLLMRepository(TestAbstractRepository):
+@pytest.mark.django_db
+class TestPrevTestRepository(TestAbstractRepository):
     
     @pytest.fixture
     def setup_data(self, db):
@@ -33,39 +33,34 @@ class TestLLMRepository(TestAbstractRepository):
         _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
         _run2 = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 2")
 
-        _test = Test.objects.create(session = _session, block = _block)
-        TestRepository.add_run(_test, _run)
-
         return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "run": _run, "run2": _run2}
     
     @pytest.fixture
     def repository(self):
-        return LLMRepository
-
+        return TestRepository()
+    
     @pytest.fixture
-    def valid_data(self):
+    def valid_data(self, setup_data):
         return {
-            "name": "llama3.2",
-            "n_parameters": "3B"
+            "session": setup_data["session"],
+            "block": setup_data["block"],
         }
 
-    def test_update_or_create(self, repository, valid_data):
-        # test: aggiungere modello non esistente
-        repository.update_or_create("mod1", "3B")
-        results = repository.get_all()
-        assert len(results) == 1
-        assert repository.get_by_id(1).name == "mod1"
-        assert repository.get_by_id(1).n_parameters == "3B"
-        # test: aggiornare modello
-        repository.update_or_create("mod1", "6B")
-        assert repository.get_by_id(1).name == "mod1"
-        assert repository.get_by_id(1).n_parameters == "6B"
-        # test: aggiornare modello con gli stessi dati
-        repository.update_or_create("mod1", "6B")
-        assert repository.get_by_id(1).name == "mod1"
-        assert repository.get_by_id(1).n_parameters, "6B"
+
+    # def test_add_run(self, repository, valid_data, setup_data):
+    #     test = repository.create(valid_data)
+    #     result = repository.add_run(test, setup_data["run"])
+    #     assert setup_data["run"] in result.run.all()
+    #     result = repository.add_run(test, setup_data["run2"])
+    #     assert setup_data["run"] in result.run.all()
+    #     assert setup_data["run2"] in result.run.all()
     
-    def test_get_previous_tests(self, repository, valid_data, setup_data):
-        model = setup_data["llm"]
-        model = repository.get_by_id(1)
-        repository.get_previous_tests(setup_data["llm"])
+    # def test_remove_run(self, repository, valid_data, setup_data):
+    #     test = repository.create(valid_data)
+    #     repository.add_run(test, setup_data["run"])
+    #     repository.add_run(test, setup_data["run2"])
+    #     result = repository.remove_run(test, setup_data["run"])
+    #     assert setup_data["run"] not in result.run.all()
+    #     assert setup_data["run2"] in result.run.all()
+    #     result = repository.remove_run(test, setup_data["run2"])
+    #     assert setup_data["run2"] not in result.run.all()
