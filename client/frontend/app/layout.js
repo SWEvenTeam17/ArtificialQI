@@ -2,8 +2,7 @@
 import Script from "next/script";
 import "./bootstrap.css";
 import { SessionContextProvider } from "./components/contexts/SessionContext";
-import NavbarContainer from "./components/containers/layout/navbar/NavbarContainer";
-
+import Navbar from "@/app/components/layout/navbar/Navbar"
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -14,7 +13,7 @@ export default function RootLayout({ children }) {
         </header>
         <main>
           <SessionContextProvider>
-            <NavbarContainer></NavbarContainer>
+            <Navbar/>
             {children}
           </SessionContextProvider>
         </main>

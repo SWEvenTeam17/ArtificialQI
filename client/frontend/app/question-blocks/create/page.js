@@ -1,6 +1,6 @@
 "use client";
-import CreateBlockFormContainer from "@/app/components/containers/question-blocks/CreateBlockFormContainer";
+import CreateBlockForm from "@/app/components/question-blocks/CreateBlockForm";
 
 export default function CreateQuestionBlock() {
-  return <CreateBlockFormContainer />;
+  return <CreateBlockForm />;
 }

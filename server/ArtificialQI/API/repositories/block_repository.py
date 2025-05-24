@@ -5,6 +5,7 @@ che gestisce le istanze dei blocchi in DB.
 
 from typing import List
 from API.models import Block, Prompt, LLM
+from django.db.models import Count, Q
 from .abstract_repository import AbstractRepository
 
 
@@ -59,3 +60,20 @@ class BlockRepository(AbstractRepository):
         Filtra i blocchi prendendo quelli con id all'interno della lista di id passata.
         """
         return list(Block.objects.filter(id__in=ids))
+
+    @staticmethod
+    def get_common_blocks_for_llms(first_llm: LLM, second_llm: LLM) -> List[Block]:
+        """
+        Restituisce i blocchi che hanno prompt usati in Run da entrambi gli LLM.
+        """
+        return (
+            Block.objects
+            .filter(
+                Q(prompt__run__llm=first_llm) | Q(prompt__run__llm=second_llm)
+            )
+            .annotate(
+                llm_count=Count('prompt__run__llm', distinct=True)
+            )
+            .filter(llm_count=2)
+            .distinct()
+        )

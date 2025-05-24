@@ -1,12 +1,9 @@
 "use client";
-import { useSessionContext } from "../components/contexts/SessionContext";
-import TestComparatorContainer from "../components/containers/compare/TestComparatorContainer";
-
+import TestComparator from "@/app/components/test-comparison/TestComparator";
 export default function Compare() {
-  const { sessions } = useSessionContext();
   return (
     <div className="container-fluid">
-      <TestComparatorContainer sessions={sessions} />
+      <TestComparator/>
     </div>
   );
 }
