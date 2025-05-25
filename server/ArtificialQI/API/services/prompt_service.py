@@ -13,10 +13,3 @@ class PromptService(AbstractService):
     """
 
     repository = PromptRepository
-
-    @classmethod
-    def filter_by_session(cls, session: Session):
-        """
-        Filtra i prompt per sessione, ritornando tutte i prompt precedenti.
-        """
-        return cls.repository.filter_by_session(session)

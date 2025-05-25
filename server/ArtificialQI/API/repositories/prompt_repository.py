@@ -14,14 +14,6 @@ class PromptRepository(AbstractRepository):
     model = Prompt
 
     @classmethod
-    def filter_by_session(cls, session: Session):
-        """
-        Funzione che filtra i prompt per sessione, ritorna tutti i prompt
-        usati in una determinata sessione.
-        """
-        return cls.model.objects.filter(session=session)
-
-    @classmethod
     def filter_one(cls, prompt_text: str, expected_answer: str):
         """
         Restituisce un singolo prompt che corrisponde esattamente a
