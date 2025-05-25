@@ -71,7 +71,7 @@ class Run(models.Model):
     llm_answer = models.TextField()
 
 
-class Test(models.Model):
+class BlockTest(models.Model):
     """
     Modello che rappresenta un test richiesto da un utente.
     Rappresenta la sessione di test, il blocco di domande inviato ed è collegato

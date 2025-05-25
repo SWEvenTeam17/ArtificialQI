@@ -2,7 +2,7 @@
 Repository che gestisce le istanze dei LLM in DB.
 """
 
-from API.models import LLM, Test
+from API.models import LLM, BlockTest
 from .abstract_repository import AbstractRepository
 
 

@@ -5,8 +5,8 @@ richieste per effettuare operazioni sui Test.
 
 from rest_framework.response import Response
 from rest_framework import status
-from API.serializers import TestSerializer
-from API.services import TestService, SessionService, BlockService
+from API.serializers import BlockTestSerializer
+from API.services import BlockTestService, SessionService, BlockService
 from API.models import Block
 from typing import List
 from .abstract_view import AbstractView
@@ -18,8 +18,8 @@ class TestView(AbstractView):
     alla gestione dei test precedentemente eseguiti in una sessione..
     """
 
-    serializer = TestSerializer
-    service = TestService
+    serializer = BlockTestSerializer
+    service = BlockTestService
 
     def post(self, request) -> Response:
         session = SessionService.read(request.data.get("sessionId"))

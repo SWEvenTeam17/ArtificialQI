@@ -8,7 +8,7 @@ se necessario.
 """
 
 from rest_framework import serializers
-from API.models import Prompt, LLM, Run, Session, Evaluation, Test, Block
+from API.models import Prompt, LLM, Run, Session, Evaluation, BlockTest, Block
 
 
 class LLMSerializer(serializers.ModelSerializer):
@@ -79,10 +79,10 @@ class RunSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TestSerializer(serializers.ModelSerializer):
+class BlockTestSerializer(serializers.ModelSerializer):
     session = SessionSerializer(read_only=True)
     block = BlockSerializer(read_only=True)
 
     class Meta:
-        model = Test
+        model = BlockTest
         fields = "__all__"

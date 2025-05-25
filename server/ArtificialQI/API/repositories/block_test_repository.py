@@ -2,19 +2,19 @@
 File che contiene il repository che gestisce le istanze dei Test in DB.
 """
 
-from API.models import Test, Run
+from API.models import BlockTest, Run
 from .abstract_repository import AbstractRepository
 
 
-class TestRepository(AbstractRepository):
+class BlockTestRepository(AbstractRepository):
     """
     Classe che contiene la definizione del repository che gestisce le istanze dei Test in DB.
     """
 
-    model = Test
+    model = BlockTest
 
     @staticmethod
-    def add_run(test: Test, run: Run) -> Test:
+    def add_run(test: BlockTest, run: Run) -> BlockTest:
         """
         Funzione che aggiunge una run ad un test.
         """
@@ -22,7 +22,7 @@ class TestRepository(AbstractRepository):
         return test
 
     @staticmethod
-    def remove_run(test: Test, run: Run) -> Test:
+    def remove_run(test: BlockTest, run: Run) -> BlockTest:
         """
         Funzione che rimuove una run da un test.
         """

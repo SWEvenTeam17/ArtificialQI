@@ -1,9 +1,9 @@
 from .abstract_repository import AbstractRepository
-from API.models import Test
+from API.models import BlockTest
 
 class PrevTestRepository(AbstractRepository):
 
-    model = Test
+    model = BlockTest
 
     @classmethod
     def get_tests_by_session(cls, session_id: int):

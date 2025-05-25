@@ -9,7 +9,7 @@ from .abstract_service import AbstractService
 from .run_service import RunService
 from .evaluation_service import EvaluationService
 from .session_service import SessionService
-from .test_service import TestService
+from .block_test_service import BlockTestService
 from .prompt_service import PromptService
 from .block_service import BlockService
 from .prev_test_service import PrevTestService

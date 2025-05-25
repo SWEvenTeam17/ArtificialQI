@@ -8,20 +8,20 @@ import os
 from collections import defaultdict
 import requests
 from dotenv import load_dotenv
-from API.repositories import TestRepository, SessionRepository, BlockRepository
-from API.models import Session, Block, Test
+from API.repositories import BlockTestRepository, SessionRepository, BlockRepository
+from API.models import Session, Block, BlockTest
 from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
 from .run_service import RunService
 
 
-class TestService(AbstractService):
+class BlockTestService(AbstractService):
     """
     Classe che contiene tutti i servizi riguardanti i test.
     """
 
-    repository = TestRepository
+    repository = BlockTestRepository
 
     @staticmethod
     def interrogate(llm_name: str, prompt: str) -> str:
@@ -51,7 +51,7 @@ class TestService(AbstractService):
 
         for block in blocks:
             prompts = BlockRepository.get_prompts(block=block)
-            test = TestService.create({"session": session, "block": block})
+            test = BlockTestService.create({"session": session, "block": block})
             block_map[block.id] = {
                 "name": block.name,
                 "test": test,
@@ -69,7 +69,7 @@ class TestService(AbstractService):
 
         for llm in llms:
             for block_id, prompt in all_prompts:
-                output = TestService.interrogate(llm.name, prompt.prompt_text)
+                output = BlockTestService.interrogate(llm.name, prompt.prompt_text)
                 semantic_eval = float(
                     LLMController.get_semantic_evaluation(
                         prompt.expected_answer, output
@@ -99,7 +99,7 @@ class TestService(AbstractService):
                     }
                 )
 
-                TestRepository.add_run(block_map[block_id]["test"], run)
+                BlockTestRepository.add_run(block_map[block_id]["test"], run)
 
                 block_map[block_id]["results"].append(
                     {
@@ -148,7 +148,7 @@ class TestService(AbstractService):
         return {"results": full_results}
     
     @staticmethod
-    def format_results(test: Test) -> Dict[str, any]:
+    def format_results(test: BlockTest) -> Dict[str, any]:
         block = test.block
         runs = test.run.all().select_related("llm", "prompt", "evaluation")
         results = []
