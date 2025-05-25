@@ -41,20 +41,15 @@ class TestRunRepository(TestAbstractRepository):
             "llm_answer": "Risposta 1",
         }
     
-    # def test_commons_run(self, repository, valid_data, setup_data):
-    #     run1 = repository.create(valid_data)
-    #     run2 = repository.create({"llm": setup_data["llm2"],
-    #         "prompt": setup_data["prompt"],
-    #         "evaluation": setup_data["evaluation"],
-    #         "llm_answer": "Risposta 2"})
-    #     results = repository.get_common_runs(setup_data["llm"], setup_data["llm2"], [])
-    #     assert len(repository.get_common_runs(setup_data["llm3"], setup_data["llm3"], [])) == 0
-    #     assert len(repository.get_common_runs(setup_data["llm"], setup_data["llm2"], [])) == 2
-    #     # run3 = repository.create({"llm": setup_data["llm"],
-    #     #     "prompt": setup_data["prompt"],
-    #     #     "evaluation": setup_data["evaluation"],
-    #     #     "llm_answer": "Risposta 2"})
-    #     assert len(repository.get_common_runs(setup_data["llm"], setup_data["llm3"], [])) == 21
+    def test_commons_run(self, repository, valid_data, setup_data):
+        run1 = repository.create(valid_data)
+        run2 = repository.create({"llm": setup_data["llm2"],
+            "prompt": setup_data["prompt"],
+            "evaluation": setup_data["evaluation"],
+            "llm_answer": "Risposta 2"})
+        results = repository.get_common_runs(setup_data["llm"], setup_data["llm2"], [])
+        assert len(repository.get_common_runs(setup_data["llm3"], setup_data["llm3"], [])) == 0
+        assert len(repository.get_common_runs(setup_data["llm"], setup_data["llm2"], [])) == 2
 
 
     def test_get_by_prompt(self, repository, valid_data, setup_data):

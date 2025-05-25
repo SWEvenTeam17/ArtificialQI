@@ -3,9 +3,10 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import Prompt, LLM, Session, Run, Evaluation, Block, Test
+from API.models import Prompt, LLM, Session, Run, Evaluation, Block, BlockTest
 from API.repositories.prev_test_repository import PrevTestRepository
 from API.repositories.block_repository import BlockRepository
+from API.repositories.block_test_repository import BlockTestRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
 
@@ -48,16 +49,15 @@ class TestPrevTestRepository(TestAbstractRepository):
             "block": setup_data["block"],
         }
 
-
     def test_get_tests_by_session(self, repository, valid_data, setup_data):
         ptest = repository.create(valid_data)
+        ptest2 = repository.create({
+            "session": setup_data["session2"],
+            "block": setup_data["block"],
+        })
         assert repository is not PrevTestRepository
-        repository.add_run(ptest, setup_data["run"])
+        BlockTestRepository.add_run(ptest, setup_data["run"])
         results = repository.get_tests_by_session(setup_data["session"])
         assert ptest in results
-        assert len(results) == 100
-        assert len(results) == 10
-        assert results is None
-        assert results is not None
-        assert results is Test
-        assert results is not Test
+        assert ptest2 not in results
+        assert len(results) == 1

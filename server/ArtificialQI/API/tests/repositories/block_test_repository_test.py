@@ -4,13 +4,13 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
 from API.models import Prompt, LLM, Session, Run, Evaluation, Block
-from API.repositories.test_repository import TestRepository
+from API.repositories.block_test_repository import BlockTestRepository
 from API.repositories.block_repository import BlockRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
 
 @pytest.mark.django_db
-class TestTestRepository(TestAbstractRepository):
+class TestBlockTestRepository(TestAbstractRepository):
     
     @pytest.fixture
     def setup_data(self, db):
@@ -37,7 +37,7 @@ class TestTestRepository(TestAbstractRepository):
     
     @pytest.fixture
     def repository(self):
-        return TestRepository()
+        return BlockTestRepository()
     
     @pytest.fixture
     def valid_data(self, setup_data):

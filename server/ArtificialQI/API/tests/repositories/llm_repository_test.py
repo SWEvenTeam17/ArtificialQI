@@ -3,10 +3,10 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import LLM, Prompt, Session, Evaluation, Block, Run, Test
+from API.models import LLM, Prompt, Session, Evaluation, Block, Run, BlockTest
 from API.repositories.llm_repository import LLMRepository
 from API.repositories.block_repository import BlockRepository
-from API.repositories.test_repository import TestRepository
+from API.repositories.block_test_repository import BlockTestRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
 
@@ -33,8 +33,8 @@ class TestLLMRepository(TestAbstractRepository):
         _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
         _run2 = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 2")
 
-        #_test = Test.objects.create(session = _session, block = _block)
-        #TestRepository.add_run(_test, _run)
+        _test = BlockTest.objects.create(session = _session, block = _block)
+        BlockTestRepository.add_run(_test, _run)
 
         return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "run": _run, "run2": _run2}
     
