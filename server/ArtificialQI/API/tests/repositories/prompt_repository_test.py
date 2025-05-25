@@ -28,11 +28,6 @@ class TestAnswerRepository(TestAbstractRepository):
             "prompt_text":"Domanda 1?",
             "expected_answer": "Risposta 1",
         }
-    
-    # def test_filter_by_session(self, repository, valid_data, setup_data):
-    #     prompt = repository.create(valid_data)
-    #     results = repository.filter_by_session(setup_data["session"])
-    #     assert prompt in results
 
     def test_filter_one(self, repository, valid_data, setup_data):
         prompt = repository.create(valid_data)
