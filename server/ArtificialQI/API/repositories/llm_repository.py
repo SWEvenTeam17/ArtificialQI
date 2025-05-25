@@ -24,9 +24,3 @@ class LLMRepository(AbstractRepository):
             llm.n_parameters = parameters
             llm.save()
         return True
-
-    @classmethod
-    def get_previous_tests(cls, llm_id: int, session_id=None):
-        if session_id is not None:
-            return Test.objects.filter(llm_id=llm_id, session_id=session_id)
-        return Test.objects.filter(llm_id=llm_id)
