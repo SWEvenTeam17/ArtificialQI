@@ -33,15 +33,15 @@ class TestLLMRepository(TestAbstractRepository):
         _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
         _run2 = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 2")
 
-        _test = Test.objects.create(session = _session, block = _block)
-        TestRepository.add_run(_test, _run)
+        #_test = Test.objects.create(session = _session, block = _block)
+        #TestRepository.add_run(_test, _run)
 
         return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "run": _run, "run2": _run2}
     
     @pytest.fixture
     def repository(self):
         return LLMRepository
-
+    
     @pytest.fixture
     def valid_data(self):
         return {
@@ -63,7 +63,7 @@ class TestLLMRepository(TestAbstractRepository):
         # test: aggiornare modello con gli stessi dati
         repository.update_or_create("mod1", "6B")
         assert repository.get_by_id(1).name == "mod1"
-        assert repository.get_by_id(1).n_parameters, "6B"
+        assert repository.get_by_id(1).n_parameters == "6B"
     
     def test_get_previous_tests(self, repository, valid_data, setup_data):
         model = setup_data["llm"]

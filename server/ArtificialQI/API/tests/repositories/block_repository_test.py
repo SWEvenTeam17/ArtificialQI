@@ -30,7 +30,8 @@ class TestAnswerRepository(TestAbstractRepository):
         _evaluation = Evaluation.objects.create(semantic_evaluation = 98, external_evaluation = 99)
         _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
         _run2 = Run.objects.create(llm = _llm2, prompt = _prompt2, evaluation = _evaluation, llm_answer = "Risposta run 2")
-        return {"llm": _llm, "session": _session, "prompt": _prompt, "prompt2": _prompt2, _run: "run", _run2: "run2"}
+        _run3 = Run.objects.create(llm = _llm2, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 3")
+        return {"llm": _llm, "llm2": _llm2, "session": _session, "prompt": _prompt, "prompt2": _prompt2, _run: "run", _run2: "run2", _run3: "run3"}
 
     @pytest.fixture
     def repository(self):
@@ -89,3 +90,11 @@ class TestAnswerRepository(TestAbstractRepository):
         results = repository.filter_by_ids([1])
         assert block1 in results
         assert block2 not in results
+
+    def test_get_common_blocks_for_llms(self, repository, valid_data, setup_data):
+        block1 = repository.create(valid_data)
+        block2 = repository.create({"name": "nome2"})
+        repository.add_prompt(block1, setup_data["prompt"])
+        repository.add_prompt(block2, setup_data["prompt2"])
+        results = repository.get_common_blocks_for_llms(setup_data["llm"],setup_data["llm2"])
+        assert len(results) == 1
