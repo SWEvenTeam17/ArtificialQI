@@ -23,6 +23,7 @@ export default function SessionCardBody() {
         />
         <input
           type="text"
+          data-cy="description-input"
           className="form-control rounded-5"
           placeholder="Descrizione"
           value={editedDescription}
@@ -34,8 +35,8 @@ export default function SessionCardBody() {
 
   return (
     <Link href={`/sessions/${session.id}`} className="text-decoration-none text-dark">
-      <h4 className="card-title text-primary">{session.title}</h4>
-      <p className="card-text">{session.description}</p>
+      <h4 data-cy="session-title" className="card-title text-primary">{session.title}</h4>
+      <p data-cy="session-description" className="card-text">{session.description}</p>
     </Link>
   );
 }
