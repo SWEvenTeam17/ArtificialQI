@@ -1,8 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+"use client";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
 
-export default function useBlockListHook() {
+const QuestionBlockContext = createContext();
+
+export function QuestionBlockProvider({ children }) {
   const [questionBlocks, setQuestionBlocks] = useState([]);
+
+  const addQuestionBlock = useCallback((newBlock) => {
+    setQuestionBlocks((prev) => [...prev, newBlock]);
+  }, []);
 
   const fetchQuestionBlocks = useCallback(async () => {
     try {
@@ -12,13 +25,13 @@ export default function useBlockListHook() {
       const data = await response.json();
       setQuestionBlocks(data);
     } catch (error) {
-      console.error("Errore nel fetch dei blocchi di domande:", error);
+      console.error("Errore nel fetch dei blocchi:", error);
     }
   }, []);
 
   const deleteQuestionBlock = useCallback(async (id) => {
     try {
-      const response = await fetch(
+      await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}/`,
         {
           method: "DELETE",
@@ -29,7 +42,7 @@ export default function useBlockListHook() {
       );
       setQuestionBlocks((prev) => prev.filter((block) => block.id !== id));
     } catch (error) {
-      console.error("Errore durante l'eliminazione del blocco:", error);
+      console.error("Errore durante l'eliminazione:", error);
     }
   }, []);
 
@@ -37,8 +50,15 @@ export default function useBlockListHook() {
     fetchQuestionBlocks();
   }, [fetchQuestionBlocks]);
 
-  return {
-    questionBlocks,
-    deleteQuestionBlock,
-  };
+  return (
+    <QuestionBlockContext.Provider
+      value={{ questionBlocks, deleteQuestionBlock, addQuestionBlock }}
+    >
+      {children}
+    </QuestionBlockContext.Provider>
+  );
+}
+
+export function useQuestionBlockContext() {
+  return useContext(QuestionBlockContext);
 }
