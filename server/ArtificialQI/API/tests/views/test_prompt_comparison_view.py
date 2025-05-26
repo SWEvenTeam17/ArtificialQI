@@ -12,7 +12,7 @@ def url():
     return "/prompt_comparison/"
 
 @patch("API.views_def.llm_view.LLMService.compare_prompts")
-@patch("API.views_def.llm_view.TestSerializer")
+@patch("API.views_def.llm_view.BlockTestSerializer")
 def test_prompt_comparison_view_success(mock_serializer, mock_compare, client, url):
     # Mock dei dati restituiti dal service
     mock_tests = [MagicMock(), MagicMock()]

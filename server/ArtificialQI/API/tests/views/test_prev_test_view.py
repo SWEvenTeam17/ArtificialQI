@@ -11,7 +11,7 @@ def url():
     return "/previous_tests/"
 
 # --- GET con test_id (ramo TestService.format_results) ---
-@patch("API.views_def.prev_test_view.TestService.format_results")
+@patch("API.views_def.prev_test_view.BlockTestService.format_results")
 @patch("API.views_def.prev_test_view.PrevTestService.read")
 def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client, url):
     mock_read.return_value = MagicMock()
@@ -22,7 +22,7 @@ def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client,
     mock_read.assert_called_once_with(instance_id='5')  # test_id è una stringa da GET
     mock_format_results.assert_called_once()
 
-@patch("API.views_def.prev_test_view.TestSerializer")
+@patch("API.views_def.prev_test_view.BlockTestSerializer")
 @patch("API.views_def.prev_test_view.PrevTestService.get_tests_by_session")
 def test_get_previous_tests_by_session(mock_get_tests, mock_serializer, client, url):
     mock_get_tests.return_value = [
@@ -59,7 +59,7 @@ def test_get_previous_tests_generic_error(mock_get_tests, client, url):
     assert "error" in response.json()
 
 # --- DELETE successo ---
-@patch("API.views_def.prev_test_view.TestService.delete")
+@patch("API.views_def.prev_test_view.BlockTestService.delete")
 def test_delete_previous_tests_success(mock_delete, client, url):
     mock_delete.return_value = None
     session_id = 1
@@ -68,14 +68,14 @@ def test_delete_previous_tests_success(mock_delete, client, url):
     assert response.status_code == 204
 
 # --- DELETE: Test.DoesNotExist ---
-@patch("API.views_def.prev_test_view.TestService.delete", side_effect=Exception("Test not found"))
+@patch("API.views_def.prev_test_view.BlockTestService.delete", side_effect=Exception("Test not found"))
 def test_delete_previous_tests_not_found(mock_delete, client, url):
     response = client.delete(f"{url}999/")
     assert response.status_code == 400
     assert "error" in response.json()
 
 # --- DELETE: generic Exception ---
-@patch("API.views_def.prev_test_view.TestService.delete", side_effect=Exception("Errore cancellazione"))
+@patch("API.views_def.prev_test_view.BlockTestService.delete", side_effect=Exception("Errore cancellazione"))
 def test_delete_previous_tests_error(mock_delete, client, url):
     response = client.delete(f"{url}123/")
     assert response.status_code == 400

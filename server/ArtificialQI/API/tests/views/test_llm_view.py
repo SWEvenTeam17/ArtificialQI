@@ -154,9 +154,9 @@ def test_llm_post_exception(client):
 @pytest.mark.django_db
 def test_llm_put_success(client):
     class FakeSerializer:
-        def __init__(self, data, many=False):
-            self._data = data
-            self.validated_data = data
+        def __init__(self, instance=None, data=None, many=False):
+            self._data = data or instance
+            self.validated_data = data or instance
             self.errors = {}
         def is_valid(self):
             return True
@@ -167,6 +167,9 @@ def test_llm_put_success(client):
         @staticmethod
         def update(instance_id, data):
             return data
+        @staticmethod
+        def read(instance_id):
+            return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
     LLMView.service = FakeService
     LLMView.serializer = FakeSerializer
     payload = {"name": "LLM Updated", "n_parameters": "1.2T"}
@@ -177,14 +180,22 @@ def test_llm_put_success(client):
 @pytest.mark.django_db
 def test_llm_put_invalid_serializer(client):
     class FakeSerializer:
-        def __init__(self, data, many=False):
-            self._data = data
+        def __init__(self, instance=None, data=None, many=False):
+            self._data = data or instance
             self.errors = {"name": ["Questo campo è obbligatorio."]}
         def is_valid(self):
             return False
         @property
         def data(self):
             return self._data
+    class FakeService:
+        @staticmethod
+        def update(instance_id, data):
+            return data
+        @staticmethod
+        def read(instance_id):
+            return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
+    LLMView.service = FakeService
     LLMView.serializer = FakeSerializer
     payload = {}
     response = client.put("/llm_list/1/", data=payload, format="json")
@@ -194,9 +205,9 @@ def test_llm_put_invalid_serializer(client):
 @pytest.mark.django_db
 def test_llm_put_exception(client):
     class FakeSerializer:
-        def __init__(self, data, many=False):
-            self._data = data
-            self.validated_data = data
+        def __init__(self, instance=None, data=None, many=False):
+            self._data = data or instance
+            self.validated_data = data or instance
             self.errors = {}
         def is_valid(self):
             return True
@@ -207,13 +218,16 @@ def test_llm_put_exception(client):
         @staticmethod
         def update(instance_id, data):
             raise Exception("Errore finto put")
+        @staticmethod
+        def read(instance_id):
+            return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
     LLMView.service = FakeService
     LLMView.serializer = FakeSerializer
     payload = {"name": "LLM Updated", "n_parameters": "1.2T"}
     response = client.put("/llm_list/1/", data=payload, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
-
+    
 # --- DELETE ---
 @pytest.mark.django_db
 def test_llm_delete_success(client):

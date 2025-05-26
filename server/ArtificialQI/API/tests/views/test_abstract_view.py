@@ -1,5 +1,7 @@
 import sys
 sys.path.append("C:/Users/Alessandro/OneDrive/Desktop/progetto swe/ArtificialQI/server")
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from rest_framework import serializers
@@ -95,13 +97,13 @@ def test_put_without_instance_id():
     view = DummyView.as_view()
     payload = {"key": "no id"}
     request = factory.put("/", data=payload, format="json")
-    response = view(request)  # nessun instance_id
+    response = view(request)  
     assert response.status_code == status.HTTP_200_OK
     assert response.data == payload
 
 def test_delete_without_instance_id():
     request = factory.delete("/")
-    response = DummyView().delete(request)  # nessun instance_id
+    response = DummyView().delete(request)  
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 # --- ERROR CASES ---

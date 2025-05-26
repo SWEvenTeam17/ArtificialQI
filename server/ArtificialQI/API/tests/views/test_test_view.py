@@ -12,7 +12,7 @@ def url():
     return "/runtest"
 
 # --- POST SUCCESS ---
-@patch("API.views_def.test_view.TestService.runtest")
+@patch("API.views_def.test_view.BlockTestService.runtest")
 @patch("API.views_def.test_view.BlockService.retrieve_blocks")
 @patch("API.views_def.test_view.SessionService.read")
 def test_post_test_success(mock_session_read, mock_block_retrieve, mock_runtest, client, url):
@@ -25,7 +25,7 @@ def test_post_test_success(mock_session_read, mock_block_retrieve, mock_runtest,
     assert response.data == {"result": "ok"}
 
 # --- POST ConnectionError ---
-@patch("API.views_def.test_view.TestService.runtest", side_effect=ConnectionError("Connessione persa"))
+@patch("API.views_def.test_view.BlockTestService.runtest", side_effect=ConnectionError("Connessione persa"))
 @patch("API.views_def.test_view.BlockService.retrieve_blocks")
 @patch("API.views_def.test_view.SessionService.read")
 def test_post_test_connection_error(mock_session_read, mock_block_retrieve, mock_runtest, client, url):
@@ -37,7 +37,7 @@ def test_post_test_connection_error(mock_session_read, mock_block_retrieve, mock
     assert response.data["error"] == "Connessione persa"
 
 # --- POST FileNotFoundError ---
-@patch("API.views_def.test_view.TestService.runtest", side_effect=FileNotFoundError("File mancante"))
+@patch("API.views_def.test_view.BlockTestService.runtest", side_effect=FileNotFoundError("File mancante"))
 @patch("API.views_def.test_view.BlockService.retrieve_blocks")
 @patch("API.views_def.test_view.SessionService.read")
 def test_post_test_file_not_found_error(mock_session_read, mock_block_retrieve, mock_runtest, client, url):
@@ -50,7 +50,7 @@ def test_post_test_file_not_found_error(mock_session_read, mock_block_retrieve, 
 
 # --- POST errore sconosciuto ---
 @pytest.mark.xfail(reason="La view non gestisce eccezioni generiche, quindi il test fallirà.")
-@patch("API.views_def.test_view.TestService.runtest", side_effect=Exception("Errore generico"))
+@patch("API.views_def.test_view.BlockTestService.runtest", side_effect=Exception("Errore generico"))
 @patch("API.views_def.test_view.BlockService.retrieve_blocks")
 @patch("API.views_def.test_view.SessionService.read")
 def test_post_test_generic_error(mock_session_read, mock_block_retrieve, mock_runtest, client, url):

@@ -14,7 +14,7 @@ def url():
     return "/llm_comparison/"
 
 @patch("API.views_def.llm_view.LLMService.compare_llms")
-@patch("API.views_def.llm_view.TestSerializer")
+@patch("API.views_def.llm_view.BlockTestSerializer")
 def test_llm_comparison_view_success(mock_serializer, mock_compare, client, url):
     mock_common_tests = [MagicMock(), MagicMock()]
     mock_compare.return_value = {
