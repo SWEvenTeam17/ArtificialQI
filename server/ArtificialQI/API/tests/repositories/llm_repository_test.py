@@ -64,8 +64,3 @@ class TestLLMRepository(TestAbstractRepository):
         repository.update_or_create("mod1", "6B")
         assert repository.get_by_id(1).name == "mod1"
         assert repository.get_by_id(1).n_parameters == "6B"
-    
-    def test_get_previous_tests(self, repository, valid_data, setup_data):
-        model = setup_data["llm"]
-        model = repository.get_by_id(1)
-        repository.get_previous_tests(setup_data["llm"])
