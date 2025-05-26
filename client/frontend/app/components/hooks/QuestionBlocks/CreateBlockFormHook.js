@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
+import { useQuestionBlockContext } from "@/app/components/contexts/QuestionBlockContext";
 
 export const useCreateBlockFormHook = () => {
+  const { addQuestionBlock } = useQuestionBlockContext();
+
   const [questionAnswerPairs, setQuestionAnswerPairs] = useState([
     { question: "", answer: "" },
   ]);
@@ -105,9 +108,10 @@ export const useCreateBlockFormHook = () => {
       );
 
       if (response.status === 201) {
+        const newBlock = await response.json();
+        addQuestionBlock(newBlock);
         e.target.reset();
         setQuestionAnswerPairs([{ question: "", answer: "" }]);
-        // Reset invalid styles after successful submission
         Object.values(inputRefs.current).forEach((ref) => {
           if (ref) {
             ref.classList.remove("is-invalid");
