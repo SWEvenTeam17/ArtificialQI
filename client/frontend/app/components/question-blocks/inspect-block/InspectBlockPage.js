@@ -1,6 +1,6 @@
 import React from "react";
 import { useInspectBlockHook } from "@/app/components/hooks/QuestionBlocks/InspectBlockHook";
-import TestResultsContainer from "../../containers/sessions/TestResults";
+import TestResults from "../../sessions/session-content/TestResults";
 import BlockHeader from "./BlockHeader";
 import PromptList from "./PromptList";
 
@@ -43,7 +43,7 @@ export default function InspectBlockPage({ id }) {
       />
 
       {testResults && (
-        <TestResultsContainer key={uniqueId} testResults={testResults} />
+        <TestResults key={uniqueId} testResults={testResults} />
       )}
     </div>
   );
