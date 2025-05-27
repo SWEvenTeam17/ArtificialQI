@@ -62,12 +62,13 @@ export default function CreateLLMForm() {
             </div>
           </div>
           <div className="col">
-            <button type="submit" className="btn btn-primary w-100 rounded-5">
+            <button data-cy="create-llm" type="submit" className="btn btn-primary w-100 rounded-5">
               Crea
             </button>
           </div>
           <div className="col">
             <button
+              data-cy="load-ollama-models"
               onClick={loadOllamaModels}
               className="btn btn-outline-success w-100 rounded-5"
             >
