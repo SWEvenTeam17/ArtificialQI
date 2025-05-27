@@ -40,7 +40,8 @@ class BlockView(AbstractView):
                     {"error": "Nome duplicato"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
-            return Response(data, status=status.HTTP_201_CREATED)
+            serialized = self.serializer(result)
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
