@@ -1,5 +1,4 @@
 import sys
-sys.path.append("C:/Users/Alessandro/OneDrive/Desktop/progetto swe/ArtificialQI/server")
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 from rest_framework.test import APIRequestFactory
