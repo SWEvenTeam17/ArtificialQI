@@ -1,4 +1,5 @@
 import { useTestContext } from "../../contexts/TestContext";
+import { TestFormContextProvider } from "../../contexts/TestFormContext";
 import SessionLLMPanel from "./session-llm-list/SessionLLMPanel";
 import TestForm from "./test-form/TestForm";
 export default function SessionContent() {
@@ -36,7 +37,9 @@ export default function SessionContent() {
         <div className="col-12">
           <div className="row row-cols-1">
             <div className="col">
-              <TestForm sessionData={sessionData} />
+              <TestFormContextProvider sessionData={sessionData}>
+                <TestForm />
+              </TestFormContextProvider>
             </div>
           </div>
         </div>

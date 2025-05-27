@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
 import {
   ResponsiveContainer,
@@ -11,7 +10,10 @@ import {
   Legend,
   Bar,
 } from "recharts";
-export default function TestResults({ testResults }) {
+import { useTestFormContext } from "../../contexts/TestFormContext";
+
+export default function TestResults() {
+  const { testResults } = useTestFormContext();
   const [results, setResults] = useState(testResults.results);
 
   const handleDeleteRun = async (runId) => {
@@ -34,6 +36,11 @@ export default function TestResults({ testResults }) {
       );
     }
   };
+
+  if (!results.length) {
+    return <p className="text-center">Nessun risultato disponibile.</p>;
+  }
+
   return (
     <div className="mt-5">
       {results.map((block, index) => (
@@ -64,15 +71,11 @@ export default function TestResults({ testResults }) {
                     </p>
                     <p className="mb-1">
                       <strong>Valutazione semantica:</strong>{" "}
-                      <span className="badge text-dark">
-                        {res.semantic_evaluation}
-                      </span>
+                      <span className="badge text-dark">{res.semantic_evaluation}</span>
                     </p>
                     <p className="mb-0">
                       <strong>Valutazione esterna:</strong>{" "}
-                      <span className="badge text-dark">
-                        {res.external_evaluation}
-                      </span>
+                      <span className="badge text-dark">{res.external_evaluation}</span>
                     </p>
                   </div>
                   <div className="card-footer text-end">
@@ -96,13 +99,11 @@ export default function TestResults({ testResults }) {
           >
             <BarChart
               layout="vertical"
-              data={Object.entries(block.averages_by_llm).map(
-                ([llm, scores]) => ({
-                  name: llm,
-                  semantic: scores.avg_semantic_scores,
-                  external: scores.avg_external_scores,
-                })
-              )}
+              data={Object.entries(block.averages_by_llm).map(([llm, scores]) => ({
+                name: llm,
+                semantic: scores.avg_semantic_scores,
+                external: scores.avg_external_scores,
+              }))}
               margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />

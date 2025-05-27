@@ -1,9 +1,8 @@
-export default function QuestionBlocksSelector({
-  questionBlocks,
-  isSelected,
-  removeBlock,
-  addBlock,
-}) {
+import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+
+export default function QuestionBlocksSelector() {
+  const { questionBlocks, isSelected, removeBlock, addBlock, loading } =
+    useTestFormContext();
   return (
     <>
       <div className="card border-0 mb-5">

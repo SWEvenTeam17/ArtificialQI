@@ -1,9 +1,8 @@
-export default function TestActions({
-  submitToBackend,
-  selectedBlocks,
-  showPrevTests,
-  loading,
-}) {
+import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+
+export default function TestActions() {
+  const { submitToBackend, selectedBlocks, showPrevTests, loading } =
+    useTestFormContext();
   return (
     <>
       <div className="card border-0 mb-5">

@@ -1,4 +1,7 @@
-export default function JSONSelector({ isJSON, setIsJSON, setSelectedBlocks }) {
+import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+
+export default function JSONSelector() {
+  const { isJSON, setIsJSON, setSelectedBlocks } = useTestFormContext();
   return (
     <>
       <div className="form-check form-switch">
