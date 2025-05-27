@@ -1,9 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
 import TestResults from "../TestResults";
 import PrevTests from "../../../results/PrevTests";
-import Form from "next/form";
-export default function TestForm({ sessionData }) {
+import JSONView from "./JSONView";
+import JSONSelector from "./JSONSelector";
+import TestActions from "./TestActions";
+import QuestionBlocksSelector from "./QuestionBlocksSelector";
+import { useTestContext } from "@/app/components/contexts/TestContext";
+export default function TestForm() {
+  const { sessionData } = useTestContext();
   const [questionBlocks, setQuestionBlocks] = useState([]);
   const [testResults, setTestResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -138,8 +143,9 @@ export default function TestForm({ sessionData }) {
         try {
           const parsed = JSON.parse(event.target.result);
           const blocks = Array.isArray(parsed) ? parsed : [parsed];
-          const valid = blocks.every (
-            (block) => block &&
+          const valid = blocks.every(
+            (block) =>
+              block &&
               typeof block === "object" &&
               typeof block.name === "string" &&
               Array.isArray(block.questions) &&
@@ -188,7 +194,7 @@ export default function TestForm({ sessionData }) {
             }
           );
           if (!response.ok)
-            throw new Error ("Errore nella creazione del blocco da JSON.");
+            throw new Error("Errore nella creazione del blocco da JSON.");
           return await response.json();
         })
       );
@@ -211,57 +217,20 @@ export default function TestForm({ sessionData }) {
     <>
       <div className="card border-0">
         <div className="card-body">
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="jsonToggle"
-              checked={isJSON}
-              onChange={() => {
-                setIsJSON(!isJSON);
-                setSelectedBlocks([]);
-              }}
-            />
-            <label className="form-check-label ms-2" htmlFor="jsonToggle">
-              {isJSON
-                ? "Modalità file JSON attiva"
-                : "Passa alla modalità file JSON"}
-            </label>
-          </div>
+          <JSONSelector
+            isJSON={isJSON}
+            setIsJSON={setIsJSON}
+            setSelectedBlocks={setSelectedBlocks}
+          />
         </div>
       </div>
 
       {isJSON && (
-        <div className="text-center fs-3 mb-4">
-          <h5 className="text-primary fw-bold mb-4">
-            Input JSON
-          </h5>
-          <Form onSubmit={handleJSONSubmit}>
-            <div className="mb-3">
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleJSONFileChange}
-                className="form-control w-50 mx-auto"
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary w-50 rounded-5"
-              disabled={loading}
-            >
-              {loading ? (
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              ) : (
-                "Invia"
-              )}
-            </button>
-          </Form>
-        </div>
+        <JSONView
+          handleJSONSubmit={handleJSONSubmit}
+          handleJSONFileChange={handleJSONFileChange}
+          loading={loading}
+        />
       )}
 
       {error && (
@@ -271,56 +240,12 @@ export default function TestForm({ sessionData }) {
       )}
 
       {!isJSON && questionBlocks.length > 0 && (
-        <div className="card border-0 mb-5">
-          <div className="card-body">
-            <h5 className="card-title text-center text-primary fw-bold">
-              Blocchi di domande disponibili
-            </h5>
-            <ul
-              className="list-group list-group-flush"
-              style={{ maxHeight: "300px", overflowY: "auto" }}
-            >
-              {questionBlocks.map((block, index) => (
-                <li
-                  key={index}
-                  className="list-group-item list-group-item-action rounded-3"
-                >
-                  <div className="row">
-                    <div className="col-9">
-                      <p className="fw-bold mb-1">Nome</p>
-                      <p>{block.name}</p>
-                    </div>
-                    <div className="col-md-3 col-12">
-                      {isSelected(block.id) ? (
-                        <button
-                          className="btn btn-outline-success rounded-5 w-100 mb-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            removeBlock(block.id);
-                          }}
-                          disabled={loading}
-                        >
-                          Rimuovi
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-success rounded-5 w-100 mb-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            addBlock(block.id);
-                          }}
-                          disabled={loading}
-                        >
-                          Seleziona
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <QuestionBlocksSelector
+          questionBlocks={questionBlocks}
+          isSelected={isSelected}
+          removeBlock={removeBlock}
+          addBlock={addBlock}
+        />
       )}
 
       {!isJSON && questionBlocks.length === 0 && (
@@ -328,41 +253,12 @@ export default function TestForm({ sessionData }) {
           È necessario creare dei blocchi di domande per eseguire un test.
         </p>
       )}
-
-      <div className="card border-0 mb-5">
-        <div className="row row-cols-1 mt-5 g-0 justify-content-center text-center">
-          <div className="col-md-6 col-12">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                submitToBackend();
-              }}
-              className="btn btn-outline-primary w-50 rounded-5"
-              disabled={loading || selectedBlocks.length === 0}
-            >
-              {loading ? (
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Caricamento...</span>
-                </div>
-              ) : (
-                "Inizia il test"
-              )}
-            </button>
-          </div>
-          <div className="col-md-6 col-12">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                showPrevTests();
-              }}
-              className="btn btn-outline-primary w-50 rounded-5"
-            >
-              Visualizza test precedenti
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <TestActions
+        submitToBackend={submitToBackend}
+        selectedBlocks={selectedBlocks}
+        showPrevTests={showPrevTests}
+        loading={loading}
+      />
       {testResults && activeView === "results" && (
         <div className="card mt-4">
           <div className="card-body">
@@ -382,3 +278,5 @@ export default function TestForm({ sessionData }) {
     </>
   );
 }
+
+
