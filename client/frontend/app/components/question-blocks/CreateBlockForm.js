@@ -1,4 +1,4 @@
-import React from "react";
+
 import Form from "next/form";
 import { useCreateBlockFormHook } from "../hooks/QuestionBlocks/CreateBlockFormHook";
 import { BlockNameInput } from "./BlockNameInput";

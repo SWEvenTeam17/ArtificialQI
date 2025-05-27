@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useInspectBlockHook } from "@/app/components/hooks/QuestionBlocks/InspectBlockHook";
 import TestResults from "../../sessions/session-content/TestResults";
 import BlockHeader from "./BlockHeader";

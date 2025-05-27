@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-import TestResults from "./TestResults";
-import PrevTests from "../../results/PrevTests";
+import TestResults from "../TestResults";
+import PrevTests from "../../../results/PrevTests";
 import Form from "next/form";
 export default function TestForm({ sessionData }) {
   const [questionBlocks, setQuestionBlocks] = useState([]);

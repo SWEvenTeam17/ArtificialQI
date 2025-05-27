@@ -1,4 +1,4 @@
-import React from "react";
+
 import PromptCard from "./PromptCard";
 
 export default function PromptList({ prompts, onDelete, onView, onEdit }) {

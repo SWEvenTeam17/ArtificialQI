@@ -1,7 +1,6 @@
-import React from "react";
-import { useTestContext } from "../../contexts/SessionPageContext";
-import SessionLLMPanel from "./SessionLLMPanel";
-import TestForm from "./TestForm";
+import { useTestContext } from "../../contexts/TestContext";
+import SessionLLMPanel from "./session-llm-list/SessionLLMPanel";
+import TestForm from "./test-form/TestForm";
 export default function SessionContent() {
   const { sessionData } = useTestContext();
   if (sessionData === null) {
