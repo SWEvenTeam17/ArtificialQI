@@ -176,7 +176,6 @@ export default function TestForm({ sessionData }) {
     try {
       const createdBlocks = await Promise.all(
         selectedBlocks.map(async (block) => {
-          console.log(block);
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
             {
@@ -193,8 +192,16 @@ export default function TestForm({ sessionData }) {
           return await response.json();
         })
       );
-      setSelectedBlocks(createdBlocks);
       setError(null);
+      setIsJSON(false);
+      await fetchQuestionBlocks();
+
+      setQuestionBlocks((prevBlocks) => {
+        const names = createdBlocks.map((b) => b.name);
+        const selected = prevBlocks.filter((b) => names.includes(b.name));
+        setSelectedBlocks(selected);
+        return prevBlocks;
+      });
     } catch (err) {
       setError("Errore durante la creazione dei blocchi da JSON.");
     }

@@ -23,7 +23,6 @@ class BlockService(AbstractService):
         duplicate = BlockRepository.get_by_name(data["name"])
         if duplicate == None:
             new_block = BlockRepository.create({"name": data["name"]})
-            print(data)
             for prompt in data["questions"]:
                 instance = PromptRepository.get_or_create(
                     prompt_text=prompt["question"], expected_answer=prompt["answer"]
