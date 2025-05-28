@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export function useInspectBlockHook(id) {
   const [blockData, setBlockData] = useState(null);
@@ -7,7 +7,7 @@ export function useInspectBlockHook(id) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchBlockData = async () => {
+  const fetchBlockData = useCallback(async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`
@@ -20,7 +20,7 @@ export function useInspectBlockHook(id) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const deletePrompt = async (promptId) => {
     try {
@@ -81,7 +81,7 @@ export function useInspectBlockHook(id) {
 
   useEffect(() => {
     fetchBlockData();
-  }, [id]);
+  }, [id, fetchBlockData]);
 
   return {
     blockData,

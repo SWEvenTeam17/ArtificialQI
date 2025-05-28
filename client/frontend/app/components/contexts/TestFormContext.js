@@ -22,7 +22,6 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
   const [activeView, setActiveView] = useState(null);
   const [isJSON, setIsJSON] = useState(false);
   const [jsonFile, setJsonFile] = useState(null);
-  
 
   const isSelected = useCallback(
     (questionId) => selectedBlocks.some((q) => q.id === questionId),
@@ -54,7 +53,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     fetchQuestionBlocks();
   }, [fetchQuestionBlocks]);
 
-  const addBlock = async (id) => {
+  const addBlock = useCallback(async (id) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}/`
@@ -66,14 +65,14 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     } catch {
       setError("Errore durante l'aggiunta del blocco.");
     }
-  };
+  }, []);
 
-  const removeBlock = (id) => {
+  const removeBlock = useCallback((id) => {
     setSelectedBlocks((prev) => prev.filter((block) => block.id !== id));
     setError(null);
-  };
+  }, []);
 
-  const submitToBackend = async () => {
+  const submitToBackend = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -100,9 +99,9 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedBlocks, sessionData.id]);
 
-  const showPrevTests = async () => {
+  const showPrevTests = useCallback(async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/`
@@ -117,24 +116,27 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       console.error("Errore nel recupero dei test precedenti:", error);
       setError("Errore nel recupero dei test precedenti.");
     }
-  };
+  }, [sessionData.id]);
 
-  const handlePrevTestClick = async (test) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/?test_id=${test.id}`
-      );
-      if (!response.ok)
-        throw new Error("Errore nel recupero del test selezionato");
-      const data = await response.json();
-      setTestResults(data);
-      setActiveView("results");
-      setError(null);
-    } catch (error) {
-      console.error("Errore caricando il test precedente:", error);
-      setError("Errore caricando il test precedente.");
-    }
-  };
+  const handlePrevTestClick = useCallback(
+    async (test) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/?test_id=${test.id}`
+        );
+        if (!response.ok)
+          throw new Error("Errore nel recupero del test selezionato");
+        const data = await response.json();
+        setTestResults(data);
+        setActiveView("results");
+        setError(null);
+      } catch (error) {
+        console.error("Errore caricando il test precedente:", error);
+        setError("Errore caricando il test precedente.");
+      }
+    },
+    [sessionData.id]
+  );
 
   const handleJSONFileChange = (e) => {
     const file = e.target.files[0];
@@ -174,45 +176,56 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     }
   };
 
-  const handleJSONSubmit = async (e) => {
-    e.preventDefault();
-    if (!jsonFile) {
-      setError("Carica un file JSON valido prima di inviare.");
-      return;
-    }
-    try {
-      const createdBlocks = await Promise.all(
-        selectedBlocks.map(async (block) => {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCSRFToken(),
-              },
-              body: JSON.stringify(block),
-            }
-          );
-          if (!response.ok)
-            throw new Error("Errore nella creazione del blocco da JSON.");
-          return await response.json();
-        })
-      );
-      setIsJSON(false);
-      setError(null);
-      await fetchQuestionBlocks();
+  const handleJSONSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!jsonFile) {
+        setError("Carica un file JSON valido prima di inviare.");
+        return;
+      }
+      try {
+        const createdBlocks = await Promise.all(
+          selectedBlocks.map(async (block) => {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": getCSRFToken(),
+                },
+                body: JSON.stringify(block),
+              }
+            );
+            if (!response.ok)
+              throw new Error("Errore nella creazione del blocco da JSON.");
+            return await response.json();
+          })
+        );
+        setIsJSON(false);
+        setError(null);
+        await fetchQuestionBlocks();
 
-      setQuestionBlocks((prev) => {
-        const names = createdBlocks.map((b) => b.name);
-        const selected = prev.filter((b) => names.includes(b.name));
-        setSelectedBlocks(selected);
-        return prev;
-      });
-    } catch {
-      setError("Errore durante la creazione dei blocchi da JSON.");
-    }
-  };
+        setQuestionBlocks((prev) => {
+          const names = createdBlocks.map((b) => b.name);
+          const selected = prev.filter((b) => names.includes(b.name));
+          setSelectedBlocks(selected);
+          return prev;
+        });
+      } catch {
+        setError("Errore durante la creazione dei blocchi da JSON.");
+      }
+    },
+    [
+      selectedBlocks,
+      jsonFile,
+      setError,
+      setIsJSON,
+      fetchQuestionBlocks,
+      setQuestionBlocks,
+      setSelectedBlocks,
+    ]
+  );
 
   const value = useMemo(
     () => ({
@@ -255,6 +268,12 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       jsonFile,
       fetchQuestionBlocks,
       isSelected,
+      addBlock,
+      handleJSONSubmit,
+      handlePrevTestClick,
+      removeBlock,
+      showPrevTests,
+      submitToBackend,
     ]
   );
 
