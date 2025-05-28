@@ -1,3 +1,7 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
 import pytest
 from unittest.mock import patch, MagicMock
 from rest_framework.test import APIClient

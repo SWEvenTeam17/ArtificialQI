@@ -1,6 +1,8 @@
-import sys
+import django
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
+import sys
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from rest_framework import serializers

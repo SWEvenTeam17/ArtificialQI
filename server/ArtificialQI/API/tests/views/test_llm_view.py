@@ -1,5 +1,8 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
 import sys
-sys.path.append("C:/Users/Alessandro/OneDrive/Desktop/progetto swe/ArtificialQI/server")
 import pytest
 from rest_framework.test import APIClient
 from rest_framework import status

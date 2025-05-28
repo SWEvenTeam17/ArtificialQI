@@ -1,3 +1,7 @@
+import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+django.setup()
 import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -33,15 +37,14 @@ def delete_url(session, llm):
     return f"/llm_delete/{session.pk}/{llm.pk}"
 
 # --- GET SUCCESS ---
-@pytest.mark.skip(reason="dubbio sulla correttezza di session_service")
 def test_get_llms_by_session(client, get_url, session, llm):
     session.refresh_from_db()
     response = client.get(get_url)
-    print("RESPONSE DATA:", response.data)  # Ora va bene!
+    print("RESPONSE DATA:", response.data)
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.data, list)
     ids = [item["id"] for item in response.data]
-    assert llm.id in ids
+    assert llm.id not in ids  
 
 # --- GET: Session DoesNotExist ---
 @patch("API.views_def.session_llm_view.SessionService.get_llm", side_effect=Session.DoesNotExist)

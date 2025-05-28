@@ -1,5 +1,5 @@
 #import sys
-#sys.path.append("C:/Users/Alessandro/OneDrive/Desktop/progetto swe/ArtificialQI/server")
+
 #import pytest
 #from unittest.mock import patch, MagicMock
 #from rest_framework.test import APIClient
