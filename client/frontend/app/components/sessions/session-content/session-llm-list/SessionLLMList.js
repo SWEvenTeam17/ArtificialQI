@@ -1,7 +1,7 @@
-import { useTestContext } from "@/app/components/contexts/TestContext";
+import { useSessionLLMContext } from "@/app/components/contexts/session/SessionLLMContext";
 import SessionLLMCard from "./SessionLLMCard";
 export default function SessionLLMList() {
-  const { sessionData, deleteLLM } = useTestContext();
+  const { sessionData, deleteLLM } = useSessionLLMContext();
   return (
     <>
       {sessionData.llm.length > 0 ? (

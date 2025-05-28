@@ -4,7 +4,7 @@ import JSONView from "./JSONView";
 import JSONSelector from "./JSONSelector";
 import TestActions from "./TestActions";
 import QuestionBlocksSelector from "./QuestionBlocksSelector";
-import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+import { useTestFormContext } from "@/app/components/contexts/session/test-form/TestFormContext";
 export default function TestForm() {
   const { questionBlocks, error, isJSON, testResults, activeView } =
     useTestFormContext();

@@ -1,6 +1,6 @@
 import CreateLLMForm from "./CreateLLMForm";
 import GeneralLLMCard from "./GeneralLLMCard";
-import { useLLMManagerContext } from "../contexts/LLMManagerContext";
+import { useLLMManagerContext } from "../contexts/llm-manager/LLMManagerContext";
 export default function LLMManager() {
   const { LLMList } = useLLMManagerContext();
   return (

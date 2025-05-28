@@ -1,4 +1,4 @@
-import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+import { useTestFormContext } from "@/app/components/contexts/session/test-form/TestFormContext";
 
 export default function JSONSelector() {
   const { isJSON, setIsJSON, setSelectedBlocks } = useTestFormContext();

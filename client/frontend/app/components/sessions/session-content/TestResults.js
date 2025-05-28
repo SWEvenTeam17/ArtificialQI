@@ -10,7 +10,7 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import { useTestFormContext } from "../../contexts/TestFormContext";
+import { useTestFormContext } from "../../contexts/session/test-form/TestFormContext";
 
 export default function TestResults() {
   const { testResults } = useTestFormContext();

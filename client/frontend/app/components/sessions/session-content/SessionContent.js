@@ -1,9 +1,9 @@
-import { useTestContext } from "../../contexts/TestContext";
-import { TestFormContextProvider } from "../../contexts/TestFormContext";
+import { useSessionLLMContext } from "../../contexts/session/SessionLLMContext";
+import { TestFormContextProvider } from "../../contexts/session/test-form/TestFormContext";
 import SessionLLMPanel from "./session-llm-list/SessionLLMPanel";
 import TestForm from "./test-form/TestForm";
 export default function SessionContent() {
-  const { sessionData } = useTestContext();
+  const { sessionData } = useSessionLLMContext();
   if (sessionData === null) {
     return (
       <div

@@ -1,6 +1,6 @@
 "use client";
 
-import { TestComparatorContextProvider } from "../components/contexts/TestComparatorContext";
+import { TestComparatorContextProvider } from "../components/contexts/test-comparator/TestComparatorContext";
 
 export default function Layout({ children }) {
   return (

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { getCSRFToken } from "@/app/helpers/csrf";
-import { useQuestionBlockContext } from "@/app/components/contexts/QuestionBlockContext";
+import { useQuestionBlockContext } from "@/app/components/contexts/question-blocks/QuestionBlockContext";
 
 export const useCreateBlockFormHook = () => {
   const { addQuestionBlock } = useQuestionBlockContext();

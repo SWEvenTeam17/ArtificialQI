@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useSessionCard } from "@/app/components/contexts/SessionCardContext";
+import { useSessionCard } from "@/app/components/contexts/session/SessionCardContext";
 
 export default function SessionCardBody() {
   const {

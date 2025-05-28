@@ -10,13 +10,13 @@ import {
 
 import { getCSRFToken } from "@/app/helpers/csrf";
 
-const TestContext = createContext();
+const SessionLLMContext = createContext();
 
-export const useTestContext = () => {
-  return useContext(TestContext);
+export const useSessionLLMContext = () => {
+  return useContext(SessionLLMContext);
 };
 
-export const TestContextProvider = ({ children, sessionId }) => {
+export const SessionLLMContextProvider = ({ children, sessionId }) => {
   const [sessionData, setSessionData] = useState(null);
   const [remainingLLMs, setRemainingLLMs] = useState(null);
   const [limit, setLimit] = useState(null);
@@ -147,6 +147,6 @@ export const TestContextProvider = ({ children, sessionId }) => {
   );
 
   return (
-    <TestContext.Provider value={contextValue}>{children}</TestContext.Provider>
+    <SessionLLMContext.Provider value={contextValue}>{children}</SessionLLMContext.Provider>
   );
 };

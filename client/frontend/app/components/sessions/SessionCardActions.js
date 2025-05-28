@@ -3,7 +3,7 @@ import cancelIcon from "/public/images/cancel.png";
 import delteIcon from "/public/images/icon.png";
 import doneIcon from "/public/images/done.png";
 import editIcon from "/public/images/edit.png";
-import { useSessionCard } from "@/app/components/contexts/SessionCardContext";
+import { useSessionCard } from "@/app/components/contexts/session/SessionCardContext";
 
 export default function SessionCardActions() {
   const {

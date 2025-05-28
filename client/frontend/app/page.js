@@ -1,5 +1,5 @@
 "use client";
-import { useSessionContext } from "./components/contexts/SessionContext";
+import { useSessionContext } from "./components/contexts/session/SessionContext";
 import SessionCard from "./components/sessions/SessionCard";
 
 export default function Home() {

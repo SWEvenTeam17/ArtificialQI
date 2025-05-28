@@ -1,6 +1,6 @@
 "use client";
-import { InspectBlockProvider } from "@/app/components/contexts/InspectBlockContext";
-import { TestFormContextProvider } from "@/app/components/contexts/TestFormContext";
+import { InspectBlockProvider } from "@/app/components/contexts/question-blocks/InspectBlockContext";
+import { TestFormContextProvider } from "@/app/components/contexts/session/test-form/TestFormContext";
 import InspectBlockPage from "@/app/components/question-blocks/inspect-block/InspectBlockPage";
 import { use } from "react";
 

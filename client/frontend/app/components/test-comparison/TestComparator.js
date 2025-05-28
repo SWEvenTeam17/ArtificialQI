@@ -1,7 +1,7 @@
 import SessionSelector from "./SessionSelector";
 import LLMSelector from "./LLMSelector";
 import LLMComparisonChart from "./LLMComparisonChart";
-import { useTestComparatorContext } from "../contexts/TestComparatorContext";
+import { useTestComparatorContext } from "../contexts/test-comparator/TestComparatorContext";
 export default function TestComparatorContainer() {
   const { selectedSessionData, selectedLLMS, chartData } = useTestComparatorContext();
   return (

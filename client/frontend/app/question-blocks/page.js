@@ -1,6 +1,6 @@
 "use client"
 import QuestionBlockCard from "../components/question-blocks/QuestionBlockCard"
-import { useQuestionBlockContext } from "../components/contexts/QuestionBlockContext";
+import { useQuestionBlockContext } from "../components/contexts/question-blocks/QuestionBlockContext";
 import Link from "next/link";
 
 export default function QuestionBlocks() {

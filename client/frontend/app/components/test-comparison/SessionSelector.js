@@ -1,5 +1,5 @@
-import { useSessionContext } from "../contexts/SessionContext";
-import { useTestComparatorContext } from "../contexts/TestComparatorContext";
+import { useSessionContext } from "../contexts/session/SessionContext";
+import { useTestComparatorContext } from "../contexts/test-comparator/TestComparatorContext";
 
 export default function SessionSelector() {
   const { sessions } = useSessionContext();

@@ -10,7 +10,7 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import { useInspectBlockContext } from "../../contexts/InspectBlockContext";
+import { useInspectBlockContext } from "../../contexts/question-blocks/InspectBlockContext";
 
 export default function PromptResults() {
   const { testResults } = useInspectBlockContext();

@@ -1,5 +1,5 @@
 
-import { useInspectBlockContext } from "@/app/components/contexts/InspectBlockContext";
+import { useInspectBlockContext } from "@/app/components/contexts/question-blocks/InspectBlockContext";
 import BlockHeader from "./BlockHeader";
 import PromptList from "./PromptList";
 import PromptResults from "./PromptResults";

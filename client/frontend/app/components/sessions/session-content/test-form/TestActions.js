@@ -1,10 +1,10 @@
-import { useTestContext } from "@/app/components/contexts/TestContext";
-import { useTestFormContext } from "@/app/components/contexts/TestFormContext";
+import { useSessionLLMContext } from "@/app/components/contexts/session/SessionLLMContext";
+import { useTestFormContext } from "@/app/components/contexts/session/test-form/TestFormContext";
 
 export default function TestActions() {
   const { submitToBackend, selectedBlocks, showPrevTests, loading } =
     useTestFormContext();
-    const {sessionData} = useTestContext();
+    const {sessionData} = useSessionLLMContext();
   return (
     <>
       <div className="card border-0 mb-5">

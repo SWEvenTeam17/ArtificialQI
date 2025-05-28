@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import { useTestComparatorContext } from "../contexts/TestComparatorContext";
+import { useTestComparatorContext } from "../contexts/test-comparator/TestComparatorContext";
 
 export default function LLMComparisonChart() {
   const { chartData, llmNames, selectedLLMS } = useTestComparatorContext();
