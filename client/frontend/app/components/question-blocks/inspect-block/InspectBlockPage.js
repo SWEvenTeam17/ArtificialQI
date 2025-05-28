@@ -1,10 +1,10 @@
 
-import { useInspectBlockHook } from "@/app/components/hooks/QuestionBlocks/InspectBlockHook";
-import TestResults from "../../sessions/session-content/TestResults";
+import { useInspectBlockContext } from "@/app/components/contexts/InspectBlockContext";
 import BlockHeader from "./BlockHeader";
 import PromptList from "./PromptList";
+import PromptResults from "./PromptResults";
 
-export default function InspectBlockPage({ id }) {
+export default function InspectBlockPage() {
   const {
     blockData,
     testResults,
@@ -13,8 +13,8 @@ export default function InspectBlockPage({ id }) {
     error,
     deletePrompt,
     handleView,
-    handleEdit,
-  } = useInspectBlockHook(id);
+    handleEdit
+  } = useInspectBlockContext();
 
   if (loading) {
     return (
@@ -45,7 +45,7 @@ export default function InspectBlockPage({ id }) {
       />
 
       {testResults && (
-        <TestResults key={uniqueId} testResults={testResults} />
+        <PromptResults key={uniqueId} />
       )}
     </div>
   );

@@ -1,6 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+} from "react";
 
-export function useInspectBlockHook(id) {
+const InspectBlockContext = createContext();
+
+export function useInspectBlockContext() {
+  return useContext(InspectBlockContext);
+}
+
+export function InspectBlockProvider({ children, id }) {
   const [blockData, setBlockData] = useState(null);
   const [testResults, setTestResults] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
@@ -55,7 +67,7 @@ export function useInspectBlockHook(id) {
 
   const handleEdit = async (promptId, editedPrompt) => {
     try {
-      const response = await fetch (
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${promptId}/`,
         {
           method: "PUT",
@@ -65,7 +77,8 @@ export function useInspectBlockHook(id) {
           body: JSON.stringify(editedPrompt),
         }
       );
-      if (!response.ok) throw new Error("Errore durante la modifica del prompt.");
+      if (!response.ok)
+        throw new Error("Errore durante la modifica del prompt.");
       const updated = await response.json();
 
       setBlockData((prev) => ({
@@ -83,14 +96,20 @@ export function useInspectBlockHook(id) {
     fetchBlockData();
   }, [id, fetchBlockData]);
 
-  return {
-    blockData,
-    testResults,
-    uniqueId,
-    loading,
-    error,
-    deletePrompt,
-    handleView,
-    handleEdit,
-  };
+  return (
+    <InspectBlockContext.Provider
+      value={{
+        blockData,
+        testResults,
+        uniqueId,
+        loading,
+        error,
+        deletePrompt,
+        handleView,
+        handleEdit,
+      }}
+    >
+      {children}
+    </InspectBlockContext.Provider>
+  );
 }

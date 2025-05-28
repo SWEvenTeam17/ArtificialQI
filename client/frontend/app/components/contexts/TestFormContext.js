@@ -99,7 +99,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     } finally {
       setLoading(false);
     }
-  }, [selectedBlocks, sessionData.id]);
+  }, [selectedBlocks, sessionData?.id]);
 
   const showPrevTests = useCallback(async () => {
     try {
@@ -116,7 +116,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       console.error("Errore nel recupero dei test precedenti:", error);
       setError("Errore nel recupero dei test precedenti.");
     }
-  }, [sessionData.id]);
+  }, [sessionData?.id]);
 
   const handlePrevTestClick = useCallback(
     async (test) => {
@@ -135,7 +135,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
         setError("Errore caricando il test precedente.");
       }
     },
-    [sessionData.id]
+    [sessionData?.id]
   );
 
   const handleJSONFileChange = (e) => {
