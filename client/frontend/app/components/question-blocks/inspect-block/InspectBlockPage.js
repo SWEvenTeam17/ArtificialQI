@@ -13,6 +13,7 @@ export default function InspectBlockPage({ id }) {
     error,
     deletePrompt,
     handleView,
+    handleEdit,
   } = useInspectBlockHook(id);
 
   if (loading) {
@@ -40,6 +41,7 @@ export default function InspectBlockPage({ id }) {
         prompts={blockData.prompt}
         onDelete={deletePrompt}
         onView={handleView}
+        onEdit={handleEdit}
       />
 
       {testResults && (
