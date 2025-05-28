@@ -53,6 +53,32 @@ export function useInspectBlockHook(id) {
     setTestResults(data);
   };
 
+  const handleEdit = async (promptId, editedPrompt) => {
+    try {
+      const response = await fetch (
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${promptId}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedPrompt),
+        }
+      );
+      if (!response.ok) throw new Error("Errore durante la modifica del prompt.");
+      const updated = await response.json();
+
+      setBlockData((prev) => ({
+        ...prev,
+        prompt: prev.prompt.map((p) =>
+          p.id === promptId ? { ...p, ...updated } : p
+        ),
+      }));
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   useEffect(() => {
     fetchBlockData();
   }, [id]);
@@ -65,5 +91,6 @@ export function useInspectBlockHook(id) {
     error,
     deletePrompt,
     handleView,
+    handleEdit,
   };
 }
