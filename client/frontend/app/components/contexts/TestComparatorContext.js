@@ -54,13 +54,13 @@ export const TestComparatorContextProvider = ({ children }) => {
   const chartData = blockComparisonData.map((block) => ({
     block: block.block_name,
     [`${llmNames[selectedLLMS.firstLLM]} - Semantica`]:
-      block.llms[selectedLLMS.firstLLM].semantic_avg,
+      block.llms[selectedLLMS.firstLLM]?.semantic_avg,
     [`${llmNames[selectedLLMS.secondLLM]} - Semantica`]:
-      block.llms[selectedLLMS.secondLLM].semantic_avg,
+      block.llms[selectedLLMS.secondLLM]?.semantic_avg,
     [`${llmNames[selectedLLMS.firstLLM]} - Esterna`]:
-      block.llms[selectedLLMS.firstLLM].external_avg,
+      block.llms[selectedLLMS.firstLLM]?.external_avg,
     [`${llmNames[selectedLLMS.secondLLM]} - Esterna`]:
-      block.llms[selectedLLMS.secondLLM].external_avg,
+      block.llms[selectedLLMS.secondLLM]?.external_avg,
   }));
   return (
     <TestComparatorContext.Provider
