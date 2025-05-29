@@ -37,12 +37,104 @@ export default function PromptResults() {
     }
   };
 
+  const getAvg = (semantic, external) =>
+    (parseFloat(semantic) + parseFloat(external)) / 2;
+
+  const getCardBgClass = (semantic, external) => {
+    const avg = getAvg(semantic, external);
+    if (avg > 75) return "bg-success bg-opacity-25";
+    if (avg >= 40) return "bg-warning bg-opacity-25";
+    return "bg-danger bg-opacity-25";
+  };
+
+  const allResults = results.flatMap((block) =>
+    block.results.map((res) => ({
+      ...res,
+      block_name: block.block_name,
+      avg: getAvg(res.semantic_evaluation, res.external_evaluation),
+    }))
+  );
+  
+  const summaryResults = [
+    {
+      result:
+        allResults.length > 0
+          ? allResults.reduce((best, curr) => (curr.avg > best.avg ? curr : best), allResults[0])
+          : null,
+      label: "Risultato migliore",
+    },
+    {
+      result:
+        allResults.length > 0
+          ? allResults.reduce((worst, curr) => (curr.avg < worst.avg ? curr: worst), allResults[0])
+          : null,
+      label: "Risultato peggiore",
+    },
+  ];
+
   if (!results.length) {
     return <p className="text-center">Nessun risultato disponibile.</p>;
   }
 
   return (
     <div className="mt-5">
+      <div className="row mb-4">
+        {summaryResults.map(
+          ({ result, label }, idx) =>
+            result && (
+              <div className="col-md-6 mb-3" key={label}>
+                <div className="card h-100 shadow-sm">
+                  <div className={`card-body d-flex flex-column ${getCardBgClass(result.semantic_evaluation, result.external_evaluation)}`}>
+                    <h5 className="card-title text-primary">{label}</h5>
+                    <p className="mb-1">
+                      <strong>Blocco:</strong>
+                      <br />
+                      {result.block_name}
+                    </p>
+                    <p className="mb-1">
+                      <strong>LLM:</strong>
+                      <br />
+                      {result.llm_name}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Domanda:</strong>
+                      <br />
+                      {result.question}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Risposta:</strong>
+                      <br />
+                      <span className="text-dark">{result.answer}</span>
+                    </p>
+                    <p className="mb-1">
+                      <strong>Risposta attesa:</strong>
+                      <br />
+                      {result.expected_answer}
+                    </p>
+                    <div className="row text-center g-0 pt-3 mt-2">
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione semantica</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{result.semantic_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione esterna</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{result.external_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+        )}
+      </div>
       {results.map((block, index) => (
         <div key={index} className="mb-5">
           <h3 className="text-center text-primary">{block.block_name}</h3>
@@ -52,7 +144,7 @@ export default function PromptResults() {
             {block.results.map((res, i) => (
               <div className="col" key={i}>
                 <div className="card h-100 shadow-sm">
-                  <div className="card-body">
+                  <div className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}>
                     <h5 className="card-title text-primary">{res.llm_name}</h5>
                     <p className="mb-1">
                       <strong>Domanda:</strong>
@@ -69,18 +161,24 @@ export default function PromptResults() {
                       <br />
                       {res.expected_answer}
                     </p>
-                    <p className="mb-1">
-                      <strong>Valutazione semantica:</strong>{" "}
-                      <span className="badge text-dark">
-                        {res.semantic_evaluation}
-                      </span>
-                    </p>
-                    <p className="mb-0">
-                      <strong>Valutazione esterna:</strong>{" "}
-                      <span className="badge text-dark">
-                        {res.external_evaluation}
-                      </span>
-                    </p>
+                    <div className="row text-center g-0 pt-3 mt-2">
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione semantica</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{res.semantic_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione esterna</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{res.external_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="card-footer text-end">
                     <button

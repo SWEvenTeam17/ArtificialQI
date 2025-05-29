@@ -37,6 +37,13 @@ export default function TestResults() {
     }
   };
 
+  const getCardBgClass = (semantic, external) => {
+    const avg = (parseFloat(semantic) + parseFloat(external)) / 2;
+    if (avg > 75) return "bg-success bg-opacity-25";
+    if (avg >= 40) return "bg-warning bg-opacity-25";
+    return "bg-danger bg-opacity-25";
+  };
+
   if (!results.length) {
     return <p className="text-center">Nessun risultato disponibile.</p>;
   }
@@ -52,7 +59,7 @@ export default function TestResults() {
             {block.results.map((res, i) => (
               <div className="col" key={i}>
                 <div className="card h-100 shadow-sm">
-                  <div className="card-body">
+                  <div className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}>
                     <h5 className="card-title text-primary">{res.llm_name}</h5>
                     <p className="mb-1">
                       <strong>Domanda:</strong>
@@ -69,14 +76,24 @@ export default function TestResults() {
                       <br />
                       {res.expected_answer}
                     </p>
-                    <p className="mb-1">
-                      <strong>Valutazione semantica:</strong>{" "}
-                      <span className="badge text-dark">{res.semantic_evaluation}</span>
-                    </p>
-                    <p className="mb-0">
-                      <strong>Valutazione esterna:</strong>{" "}
-                      <span className="badge text-dark">{res.external_evaluation}</span>
-                    </p>
+                    <div className="row text-center g-0 pt-3 mt-2">
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione semantica</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{res.semantic_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="w-100">
+                          <strong>Valutazione esterna</strong>
+                          <div className="mt-2">
+                            <span className="badge text-dark fs-5">{res.external_evaluation}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="card-footer text-end">
                     <button
