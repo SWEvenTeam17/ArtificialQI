@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import { useInspectBlockContext } from "../../contexts/question-blocks/InspectBlockContext";
 
-export default function PromptCard({ prompt, onDelete, onView, onEdit }) {
+export default function PromptCard({ prompt }) {
+  const { deletePrompt, handleView, handleEdit } = useInspectBlockContext();
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedPrompt, setEditedPrompt] = useState({
     prompt_text: prompt.prompt_text,
@@ -16,8 +19,8 @@ export default function PromptCard({ prompt, onDelete, onView, onEdit }) {
   };
 
   const handleSave = () => {
-    if (onEdit) {
-      onEdit(prompt.id, editedPrompt);
+    if (handleEdit) {
+      handleEdit(prompt.id, editedPrompt);
     }
     setIsEditing(false);
   };
@@ -70,7 +73,7 @@ export default function PromptCard({ prompt, onDelete, onView, onEdit }) {
       <div className="card-footer text-end">
         <button
           className="btn btn-outline-primary btn-sm me-2"
-          onClick={() => onView(prompt.id)}
+          onClick={() => handleView(prompt.id)}
           disabled={isEditing}
         >
           Visualizza run
@@ -100,7 +103,7 @@ export default function PromptCard({ prompt, onDelete, onView, onEdit }) {
             </button>
             <button
               className="btn btn-outline-danger btn-sm"
-              onClick={() => onDelete(prompt.id)}
+              onClick={() => deletePrompt(prompt.id)}
             >
               Elimina
             </button>
