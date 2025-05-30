@@ -9,10 +9,10 @@ class TestSessionService(AbstractServiceTestCase):
 
     @patch("API.services.session_service.SessionService.repository")
     def test_get_llm(self, mock_repo):
-        """Test get_llm restituisce i LLM associati a una sessione"""
+        """Test get_excluded_llm restituisce i LLM associati a una sessione"""
         mock_repo.get_remaining_llm.return_value = ["llm1", "llm2"]
 
-        result = self.service_class.get_llm(session_id=1)
+        result = self.service_class.get_excluded_llm(session_id=1)
 
         mock_repo.get_remaining_llm.assert_called_once_with(session_id=1)
         assert result == ["llm1", "llm2"]

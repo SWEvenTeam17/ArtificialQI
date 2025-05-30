@@ -47,7 +47,7 @@ def test_get_llms_by_session(client, get_url, session, llm):
     assert llm.id not in ids  
 
 # --- GET: Session DoesNotExist ---
-@patch("API.views_def.session_llm_view.SessionService.get_llm", side_effect=Session.DoesNotExist)
+@patch("API.views_def.session_llm_view.SessionService.get_excluded_llm", side_effect=Session.DoesNotExist)
 def test_get_llms_by_session_not_found(mock_get_llm, client, session):
     url = f"/llm_list_by_session/9999/"
     response = client.get(url)
@@ -55,7 +55,7 @@ def test_get_llms_by_session_not_found(mock_get_llm, client, session):
     assert response.data["error"] == "Session not found"
 
 # --- GET: LLM DoesNotExist ---
-@patch("API.views_def.session_llm_view.SessionService.get_llm", side_effect=LLM.DoesNotExist)
+@patch("API.views_def.session_llm_view.SessionService.get_excluded_llm", side_effect=LLM.DoesNotExist)
 def test_get_llms_by_session_llm_not_found(mock_get_llm, client, session):
     url = f"/llm_list_by_session/{session.pk}/"
     response = client.get(url)
@@ -63,7 +63,7 @@ def test_get_llms_by_session_llm_not_found(mock_get_llm, client, session):
     assert response.data["error"] == "LLM not found"
 
 # --- GET: Generic Exception ---
-@patch("API.views_def.session_llm_view.SessionService.get_llm", side_effect=Exception("Errore generico"))
+@patch("API.views_def.session_llm_view.SessionService.get_excluded_llm", side_effect=Exception("Errore generico"))
 def test_get_llms_by_session_generic_error(mock_get_llm, client, session):
     url = f"/llm_list_by_session/{session.pk}/"
     response = client.get(url)
