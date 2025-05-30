@@ -1,4 +1,4 @@
-import { useTestComparatorContext } from "../contexts/TestComparatorContext";
+import { useTestComparatorContext } from "../contexts/test-comparator/TestComparatorContext";
 
 export default function LLMSelector() {
   const { setSelectedLLMS, selectedSessionData, selectedLLMS } =

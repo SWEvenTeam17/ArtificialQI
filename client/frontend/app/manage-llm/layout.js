@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { LLMManagerContextProvider } from "../components/contexts/LLMManagerContext";
+
+import { LLMManagerContextProvider } from "../components/contexts/llm-manager/LLMManagerContext";
 export default function Layout({ children }) {
   return (
       <LLMManagerContextProvider>

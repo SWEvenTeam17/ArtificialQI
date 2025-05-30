@@ -1,19 +1,11 @@
-import React from "react";
-import { useInspectBlockHook } from "@/app/components/hooks/QuestionBlocks/InspectBlockHook";
-import TestResultsContainer from "../../containers/sessions/TestResults";
+import { useInspectBlockContext } from "@/app/components/contexts/question-blocks/InspectBlockContext";
 import BlockHeader from "./BlockHeader";
 import PromptList from "./PromptList";
+import PromptResults from "./PromptResults";
 
-export default function InspectBlockPage({ id }) {
-  const {
-    blockData,
-    testResults,
-    uniqueId,
-    loading,
-    error,
-    deletePrompt,
-    handleView,
-  } = useInspectBlockHook(id);
+export default function InspectBlockPage() {
+  const { blockData, testResults, uniqueId, loading, error } =
+    useInspectBlockContext();
 
   if (loading) {
     return (
@@ -34,17 +26,14 @@ export default function InspectBlockPage({ id }) {
 
   return (
     <div className="container py-4">
-      <BlockHeader name={blockData.name} promptCount={blockData.prompt?.length || 0} />
-
-      <PromptList
-        prompts={blockData.prompt}
-        onDelete={deletePrompt}
-        onView={handleView}
+      <BlockHeader
+        name={blockData.name}
+        promptCount={blockData.prompt?.length || 0}
       />
 
-      {testResults && (
-        <TestResultsContainer key={uniqueId} testResults={testResults} />
-      )}
+      <PromptList prompts={blockData.prompt} />
+
+      {testResults && <PromptResults key={uniqueId} />}
     </div>
   );
 }

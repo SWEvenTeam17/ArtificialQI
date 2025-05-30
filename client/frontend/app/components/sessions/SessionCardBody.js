@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useSessionCard } from "@/app/components/contexts/SessionCardContext";
+import { useSessionCard } from "@/app/components/contexts/session/SessionCardContext";
+import { useEffect, useState } from "react";
 
 export default function SessionCardBody() {
   const {
@@ -10,6 +11,22 @@ export default function SessionCardBody() {
     setEditedTitle,
     setEditedDescription,
   } = useSessionCard();
+
+  const [lastClicked, setLastClicked] = useState(null);
+
+  useEffect(() => {
+    if (session?.id) {
+      const stored = localStorage.getItem(`session_last_clicked_${session.id}`);
+      if (stored)
+        setLastClicked(new Date(stored));
+    }
+  }, [session?.id]);
+
+  const handleCardClick = () => {
+    const now = new Date();
+    localStorage.setItem(`session_last_clicked_${session.id}`, now.toISOString());
+    setLastClicked(now);
+  };
 
   if (isEditing) {
     return (
@@ -33,9 +50,26 @@ export default function SessionCardBody() {
   }
 
   return (
-    <Link href={`/sessions/${session.id}`} className="text-decoration-none text-dark">
+    <Link
+      href={`/sessions/${session.id}`}
+      className="text-decoration-none text-dark"
+      onClick={handleCardClick}
+    >
       <h4 className="card-title text-primary">{session.title}</h4>
       <p className="card-text">{session.description}</p>
+      <small className="text-muted">
+        Ultimo accesso: {lastClicked
+          ? lastClicked.toLocaleString("it-IT", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: false,
+            })
+          : "Mai"}
+      </small>
     </Link>
   );
 }

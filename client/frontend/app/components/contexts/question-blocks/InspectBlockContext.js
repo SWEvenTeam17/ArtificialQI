@@ -1,13 +1,25 @@
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+} from "react";
 
-export function useInspectBlockHook(id) {
+const InspectBlockContext = createContext();
+
+export function useInspectBlockContext() {
+  return useContext(InspectBlockContext);
+}
+
+export function InspectBlockProvider({ children, id }) {
   const [blockData, setBlockData] = useState(null);
   const [testResults, setTestResults] = useState(null);
   const [uniqueId, setUniqueId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchBlockData = async () => {
+  const fetchBlockData = useCallback(async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`
@@ -20,7 +32,7 @@ export function useInspectBlockHook(id) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const deletePrompt = async (promptId) => {
     try {
@@ -53,17 +65,51 @@ export function useInspectBlockHook(id) {
     setTestResults(data);
   };
 
+  const handleEdit = async (promptId, editedPrompt) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${promptId}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedPrompt),
+        }
+      );
+      if (!response.ok)
+        throw new Error("Errore durante la modifica del prompt.");
+      const updated = await response.json();
+
+      setBlockData((prev) => ({
+        ...prev,
+        prompt: prev.prompt.map((p) =>
+          p.id === promptId ? { ...p, ...updated } : p
+        ),
+      }));
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   useEffect(() => {
     fetchBlockData();
-  }, [id]);
+  }, [id, fetchBlockData]);
 
-  return {
-    blockData,
-    testResults,
-    uniqueId,
-    loading,
-    error,
-    deletePrompt,
-    handleView,
-  };
+  return (
+    <InspectBlockContext.Provider
+      value={{
+        blockData,
+        testResults,
+        uniqueId,
+        loading,
+        error,
+        deletePrompt,
+        handleView,
+        handleEdit,
+      }}
+    >
+      {children}
+    </InspectBlockContext.Provider>
+  );
 }

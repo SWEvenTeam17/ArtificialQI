@@ -1,5 +1,5 @@
 "use client";
-import { SessionCardProvider } from "@/app/components/contexts/SessionCardContext";
+import { SessionCardProvider } from "@/app/components/contexts/session/SessionCardContext";
 import SessionCardBody from "./SessionCardBody";
 import SessionCardActions from "./SessionCardActions";
 

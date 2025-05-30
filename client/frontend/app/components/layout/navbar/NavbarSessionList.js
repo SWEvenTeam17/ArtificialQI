@@ -1,4 +1,4 @@
-import { useSessionContext } from "@/app/components/contexts/SessionContext";
+import { useSessionContext } from "@/app/components/contexts/session/SessionContext";
 import NavbarSessionElement from "./NavbarSessionElement";
 
 export default function NavbarSessionList() {

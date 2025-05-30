@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useSessionContext } from "@/app/components/contexts/SessionContext";
+import { useSessionContext } from "@/app/components/contexts/session/SessionContext";
 import { getCSRFToken } from "@/app/helpers/csrf";
 
 export default function AccordionForm() {

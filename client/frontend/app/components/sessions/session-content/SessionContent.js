@@ -1,9 +1,9 @@
-import React from "react";
-import { useTestContext } from "../../contexts/SessionPageContext";
-import SessionLLMPanel from "./SessionLLMPanel";
-import TestForm from "./TestForm";
+import { useSessionLLMContext } from "../../contexts/session/SessionLLMContext";
+import { TestFormContextProvider } from "../../contexts/session/test-form/TestFormContext";
+import SessionLLMPanel from "./session-llm-list/SessionLLMPanel";
+import TestForm from "./test-form/TestForm";
 export default function SessionContent() {
-  const { sessionData } = useTestContext();
+  const { sessionData } = useSessionLLMContext();
   if (sessionData === null) {
     return (
       <div
@@ -37,7 +37,9 @@ export default function SessionContent() {
         <div className="col-12">
           <div className="row row-cols-1">
             <div className="col">
-              <TestForm sessionData={sessionData} />
+              <TestFormContextProvider sessionData={sessionData}>
+                <TestForm />
+              </TestFormContextProvider>
             </div>
           </div>
         </div>

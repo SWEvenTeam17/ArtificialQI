@@ -1,7 +1,7 @@
 "use client";
 import Script from "next/script";
 import "./bootstrap.css";
-import { SessionContextProvider } from "./components/contexts/SessionContext";
+import { SessionContextProvider } from "./components/contexts/session/SessionContext";
 import Navbar from "@/app/components/layout/navbar/Navbar"
 export default function RootLayout({ children }) {
   return (

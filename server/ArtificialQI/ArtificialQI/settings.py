@@ -32,10 +32,7 @@ SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'backend',
-    'localhost'
-]
+ALLOWED_HOSTS = ["server", "localhost"]
 
 
 # Application definition

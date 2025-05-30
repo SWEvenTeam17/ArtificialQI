@@ -1,6 +1,7 @@
 "use client";
 
 import { getCSRFToken } from "@/app/helpers/csrf";
+import { useTestFormContext } from "../contexts/session/test-form/TestFormContext";
 
 function formatTimestamp(ts) {
     const date = new Date(ts);
@@ -14,7 +15,8 @@ function formatTimestamp(ts) {
     });
 }
 
-export default function PrevTests({ prevTests, setPrevTests, onTestClick }) {
+export default function PrevTests() {
+    const { prevTests, setPrevTests, handlePrevTestClick } = useTestFormContext();
     const handleDelete = async (testId) => {
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${testId}/`,
@@ -42,7 +44,7 @@ export default function PrevTests({ prevTests, setPrevTests, onTestClick }) {
                         <div className="col" key={test.id}>
                             <div className="card h-100 shadow-sm"
                                 style={{ cursor: "pointer", userSelect: "none" }}
-                                onClick={() => onTestClick && onTestClick(test)}
+                                onClick={() => handlePrevTestClick && handlePrevTestClick(test)}
                                 onMouseDown={e => e.preventDefault()}
                             >
                                 <div className="card-body">
