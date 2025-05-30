@@ -9,17 +9,14 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-
 class RunView(AbstractView):
     """
     Classe che contiene le definizioni delle viste dedicate alla gestione dei Prompt.
     """
-
     serializer = RunSerializer
     service = RunService
 
 class RunPromptView(APIView):
-
     def get(self, request):
         prompt_id = request.GET.get("prompt_id")
         if not prompt_id:

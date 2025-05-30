@@ -14,6 +14,7 @@ from API.classes.llm_controller import LLMController
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
 from .run_service import RunService
+from typing import Dict
 
 
 class BlockTestService(AbstractService):
