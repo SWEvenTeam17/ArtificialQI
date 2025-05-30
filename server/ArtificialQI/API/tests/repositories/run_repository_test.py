@@ -22,11 +22,19 @@ class TestRunRepository(TestAbstractRepository):
             prompt_text="Domanda 1?",
             expected_answer="Risposta 1",
         )
+        _prompt2 = Prompt.objects.create(
+            prompt_text="Domanda 2?",
+            expected_answer="Risposta 2",
+        )
         _evaluation = Evaluation.objects.create(
             semantic_evaluation = 98,
             external_evaluation = 98
         )
-        return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "evaluation": _evaluation}
+        _evaluation2 = Evaluation.objects.create(
+            semantic_evaluation = 95,
+            external_evaluation = 95
+        )
+        return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "prompt2": _prompt2, "evaluation": _evaluation, "evaluation2": _evaluation2}
     
     @pytest.fixture
     def repository(self):
@@ -39,6 +47,15 @@ class TestRunRepository(TestAbstractRepository):
             "prompt": setup_data["prompt"],
             "evaluation": setup_data["evaluation"],
             "llm_answer": "Risposta 1",
+        }
+    
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "llm": setup_data["llm2"],
+            "prompt": setup_data["prompt2"],
+            "evaluation": setup_data["evaluation2"],
+            "llm_answer": "Risposta 2",
         }
     
     def test_commons_run(self, repository, valid_data, setup_data):

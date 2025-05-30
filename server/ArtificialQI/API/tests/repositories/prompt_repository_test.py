@@ -28,6 +28,12 @@ class TestAnswerRepository(TestAbstractRepository):
             "prompt_text":"Domanda 1?",
             "expected_answer": "Risposta 1",
         }
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "prompt_text":"Domanda 2?",
+            "expected_answer": "Risposta 2",
+        }
 
     def test_filter_one(self, repository, valid_data, setup_data):
         prompt = repository.create(valid_data)

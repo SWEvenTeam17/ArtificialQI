@@ -19,6 +19,8 @@ class TestBlockTestRepository(TestAbstractRepository):
         _llm3 = LLM.objects.create(name="llama3.1", n_parameters="1B")
         _session = Session.objects.create(title="Sessione 1", description="test 1")
         _session.llm.add(_llm)
+        _session2 = Session.objects.create(title="Sessione 2", description="test 2")
+        _session2.llm.add(_llm)
         _prompt = Prompt.objects.create(
             prompt_text="Domanda 1?",
             expected_answer="Risposta 1",
@@ -29,11 +31,13 @@ class TestBlockTestRepository(TestAbstractRepository):
         )
         _block = Block.objects.create(name="blocco1")
         BlockRepository.add_prompt(_block, _prompt)
+        _block2 = Block.objects.create(name="blocco2")
+        BlockRepository.add_prompt(_block2, _prompt)
 
         _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
         _run2 = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 2")
 
-        return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "run": _run, "run2": _run2}
+        return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "session2": _session2, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "block2": _block2, "run": _run, "run2": _run2}
     
     @pytest.fixture
     def repository(self):
@@ -45,7 +49,13 @@ class TestBlockTestRepository(TestAbstractRepository):
             "session": setup_data["session"],
             "block": setup_data["block"],
         }
-
+    
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "session": setup_data["session2"],
+            "block": setup_data["block2"],
+        }
 
     def test_add_run(self, repository, valid_data, setup_data):
         test = repository.create(valid_data)

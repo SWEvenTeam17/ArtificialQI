@@ -43,6 +43,12 @@ class TestAnswerRepository(TestAbstractRepository):
             "name": "nome"
         }
     
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "name": "nome_update"
+        }
+    
     def test_add_prompt(self, repository, valid_data, setup_data):
         block = repository.create(valid_data)
         repository.add_prompt(block,setup_data["prompt"])

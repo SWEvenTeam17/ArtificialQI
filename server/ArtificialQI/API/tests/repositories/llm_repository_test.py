@@ -48,6 +48,13 @@ class TestLLMRepository(TestAbstractRepository):
             "name": "llama3.2",
             "n_parameters": "3B"
         }
+    
+    @pytest.fixture
+    def update_data(self):
+        return {
+            "name": "gemma4",
+            "n_parameters": "4B"
+        }
 
     def test_update_or_create(self, repository, valid_data):
         # test: aggiungere modello non esistente

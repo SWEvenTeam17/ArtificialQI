@@ -32,3 +32,10 @@ class TestEvaluationRepository(TestAbstractRepository):
             "semantic_evaluation": 98,
             "external_evaluation": 98,
         }
+    
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "semantic_evaluation": 90,
+            "external_evaluation": 91,
+        }

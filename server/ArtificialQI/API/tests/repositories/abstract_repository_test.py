@@ -30,19 +30,24 @@ class TestAbstractRepository(ABC):
     def test_get_all(self, repository, valid_data):
         repository.create(valid_data)
         results = repository.get_all()
-        assert len(results) >= 1
-        for field, value in valid_data.items():
-            assert getattr(results[0], field) == value
+        assert len(results) >= 1, "Lista vuota"
+        record_found = False
+        for record in results:
+            if all(getattr(record, field) == value for field, value in valid_data.items()):
+                record_found = True
+            break
+        assert record_found is True
 
     def test_get_by_id(self, repository, valid_data):
         instance = repository.create(valid_data)
         retrieved = repository.get_by_id(instance.pk)
         assert retrieved.pk == instance.pk
 
-    def test_update(self, repository, valid_data):
+    def test_update(self, repository, valid_data, update_data):
         instance = repository.create(valid_data)
-        updated = repository.update(instance.pk, {"LLM_answer": "Updated Answer"})
-        assert updated.LLM_answer == "Updated Answer"
+        updated = repository.update(instance.pk, update_data)
+        for field, value in update_data.items():
+            assert getattr(updated, field) == value
 
     def test_delete(self, repository, valid_data):
         instance = repository.create(valid_data)

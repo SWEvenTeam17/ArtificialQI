@@ -26,6 +26,12 @@ class TestAnswerRepository(TestAbstractRepository):
             "title": "Sessione 1",
             "description": "Descrizione",
         }
+    @pytest.fixture
+    def update_data(self, setup_data):
+        return {
+            "title": "Sessione 2",
+            "description": "Descrizione 2",
+        }
     
     def test_get_remaining_llm(self, repository, valid_data, setup_data):
         # creazione session e aggiunta llm
