@@ -33,6 +33,8 @@ class DummyService:
 
     @staticmethod
     def read(instance_id):
+        if instance_id is None:
+            return None  # Simula oggetto non trovato
         return {"value": f"data{instance_id}"}
 
     @staticmethod
@@ -45,6 +47,8 @@ class DummyService:
 
     @staticmethod
     def delete(instance_id):
+        if instance_id is None:
+            return None
         return True
 
 # Dummy view base
@@ -98,13 +102,13 @@ def test_put_without_instance_id():
     view = DummyView.as_view()
     payload = {"key": "no id"}
     request = factory.put("/", data=payload, format="json")
-    response = view(request)  
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data == payload
+    response = view(request)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.data == {"error": "Sessione non trovata"}
 
 def test_delete_without_instance_id():
     request = factory.delete("/")
-    response = DummyView().delete(request)  
+    response = DummyView().delete(request)
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 # --- ERROR CASES ---

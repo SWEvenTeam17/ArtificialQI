@@ -37,6 +37,18 @@ def delete_url(session, llm):
     return f"/llm_delete/{session.pk}/{llm.pk}"
 
 # --- GET SUCCESS ---
+@patch("API.views_def.session_llm_view.SessionService.get_excluded_llm")
+def test_get_llms_by_session(mock_get_excluded_llm, client, get_url, llm):
+    # Simula che il service restituisca una lista di LLM finti
+    mock_get_excluded_llm.return_value = [{"id": 2, "name": "Fake LLM"}]
+    response = client.get(get_url)
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.data, list)
+    ids = [item["id"] for item in response.data]
+    assert llm.id not in ids
+    mock_get_excluded_llm.assert_called_once()
+
+
 def test_get_llms_by_session(client, get_url, session, llm):
     session.refresh_from_db()
     response = client.get(get_url)
@@ -71,14 +83,17 @@ def test_get_llms_by_session_generic_error(mock_get_llm, client, session):
     assert "error" in response.data
 
 # --- POST SUCCESS ---
-def test_post_add_llm_to_session(client, session, post_url):
-    new_llm = LLM.objects.create(name="LLaMA-3", n_parameters="70B")
+@patch("API.views_def.session_llm_view.SessionService.add_llm")
+def test_post_add_llm_to_session(mock_add_llm, client, post_url):
+    llm = LLM(id=123, name="Fake LLM", n_parameters="1T")
+    mock_add_llm.return_value = llm
     response = client.post(post_url, {
-        "sessionId": session.pk,
-        "llmId": new_llm.pk
+        "sessionId": 1,
+        "llmId": 123
     }, format="json")
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data["id"] == new_llm.id
+    assert response.data["id"] == 123
+    mock_add_llm.assert_called_once_with(session_id=1, llm_id=123)
 
 # --- POST: Session DoesNotExist ---
 @patch("API.views_def.session_llm_view.SessionService.add_llm", side_effect=Session.DoesNotExist)
@@ -111,10 +126,12 @@ def test_post_add_llm_generic_error(mock_add_llm, client, post_url, session):
     assert "error" in response.data
 
 # --- DELETE SUCCESS ---
-def test_delete_llm_from_session(client, delete_url, session, llm):
+@patch("API.views_def.session_llm_view.SessionService.delete_llm")
+def test_delete_llm_from_session_unit(mock_delete_llm, client, delete_url):
+    mock_delete_llm.return_value = None
     response = client.delete(delete_url)
     assert response.status_code == status.HTTP_204_NO_CONTENT
-    assert not session.llm.filter(pk=llm.pk).exists()
+    mock_delete_llm.assert_called_once()
 
 # --- DELETE: Session DoesNotExist ---
 @patch("API.views_def.session_llm_view.SessionService.delete_llm", side_effect=Session.DoesNotExist)

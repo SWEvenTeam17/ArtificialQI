@@ -6,8 +6,7 @@ import sys
 import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
+
 
 @pytest.fixture
 def client():
