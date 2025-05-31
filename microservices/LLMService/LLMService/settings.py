@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['llm_service', 'localhost', '127.0.0.1']
 
 # Application definition
 
-INSTALLED_APPS = ["django.contrib.staticfiles", "api", "rest_framework"]
+INSTALLED_APPS = ["django.contrib.staticfiles", "api", "rest_framework", "drf_spectacular"]
 
 MIDDLEWARE = []
 
@@ -74,6 +74,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
     "UNAUTHENTICATED_USER": None,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",  # <--- importante!

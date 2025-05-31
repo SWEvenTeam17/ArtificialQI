@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /interrogate/:
+    get:
+      operationId: interrogate_retrieve
+      description: Restituisce la lista degli LLM disponibili
+      tags:
+        - interrogate
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMResponse'
+    post:
+      operationId: interrogate_create
+      description: Interroga un LLM specifico con un prompt
+      tags:
+        - interrogate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LLMRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LLMRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LLMRequest'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMResponse'
+components:
+  schemas:
+    LLMRequest:
+      type: object
+      properties:
+        llm_name:
+          type: string
+        prompt:
+          type: string
+      required:
+        - llm_name
+        - prompt
+      additionalProperties: false
+    LLMResponse:
+      type: object
+      properties:
+        llm_name:
+          type: string
+        prompt:
+          type: string
+        answer:
+          type: string
+      required:
+        - llm_name
+        - prompt
+        - answer
+      additionalProperties: false
