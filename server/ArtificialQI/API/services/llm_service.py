@@ -6,6 +6,8 @@ import os
 import requests
 from dotenv import load_dotenv
 from API.repositories import LLMRepository
+from API.models import BlockTest
+from typing import List, Dict
 from .abstract_service import AbstractService
 
 

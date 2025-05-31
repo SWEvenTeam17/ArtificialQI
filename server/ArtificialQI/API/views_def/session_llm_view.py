@@ -24,7 +24,7 @@ class SessionLLMView(APIView):
         Ritorna tutti i modelli collegati ad una sessione.
         """
         try:
-            result = self.service.get_llm(session_id=instance_id)
+            result = self.service.get_excluded_llm(session_id=instance_id)
             serializer = self.serializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Session.DoesNotExist:

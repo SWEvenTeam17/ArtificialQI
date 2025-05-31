@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-
 class BlockView(AbstractView):
     """
     Classe che contiene la definizione della vista dedicata
@@ -31,7 +30,7 @@ class BlockView(AbstractView):
         """
         data: dict = {
             "name": request.data.get("name"),
-            "questions": request.data.get("questions"),
+            "questions": request.data.get("questions")        
         }
         try:
             result = self.service.create(data=data)

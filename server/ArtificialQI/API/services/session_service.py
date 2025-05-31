@@ -15,9 +15,9 @@ class SessionService(AbstractService):
     repository = SessionRepository
 
     @classmethod
-    def get_llm(cls, session_id: int):
+    def get_excluded_llm(cls, session_id: int):
         """
-        Funzione che ritorna tutti i LLM connessi ad una sessione.
+        Funzione che ritorna tutti i LLM  non connessi ad una sessione.
         """
         return cls.repository.get_remaining_llm(session_id=session_id)
 
