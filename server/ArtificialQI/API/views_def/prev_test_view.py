@@ -17,9 +17,6 @@ class PrevTestView(APIView):
     alla gestione dei test precedentemente eseguiti in una sessione.
     """
 
-    serializer = BlockTestSerializer
-    service = PrevTestService
-
     def get(self, request, instance_id: int) -> Response:
         """
         Funzione che ritorna tutti i prompt precedenti di una sessione.
@@ -27,11 +24,11 @@ class PrevTestView(APIView):
         test_id = request.GET.get("test_id")
         try:
             if test_id is not None:
-                test = self.service.read(instance_id=test_id)
+                test = PrevTestService.read(instance_id=test_id)
                 data = BlockTestService.format_results(test)
                 return Response(data)
-            tests = self.service.get_tests_by_session(instance_id)
-            serializer = self.serializer(tests, many=True)
+            tests = PrevTestService.get_tests_by_session(instance_id)
+            serializer = BlockTestSerializer(tests, many=True)
             return Response(serializer.data)
         except BlockTest.DoesNotExist:
             return Response(
