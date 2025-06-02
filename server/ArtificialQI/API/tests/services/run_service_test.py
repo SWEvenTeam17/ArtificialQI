@@ -8,9 +8,9 @@ from API.models import Prompt
 class TestRunService(AbstractServiceTestCase):
     service_class = RunService
 
-    @patch("API.services.run_service.Prompt.objects.get")
-    @patch("API.services.run_service.RunService.repository.get_by_prompt")
-    def test_get_formatted_by_prompt(self, mock_get_by_prompt, mock_prompt_get):
+    @patch("API.services.run_service.RunService._repository.get_by_prompt")
+    @patch("API.services.run_service.PromptRepository.get_by_id")
+    def test_get_formatted_by_prompt(self, mock_prompt_get, mock_get_by_prompt):
         prompt = MagicMock(spec=Prompt)
         prompt.id = 1
         prompt.prompt_text = "Qual è la capitale della Francia?"
@@ -35,7 +35,7 @@ class TestRunService(AbstractServiceTestCase):
 
         result = self.service_class.get_formatted_by_prompt(prompt_id=1)
 
-        mock_prompt_get.assert_called_once_with(id=1)
+        mock_prompt_get.assert_called_once_with(instance_id=1)
         mock_get_by_prompt.assert_called_once_with(prompt_id=1)
 
         assert isinstance(result, dict)
@@ -58,11 +58,9 @@ class TestRunService(AbstractServiceTestCase):
         assert res["averages_by_llm"]["GPT-Test"]["avg_semantic_scores"] == 0.95
         assert res["averages_by_llm"]["GPT-Test"]["avg_external_scores"] == 0.90
 
-    @patch(
-        "API.services.run_service.Prompt.objects.get", side_effect=Prompt.DoesNotExist
-    )
+    @patch("API.services.run_service.PromptRepository.get_by_id", side_effect=Prompt.DoesNotExist)
     def test_get_formatted_by_prompt_prompt_not_found(self, mock_prompt_get):
         result = self.service_class.get_formatted_by_prompt(prompt_id=999)
 
-        mock_prompt_get.assert_called_once_with(id=999)
+        mock_prompt_get.assert_called_once_with(instance_id=999)
         assert result is None

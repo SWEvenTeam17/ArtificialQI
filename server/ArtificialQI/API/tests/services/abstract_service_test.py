@@ -15,7 +15,7 @@ class AbstractServiceTestCase:
     @pytest.fixture(autouse=True)
     def setup(self, mocker):
         self.mock_repository = mocker.MagicMock()
-        self.service_class.repository = self.mock_repository
+        self.service_class._repository = self.mock_repository
 
     def test_create(self):
         sample_data = {"key": "value"}

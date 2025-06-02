@@ -8,9 +8,9 @@ from API.tests.services.abstract_service_test import AbstractServiceTestCase
 class TestBlockService(AbstractServiceTestCase):
     service_class = BlockService
 
+    @patch("API.services.block_service.BlockService._repository")
     @patch("API.services.block_service.PromptRepository")
-    @patch("API.services.block_service.BlockRepository")
-    def test_create(self, mock_block_repo, mock_prompt_repo):
+    def test_create(self, mock_prompt_repo, mock_block_repo):
         mock_block_repo.get_by_name.return_value = None
         mock_block = MagicMock(spec=Block)
         mock_block_repo.create.return_value = mock_block
@@ -35,9 +35,9 @@ class TestBlockService(AbstractServiceTestCase):
             block=mock_block, prompt=mock_prompt
         )
 
+    @patch("API.services.block_service.BlockService._repository")
     @patch("API.services.block_service.PromptRepository")
-    @patch("API.services.block_service.BlockRepository")
-    def test_create_no_duplicate(self, mock_block_repo, mock_prompt_repo):
+    def test_create_no_duplicate(self, mock_prompt_repo, mock_block_repo):
         mock_block_repo.get_by_name.return_value = None
         mock_new_block = MagicMock(spec=Block)
         mock_block_repo.create.return_value = mock_new_block
@@ -61,7 +61,7 @@ class TestBlockService(AbstractServiceTestCase):
         assert mock_prompt_repo.get_or_create.call_count == 2
         assert mock_block_repo.add_prompt.call_count == 2
 
-    @patch("API.services.block_service.BlockRepository")
+    @patch("API.services.block_service.BlockService._repository")
     def test_create_duplicate(self, mock_block_repo):
         mock_existing_block = MagicMock(spec=Block)
         mock_block_repo.get_by_name.return_value = mock_existing_block
@@ -74,7 +74,7 @@ class TestBlockService(AbstractServiceTestCase):
         mock_block_repo.get_by_name.assert_called_once_with("existing_block")
         mock_block_repo.create.assert_not_called()
 
-    @patch("API.services.block_service.BlockRepository")
+    @patch("API.services.block_service.BlockService._repository")
     def test_is_duplicated_true(self, mock_block_repo):
         mock_block_repo.get_by_name.return_value = MagicMock(spec=Block)
 
@@ -83,7 +83,7 @@ class TestBlockService(AbstractServiceTestCase):
         assert result is True
         mock_block_repo.get_by_name.assert_called_once_with(name="existing_name")
 
-    @patch("API.services.block_service.BlockRepository")
+    @patch("API.services.block_service.BlockService._repository")
     def test_is_duplicated_false(self, mock_block_repo):
         mock_block_repo.get_by_name.return_value = None
 
@@ -109,7 +109,7 @@ class TestBlockService(AbstractServiceTestCase):
             mock_read.assert_any_call(1)
             mock_read.assert_any_call(2)
 
-    @patch("API.services.block_service.BlockRepository")
+    @patch("API.services.block_service.BlockService._repository")
     def test_get_common_blocks(self, mock_block_repo):
         mock_llm1 = MagicMock(spec=LLM)
         mock_llm2 = MagicMock(spec=LLM)

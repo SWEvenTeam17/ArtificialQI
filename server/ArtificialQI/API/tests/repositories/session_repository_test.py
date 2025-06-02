@@ -140,15 +140,14 @@ class TestAnswerRepository(TestAbstractRepository):
         # verifica che llm non sia più collegato
         assert repository.get_by_id(session.id).llm.count() == 0
 
-    def test_get_tests_by_session(self, repository, valid_data, setup_data_prev):
-        ptest = repository.create(valid_data)
-        ptest2 = repository.create(
+    def test_get_tests_by_session(self, repository, valid_data_prev, setup_data_prev):
+        ptest = BlockTestRepository.create(valid_data_prev)
+        ptest2 = BlockTestRepository.create(
             {
                 "session": setup_data_prev["session2"],
                 "block": setup_data_prev["block"],
             }
         )
-        assert repository is not SessionRepository
         BlockTestRepository.add_run(ptest, setup_data_prev["run"])
         results = repository.get_tests_by_session(setup_data_prev["session"])
         assert ptest in results

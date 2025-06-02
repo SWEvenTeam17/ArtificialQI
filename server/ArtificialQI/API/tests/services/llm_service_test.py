@@ -36,8 +36,8 @@ class TestLLMService(AbstractServiceTestCase):
             {"name": "mistral", "details": {"parameter_size": "7B"}},
         ]
         mock_repo = MagicMock()
-        self.service_class.repository = (
-            mock_repo  # <- Patch manuale dell'attributo di classe
+        self.service_class._repository = (
+            mock_repo
         )
 
         self.service_class.sync_ollama_llms()
