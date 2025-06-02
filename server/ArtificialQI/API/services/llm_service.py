@@ -3,10 +3,13 @@ File che contiene i servizi riguardanti i LLM.
 """
 
 import os
-import requests
 from typing import ClassVar
+
+import requests
 from dotenv import load_dotenv
-from API.repositories import LLMRepository, AbstractRepository
+
+from API.repositories import AbstractRepository, LLMRepository
+
 from .abstract_service import AbstractService
 
 

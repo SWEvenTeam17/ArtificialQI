@@ -3,9 +3,10 @@ File che contiene la vista dedicata alla gestione dei
 test precedentemente eseguiti in una sessione.
 """
 
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from API.models import BlockTest
 from API.serializers import BlockTestSerializer
 from API.services import BlockTestService, SessionService

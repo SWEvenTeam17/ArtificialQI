@@ -3,12 +3,14 @@ File che contiene la definizione del repository
 che gestisce le istanze dei blocchi in DB.
 """
 
-from typing import List
-from API.models import Block, Prompt, LLM
-from django.db.models import Count, Q
-from .abstract_repository import AbstractRepository
-from typing import ClassVar
+from typing import ClassVar, List
+
 from django.db import models
+from django.db.models import Count, Q
+
+from API.models import LLM, Block, Prompt
+
+from .abstract_repository import AbstractRepository
 
 
 class BlockRepository(AbstractRepository):

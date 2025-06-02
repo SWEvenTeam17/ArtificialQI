@@ -1,7 +1,9 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 import pytest
 import requests
 from django.core.exceptions import ObjectDoesNotExist
+
 from API.services.llm_service import LLMService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
 
@@ -36,9 +38,7 @@ class TestLLMService(AbstractServiceTestCase):
             {"name": "mistral", "details": {"parameter_size": "7B"}},
         ]
         mock_repo = MagicMock()
-        self.service_class._repository = (
-            mock_repo
-        )
+        self.service_class._repository = mock_repo
 
         self.service_class.sync_ollama_llms()
 

@@ -2,11 +2,15 @@
 File che contiene le definizioni delle viste LLMView e OllamaView.
 """
 
-from rest_framework import status
+from typing import ClassVar
+
+from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from API.serializers import LLMSerializer
-from API.services import LLMService
+from API.services import AbstractService, LLMService
+
 from .abstract_view import AbstractView
 
 
@@ -15,8 +19,8 @@ class LLMView(AbstractView):
     Classe che gestisce le richieste per creare,modificare e cancellare LLM.
     """
 
-    serializer = LLMSerializer
-    service = LLMService
+    serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
+    service: ClassVar[type[AbstractService]] = LLMService
 
 
 class OllamaView(APIView):

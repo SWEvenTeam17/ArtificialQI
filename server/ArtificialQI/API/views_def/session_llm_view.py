@@ -2,12 +2,15 @@
 File che contiene la classe SessionLLMView.
 """
 
+from typing import ClassVar
+
+from rest_framework import serializers, status
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
+
+from API.models import LLM, Session
 from API.serializers import LLMSerializer
-from API.services import SessionService
-from API.models import Session, LLM
+from API.services import AbstractService, SessionService
 
 
 class SessionLLMView(APIView):
@@ -16,8 +19,8 @@ class SessionLLMView(APIView):
     alla gestione della connessione sessione-llm.
     """
 
-    serializer = LLMSerializer
-    service = SessionService
+    serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
+    service: ClassVar[type[AbstractService]] = SessionService
 
     def get(self, request, instance_id: int) -> Response:
         """

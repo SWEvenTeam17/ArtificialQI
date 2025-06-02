@@ -2,10 +2,13 @@
 Repository che gestisce le istanze dei LLM in DB.
 """
 
-from API.models import LLM
-from .abstract_repository import AbstractRepository
 from typing import ClassVar
+
 from django.db import models
+
+from API.models import LLM
+
+from .abstract_repository import AbstractRepository
 
 
 class LLMRepository(AbstractRepository):

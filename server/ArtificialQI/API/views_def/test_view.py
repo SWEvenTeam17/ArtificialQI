@@ -3,12 +3,15 @@ File che contiene la classe TestView, che gestisce le
 richieste per effettuare operazioni sui Test.
 """
 
+from typing import ClassVar, List
+
+from rest_framework import serializers, status
 from rest_framework.response import Response
-from rest_framework import status
-from API.serializers import BlockTestSerializer
-from API.services import BlockTestService, SessionService, BlockService
+
 from API.models import Block
-from typing import List
+from API.serializers import BlockTestSerializer
+from API.services import AbstractService, BlockService, BlockTestService, SessionService
+
 from .abstract_view import AbstractView
 
 
@@ -18,8 +21,8 @@ class TestView(AbstractView):
     alla gestione dei test precedentemente eseguiti in una sessione..
     """
 
-    serializer = BlockTestSerializer
-    service = BlockTestService
+    serializer: ClassVar[type[serializers.Serializer]] = BlockTestSerializer
+    service: ClassVar[type[AbstractService]] = BlockTestService
 
     def post(self, request) -> Response:
         session = SessionService.read(request.data.get("sessionId"))

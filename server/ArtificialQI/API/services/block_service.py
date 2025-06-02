@@ -2,11 +2,12 @@
 File che contiene i servizi riguardanti i blocchi.
 """
 
-from typing import List
-from API.repositories import BlockRepository, PromptRepository, AbstractRepository
-from API.models import Block, LLM
+from typing import ClassVar, List
+
+from API.models import LLM, Block
+from API.repositories import AbstractRepository, BlockRepository, PromptRepository
+
 from .abstract_service import AbstractService
-from typing import ClassVar
 
 
 class BlockService(AbstractService):

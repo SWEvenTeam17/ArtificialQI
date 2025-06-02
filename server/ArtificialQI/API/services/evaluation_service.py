@@ -2,15 +2,18 @@
 File che contiene i servizi riguardanti le valutazioni.
 """
 
+import logging
 import os
 import re
-import logging
 from typing import ClassVar
+
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
-from langchain_google_genai import ChatGoogleGenerativeAI
 from google.api_core.exceptions import GoogleAPICallError, InternalServerError
-from API.repositories import EvaluationRepository, AbstractRepository
+from langchain_google_genai import ChatGoogleGenerativeAI
+from sentence_transformers import SentenceTransformer
+
+from API.repositories import AbstractRepository, EvaluationRepository
+
 from .abstract_service import AbstractService
 
 

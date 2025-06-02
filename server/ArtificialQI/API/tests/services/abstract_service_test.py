@@ -1,10 +1,13 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
+
 from API.services.abstract_service import AbstractService
 
 

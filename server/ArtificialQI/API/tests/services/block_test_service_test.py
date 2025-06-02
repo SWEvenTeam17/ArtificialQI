@@ -1,7 +1,8 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+from API.models import Block, BlockTest, Session
 from API.services.block_test_service import BlockTestService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
-from API.models import Block, Session, BlockTest
 
 
 class TestBlockTestService(AbstractServiceTestCase):
@@ -10,9 +11,18 @@ class TestBlockTestService(AbstractServiceTestCase):
     @patch.object(BlockTestService, "_repository")
     @patch("API.services.block_test_service.RunService.create")
     @patch("API.services.block_test_service.EvaluationService.create")
-    @patch("API.services.block_test_service.EvaluationService.get_external_evaluation", return_value=0.9)
-    @patch("API.services.block_test_service.EvaluationService.get_semantic_evaluation", return_value=0.8)
-    @patch("API.services.block_test_service.BlockTestService.interrogate", return_value="Risposta LLM")
+    @patch(
+        "API.services.block_test_service.EvaluationService.get_external_evaluation",
+        return_value=0.9,
+    )
+    @patch(
+        "API.services.block_test_service.EvaluationService.get_semantic_evaluation",
+        return_value=0.8,
+    )
+    @patch(
+        "API.services.block_test_service.BlockTestService.interrogate",
+        return_value="Risposta LLM",
+    )
     @patch("API.services.block_test_service.BlockRepository.get_prompts")
     @patch("API.services.block_test_service.SessionRepository.get_llms")
     @patch("API.services.block_test_service.BlockTestService.create")
@@ -57,7 +67,6 @@ class TestBlockTestService(AbstractServiceTestCase):
 
         assert isinstance(result, dict)
         assert result["results"][0]["block_id"] == 1
-
 
     @patch("API.services.block_test_service.BlockTest.run")
     def test_format_results(self, mock_run_related):

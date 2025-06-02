@@ -1,8 +1,10 @@
-import os, requests
-from requests.exceptions import RequestException
+import os
+from typing import Any, Dict, List
+
+import requests
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
-from typing import List, Dict, Any
+from requests.exceptions import RequestException
 
 
 class OllamaLLMIntegrationService:

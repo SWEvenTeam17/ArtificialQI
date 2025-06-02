@@ -2,10 +2,13 @@
 Repository che gestisce le istanze delle Sessioni in DB.
 """
 
-from API.models import Session, LLM, BlockTest
-from .abstract_repository import AbstractRepository
 from typing import ClassVar
+
 from django.db import models
+
+from API.models import LLM, BlockTest, Session
+
+from .abstract_repository import AbstractRepository
 
 
 class SessionRepository(AbstractRepository):

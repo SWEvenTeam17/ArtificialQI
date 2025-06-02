@@ -1,19 +1,22 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from api.services.ollama_llm_integration_service import OllamaLLMIntegrationService
-import pytest
-from unittest.mock import patch, MagicMock
-from requests.exceptions import RequestException
+from unittest.mock import MagicMock, patch
 
+import pytest
+from api.services.ollama_llm_integration_service import OllamaLLMIntegrationService
+from requests.exceptions import RequestException
 
 # --- Test get_llm ---
 
 
 @patch("api.services.ollama_llm_integration_service.requests.get")
 @patch("api.services.ollama_llm_integration_service.OllamaLLM")
-@patch("api.services.ollama_llm_integration_service.os.getenv", return_value="http://fake-url")
+@patch(
+    "api.services.ollama_llm_integration_service.os.getenv",
+    return_value="http://fake-url",
+)
 def test_get_llm_success(mock_getenv, mock_ollama, mock_requests_get):
     mock_response = MagicMock()
     mock_requests_get.return_value = mock_response
@@ -24,8 +27,14 @@ def test_get_llm_success(mock_getenv, mock_ollama, mock_requests_get):
     mock_ollama.assert_called_once_with(model="test-model", base_url="http://fake-url")
 
 
-@patch("api.services.ollama_llm_integration_service.requests.get", side_effect=RequestException)
-@patch("api.services.ollama_llm_integration_service.os.getenv", return_value="http://fake-url")
+@patch(
+    "api.services.ollama_llm_integration_service.requests.get",
+    side_effect=RequestException,
+)
+@patch(
+    "api.services.ollama_llm_integration_service.os.getenv",
+    return_value="http://fake-url",
+)
 def test_get_llm_failure(mock_getenv, mock_requests_get):
     llm = OllamaLLMIntegrationService.get_llm("test-model")
     assert llm is None
@@ -47,7 +56,10 @@ def test_interrogate():
 
 
 @patch("api.services.ollama_llm_integration_service.requests.get")
-@patch("api.services.ollama_llm_integration_service.os.getenv", return_value="http://fake-url")
+@patch(
+    "api.services.ollama_llm_integration_service.os.getenv",
+    return_value="http://fake-url",
+)
 def test_get_ollama_llms_success(mock_getenv, mock_requests_get):
     mock_response = MagicMock()
     mock_response.json.return_value = {"models": [{"name": "llm1"}, {"name": "llm2"}]}
@@ -57,8 +69,14 @@ def test_get_ollama_llms_success(mock_getenv, mock_requests_get):
     mock_requests_get.assert_called_once_with("http://fake-url/api/tags")
 
 
-@patch("api.services.ollama_llm_integration_service.requests.get", side_effect=RequestException)
-@patch("api.services.ollama_llm_integration_service.os.getenv", return_value="http://fake-url")
+@patch(
+    "api.services.ollama_llm_integration_service.requests.get",
+    side_effect=RequestException,
+)
+@patch(
+    "api.services.ollama_llm_integration_service.os.getenv",
+    return_value="http://fake-url",
+)
 def test_get_ollama_llms_failure(mock_getenv, mock_requests_get):
     result = OllamaLLMIntegrationService.get_ollama_llms()
     assert result is None

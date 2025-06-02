@@ -3,18 +3,21 @@ File che contiene le funzioni utili a gestire
 la logica di business quando si esegue un test.
 """
 
-from typing import List, Dict, ClassVar
 import os
 from collections import defaultdict
+from typing import ClassVar, Dict, List
+
 import requests
 from dotenv import load_dotenv
+
+from API.models import Block, BlockTest, Session
 from API.repositories import (
+    AbstractRepository,
+    BlockRepository,
     BlockTestRepository,
     SessionRepository,
-    BlockRepository,
-    AbstractRepository,
 )
-from API.models import Session, Block, BlockTest
+
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
 from .run_service import RunService

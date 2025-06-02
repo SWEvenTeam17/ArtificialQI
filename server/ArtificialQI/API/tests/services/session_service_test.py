@@ -1,4 +1,5 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 from API.services.session_service import SessionService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
 

@@ -1,15 +1,17 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
-from API.models import LLM, Session, Prompt, Evaluation, Block, Run
-from API.repositories.session_repository import SessionRepository
+import pytest
+
+from API.models import LLM, Block, Evaluation, Prompt, Run, Session
 from API.repositories.block_repository import BlockRepository
 from API.repositories.block_test_repository import BlockTestRepository
+from API.repositories.session_repository import SessionRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
-import pytest
 
 
 class TestAnswerRepository(TestAbstractRepository):
@@ -19,7 +21,7 @@ class TestAnswerRepository(TestAbstractRepository):
         _llm = LLM.objects.create(name="llama3.2", n_parameters="3B")
         _llm2 = LLM.objects.create(name="gemma3", n_parameters="4B")
         return {"llm1": _llm, "llm2": _llm2}
-    
+
     @pytest.fixture
     def setup_data_prev(self, db):
         _llm = LLM.objects.create(name="llama3.3", n_parameters="3B")
@@ -79,7 +81,7 @@ class TestAnswerRepository(TestAbstractRepository):
             "title": "Sessione 1",
             "description": "Descrizione",
         }
-    
+
     @pytest.fixture
     def valid_data_prev(self, setup_data_prev):
         return {
@@ -93,7 +95,7 @@ class TestAnswerRepository(TestAbstractRepository):
             "title": "Sessione 2",
             "description": "Descrizione 2",
         }
-    
+
     @pytest.fixture
     def update_data_prev(self, setup_data_prev):
         return {

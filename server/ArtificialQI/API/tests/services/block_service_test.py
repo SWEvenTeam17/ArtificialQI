@@ -1,6 +1,8 @@
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import MagicMock, call, patch
+
 import pytest
-from API.models import Block, LLM
+
+from API.models import LLM, Block
 from API.services.block_service import BlockService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
 

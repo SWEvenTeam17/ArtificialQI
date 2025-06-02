@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+from API.models import Prompt
 from API.services.run_service import RunService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
-from API.models import Prompt
 
 
 class TestRunService(AbstractServiceTestCase):
@@ -58,7 +59,10 @@ class TestRunService(AbstractServiceTestCase):
         assert res["averages_by_llm"]["GPT-Test"]["avg_semantic_scores"] == 0.95
         assert res["averages_by_llm"]["GPT-Test"]["avg_external_scores"] == 0.90
 
-    @patch("API.services.run_service.PromptRepository.get_by_id", side_effect=Prompt.DoesNotExist)
+    @patch(
+        "API.services.run_service.PromptRepository.get_by_id",
+        side_effect=Prompt.DoesNotExist,
+    )
     def test_get_formatted_by_prompt_prompt_not_found(self, mock_prompt_get):
         result = self.service_class.get_formatted_by_prompt(prompt_id=999)
 

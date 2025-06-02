@@ -1,11 +1,13 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
+from unittest.mock import patch
+
 import pytest
 from rest_framework.test import APIClient
-from unittest.mock import patch
 
 RUNPROMPT_URL = "/prompt_runs"
 

@@ -3,11 +3,13 @@ File che contiene il repository che gestisce le istanze
 delle Run in DB.
 """
 
-from API.models import Run, LLM
-from .abstract_repository import AbstractRepository
-from typing import List
-from typing import ClassVar
+from typing import ClassVar, List
+
 from django.db import models
+
+from API.models import LLM, Run
+
+from .abstract_repository import AbstractRepository
 
 
 class RunRepository(AbstractRepository):

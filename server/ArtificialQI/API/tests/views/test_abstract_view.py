@@ -1,14 +1,16 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 import sys
-from rest_framework.test import APIRequestFactory
-from rest_framework import status
-from rest_framework import serializers
-from API.views_def.abstract_view import AbstractView
+
 import pytest
+from rest_framework import serializers, status
+from rest_framework.test import APIRequestFactory
+
+from API.views_def.abstract_view import AbstractView
 
 
 # Dummy serializer base

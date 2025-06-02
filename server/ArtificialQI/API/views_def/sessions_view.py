@@ -3,8 +3,13 @@ File che contiene la classe SessionsView, che gestisce le
 richieste per effettuare operazioni sulle Sessioni.
 """
 
+from typing import ClassVar
+
+from rest_framework import serializers
+
 from API.serializers import SessionSerializer
-from API.services import SessionService
+from API.services import AbstractService, SessionService
+
 from .abstract_view import AbstractView
 
 
@@ -14,5 +19,5 @@ class SessionsView(AbstractView):
     alla gestione delle sessioni.
     """
 
-    serializer = SessionSerializer
-    service = SessionService
+    serializer: ClassVar[type[serializers.Serializer]] = SessionSerializer
+    service: ClassVar[type[AbstractService]] = SessionService

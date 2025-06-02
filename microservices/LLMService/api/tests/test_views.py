@@ -1,11 +1,12 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from unittest.mock import MagicMock, patch
+
 import pytest
-from rest_framework.test import APIRequestFactory
-from unittest.mock import patch, MagicMock
 from api.views import LLMServiceView
+from rest_framework.test import APIRequestFactory
 
 
 @pytest.fixture

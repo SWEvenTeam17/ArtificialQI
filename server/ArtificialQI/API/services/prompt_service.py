@@ -2,8 +2,10 @@
 File che contiene i servizi riguardanti i prompt.
 """
 
-from API.repositories import PromptRepository, AbstractRepository
 from typing import ClassVar
+
+from API.repositories import AbstractRepository, PromptRepository
+
 from .abstract_service import AbstractService
 
 

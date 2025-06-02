@@ -1,12 +1,14 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
-import pytest
 from unittest.mock import patch
-from rest_framework.test import APIClient
+
+import pytest
 from rest_framework import status
+from rest_framework.test import APIClient
 
 
 @pytest.fixture

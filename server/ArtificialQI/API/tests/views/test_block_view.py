@@ -1,12 +1,14 @@
-import django
 import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 import pytest
-from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework import status
-from API.views_def.block_view import BlockView, BlockTestView
+from rest_framework.test import APIClient, APIRequestFactory
+
+from API.views_def.block_view import BlockTestView, BlockView
 
 
 @pytest.fixture

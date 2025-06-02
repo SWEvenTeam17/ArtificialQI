@@ -4,6 +4,7 @@ File che contiene la definizione della classe astratta da cui derivano tutti i s
 
 from abc import ABC
 from typing import ClassVar
+
 from API.repositories import AbstractRepository
 
 

@@ -3,14 +3,18 @@ File che contiene la vista dedicata alla gestione dei
 test precedentemente eseguiti in una sessione.
 """
 
-from API.serializers import BlockSerializer
-from API.services import BlockService, LLMService
-from API.repositories import RunRepository, BlockRepository
-from API.models import Block
-from .abstract_view import AbstractView
+from typing import ClassVar
+
+from rest_framework import serializers, status
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
+
+from API.models import Block
+from API.repositories import BlockRepository, RunRepository
+from API.serializers import BlockSerializer
+from API.services import AbstractService, BlockService, LLMService
+
+from .abstract_view import AbstractView
 
 
 class BlockView(AbstractView):
@@ -19,8 +23,8 @@ class BlockView(AbstractView):
     alla gestione dei blocchi di domande.
     """
 
-    serializer = BlockSerializer
-    service = BlockService
+    serializer: ClassVar[type[serializers.Serializer]] = BlockSerializer
+    service: ClassVar[type[AbstractService]] = BlockService
 
     def post(self, request) -> Response:
         """

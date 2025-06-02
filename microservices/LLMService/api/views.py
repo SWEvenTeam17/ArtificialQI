@@ -1,9 +1,9 @@
-from drf_spectacular.utils import extend_schema
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from api.services import OllamaLLMIntegrationService
 from api.serializers import LLMRequestSerializer, LLMResponseSerializer
+from api.services import OllamaLLMIntegrationService
+from drf_spectacular.utils import extend_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class LLMServiceView(APIView):

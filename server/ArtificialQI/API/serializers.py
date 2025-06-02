@@ -8,7 +8,8 @@ se necessario.
 """
 
 from rest_framework import serializers
-from API.models import Prompt, LLM, Run, Session, Evaluation, BlockTest, Block
+
+from API.models import LLM, Block, BlockTest, Evaluation, Prompt, Run, Session
 
 
 class LLMSerializer(serializers.ModelSerializer):
