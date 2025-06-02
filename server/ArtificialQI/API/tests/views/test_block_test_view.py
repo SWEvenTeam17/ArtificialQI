@@ -22,9 +22,9 @@ def url():
 
 
 # --- POST SUCCESS ---
-@patch("API.views_def.test_view.BlockTestService.runtest")
-@patch("API.views_def.test_view.BlockService.retrieve_blocks")
-@patch("API.views_def.test_view.SessionService.read")
+@patch("API.views_def.block_test_view.BlockTestService.runtest")
+@patch("API.views_def.block_test_view.BlockService.retrieve_blocks")
+@patch("API.views_def.block_test_view.SessionService.read")
 def test_post_test_success(
     mock_session_read, mock_block_retrieve, mock_runtest, client, url
 ):
@@ -39,11 +39,11 @@ def test_post_test_success(
 
 # --- POST ConnectionError ---
 @patch(
-    "API.views_def.test_view.BlockTestService.runtest",
+    "API.views_def.block_test_view.BlockTestService.runtest",
     side_effect=ConnectionError("Connessione persa"),
 )
-@patch("API.views_def.test_view.BlockService.retrieve_blocks")
-@patch("API.views_def.test_view.SessionService.read")
+@patch("API.views_def.block_test_view.BlockService.retrieve_blocks")
+@patch("API.views_def.block_test_view.SessionService.read")
 def test_post_test_connection_error(
     mock_session_read, mock_block_retrieve, mock_runtest, client, url
 ):
@@ -57,11 +57,11 @@ def test_post_test_connection_error(
 
 # --- POST FileNotFoundError ---
 @patch(
-    "API.views_def.test_view.BlockTestService.runtest",
+    "API.views_def.block_test_view.BlockTestService.runtest",
     side_effect=FileNotFoundError("File mancante"),
 )
-@patch("API.views_def.test_view.BlockService.retrieve_blocks")
-@patch("API.views_def.test_view.SessionService.read")
+@patch("API.views_def.block_test_view.BlockService.retrieve_blocks")
+@patch("API.views_def.block_test_view.SessionService.read")
 def test_post_test_file_not_found_error(
     mock_session_read, mock_block_retrieve, mock_runtest, client, url
 ):
@@ -75,11 +75,11 @@ def test_post_test_file_not_found_error(
 
 # --- POST errore sconosciuto ---
 @patch(
-    "API.views_def.test_view.BlockTestService.runtest",
+    "API.views_def.block_test_view.BlockTestService.runtest",
     side_effect=Exception("Errore generico"),
 )
-@patch("API.views_def.test_view.BlockService.retrieve_blocks")
-@patch("API.views_def.test_view.SessionService.read")
+@patch("API.views_def.block_test_view.BlockService.retrieve_blocks")
+@patch("API.views_def.block_test_view.SessionService.read")
 def test_post_test_generic_error(
     mock_session_read, mock_block_retrieve, mock_runtest, client, url
 ):

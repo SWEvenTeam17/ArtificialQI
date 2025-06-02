@@ -15,7 +15,7 @@ from API.services import AbstractService, BlockService, BlockTestService, Sessio
 from .abstract_view import AbstractView
 
 
-class TestView(AbstractView):
+class BlockTestView(AbstractView):
     """
     Classe che contiene la definizione della vista dedicata
     alla gestione dei test precedentemente eseguiti in una sessione..
