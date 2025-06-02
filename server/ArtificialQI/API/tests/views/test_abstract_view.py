@@ -118,7 +118,7 @@ def test_put_without_instance_id():
     request = factory.put("/", data=payload, format="json")
     response = view(request)
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.data == {"error": "Sessione non trovata"}
+    assert response.data == {"error": "Istanza non trovata"}
 
 
 def test_delete_without_instance_id():
