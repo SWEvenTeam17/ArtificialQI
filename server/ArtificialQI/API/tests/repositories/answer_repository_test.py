@@ -10,7 +10,7 @@
 
 # @pytest.mark.django_db
 # class TestAnswerRepository(TestAbstractRepository):
-    
+
 #     @pytest.fixture
 #     def setup_data(self, db):
 #         _llm = LLM.objects.create(name="llama3.2", n_parameters="3B")
@@ -22,11 +22,11 @@
 #             session=_session
 #         )
 #         return {"llm": _llm, "session": _session, "prompt": _prompt}
-    
+
 #     @pytest.fixture
 #     def repository(self):
 #         return AnswerRepository()
-    
+
 #     @pytest.fixture
 #     def valid_data(self, setup_data):
 #         return {

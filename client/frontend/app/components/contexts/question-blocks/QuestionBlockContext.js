@@ -20,7 +20,7 @@ export function QuestionBlockProvider({ children }) {
   const fetchQuestionBlocks = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
       );
       const data = await response.json();
       setQuestionBlocks(data);
@@ -38,7 +38,7 @@ export function QuestionBlockProvider({ children }) {
           headers: {
             "X-CSRFToken": getCSRFToken(),
           },
-        }
+        },
       );
       setQuestionBlocks((prev) => prev.filter((block) => block.id !== id));
     } catch (error) {

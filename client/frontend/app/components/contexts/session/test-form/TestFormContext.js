@@ -25,19 +25,19 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
 
   const isSelected = useCallback(
     (questionId) => selectedBlocks.some((q) => q.id === questionId),
-    [selectedBlocks]
+    [selectedBlocks],
   );
 
   const fetchQuestionBlocks = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
       );
       if (!response.ok) throw new Error("Errore nel recupero dei blocchi");
       const data = await response.json();
       const filteredData = data.filter(
-        (block) => Array.isArray(block.prompt) && block.prompt.length > 0
+        (block) => Array.isArray(block.prompt) && block.prompt.length > 0,
       );
       setQuestionBlocks(filteredData);
       setError(null);
@@ -56,7 +56,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
   const addBlock = useCallback(async (id) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}/`,
       );
       if (!response.ok) throw new Error("Errore nel recupero del blocco");
       const data = await response.json();
@@ -87,7 +87,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
             sessionId: sessionData.id,
             blocks: selectedBlocks,
           }),
-        }
+        },
       );
       const data = await response.json();
       setTestResults(data);
@@ -104,7 +104,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
   const showPrevTests = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/`,
       );
       if (!response.ok)
         throw new Error("Errore nel recupero dei test precedenti");
@@ -122,7 +122,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     async (test) => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/?test_id=${test.id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/previous_tests/${sessionData.id}/?test_id=${test.id}`,
         );
         if (!response.ok)
           throw new Error("Errore nel recupero del test selezionato");
@@ -135,7 +135,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
         setError("Errore caricando il test precedente.");
       }
     },
-    [sessionData?.id]
+    [sessionData?.id],
   );
 
   const handleJSONFileChange = (e) => {
@@ -156,8 +156,8 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
                 (p) =>
                   typeof p === "object" &&
                   typeof p.question === "string" &&
-                  typeof p.answer === "string"
-              )
+                  typeof p.answer === "string",
+              ),
           );
           if (valid) {
             setSelectedBlocks(blocks);
@@ -195,12 +195,12 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
                   "X-CSRFToken": getCSRFToken(),
                 },
                 body: JSON.stringify(block),
-              }
+              },
             );
             if (!response.ok)
               throw new Error("Errore nella creazione del blocco da JSON.");
             return await response.json();
-          })
+          }),
         );
         setIsJSON(false);
         setError(null);
@@ -224,7 +224,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       fetchQuestionBlocks,
       setQuestionBlocks,
       setSelectedBlocks,
-    ]
+    ],
   );
 
   const value = useMemo(
@@ -274,7 +274,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       removeBlock,
       showPrevTests,
       submitToBackend,
-    ]
+    ],
   );
 
   return (

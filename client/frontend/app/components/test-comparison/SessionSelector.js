@@ -4,7 +4,7 @@ import { useTestComparatorContext } from "../contexts/test-comparator/TestCompar
 export default function SessionSelector() {
   const { sessions } = useSessionContext();
   const { setSelectedSessionData, fetchSessionData } =
-    useTestComparatorContext(); 
+    useTestComparatorContext();
   return (
     <select
       onChange={(e) => {

@@ -8,7 +8,10 @@ class TestBlockTestService(AbstractServiceTestCase):
     service_class = BlockTestService
 
     @patch("API.services.block_test_service.requests.post")
-    @patch("API.services.block_test_service.os.getenv", return_value="http://fake-llm-service/")
+    @patch(
+        "API.services.block_test_service.os.getenv",
+        return_value="http://fake-llm-service/",
+    )
     def test_interrogate(self, mock_getenv, mock_post):
         """Test che verifica l'interrogazione al microservizio LLM"""
         mock_post.return_value.json.return_value = {"answer": "test response"}
@@ -18,16 +21,25 @@ class TestBlockTestService(AbstractServiceTestCase):
         mock_getenv.assert_called_once_with("LLM_SERVICE_URL")
         mock_post.assert_called_once_with(
             "http://fake-llm-service/interrogate/",
-            {"llm_name": "GPT-4", "prompt": "Che ore sono?"}
+            {"llm_name": "GPT-4", "prompt": "Che ore sono?"},
         )
         assert response == "test response"
 
     @patch("API.services.block_test_service.BlockTestRepository.add_run")
     @patch("API.services.block_test_service.RunService.create")
     @patch("API.services.block_test_service.EvaluationService.create")
-    @patch("API.services.block_test_service.EvaluationService.get_external_evaluation", return_value=0.9)
-    @patch("API.services.block_test_service.EvaluationService.get_semantic_evaluation", return_value=0.8)
-    @patch("API.services.block_test_service.BlockTestService.interrogate", return_value="Risposta LLM")
+    @patch(
+        "API.services.block_test_service.EvaluationService.get_external_evaluation",
+        return_value=0.9,
+    )
+    @patch(
+        "API.services.block_test_service.EvaluationService.get_semantic_evaluation",
+        return_value=0.8,
+    )
+    @patch(
+        "API.services.block_test_service.BlockTestService.interrogate",
+        return_value="Risposta LLM",
+    )
     @patch("API.services.block_test_service.BlockRepository.get_prompts")
     @patch("API.services.block_test_service.SessionRepository.get_llms")
     @patch("API.services.block_test_service.BlockTestService.create")
@@ -74,7 +86,9 @@ class TestBlockTestService(AbstractServiceTestCase):
         mock_test_create.assert_called_once_with({"session": session, "block": block})
         mock_interrogate.assert_called_once_with("LLM-1", "Domanda?")
         mock_semantic_eval.assert_called_once_with("Risposta attesa", "Risposta LLM")
-        mock_external_eval.assert_called_once_with("google", "Risposta attesa", "Risposta LLM")
+        mock_external_eval.assert_called_once_with(
+            "google", "Risposta attesa", "Risposta LLM"
+        )
         mock_eval_create.assert_called_once()
         mock_run_create.assert_called_once()
         mock_add_run.assert_called_once_with(test_mock, run_mock)
@@ -83,8 +97,14 @@ class TestBlockTestService(AbstractServiceTestCase):
         assert result["results"][0]["block_id"] == 1
         assert result["results"][0]["block_name"] == "Block 1"
         assert len(result["results"][0]["results"]) == 1
-        assert result["results"][0]["averages_by_llm"]["LLM-1"]["avg_semantic_scores"] == 0.8
-        assert result["results"][0]["averages_by_llm"]["LLM-1"]["avg_external_scores"] == 0.9
+        assert (
+            result["results"][0]["averages_by_llm"]["LLM-1"]["avg_semantic_scores"]
+            == 0.8
+        )
+        assert (
+            result["results"][0]["averages_by_llm"]["LLM-1"]["avg_external_scores"]
+            == 0.9
+        )
 
     @patch("API.services.block_test_service.BlockTest.run")
     def test_format_results(self, mock_run_related):

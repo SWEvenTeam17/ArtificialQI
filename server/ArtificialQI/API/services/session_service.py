@@ -7,6 +7,7 @@ from API.models import LLM
 from .abstract_service import AbstractService
 from typing import ClassVar
 
+
 class SessionService(AbstractService):
     """
     Classe che contiene i servizi riguardanti le sessioni.

@@ -1,20 +1,22 @@
 import django
 import os
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 from abc import ABC, abstractmethod
 
 import pytest
 
+
 @pytest.mark.django_db
 class TestAbstractRepository(ABC):
-    
+
     @pytest.fixture
     @abstractmethod
     def repository(self):
         """Restituisce il repository che si sta testando"""
         pass
-    
+
     @pytest.fixture
     @abstractmethod
     def valid_data(self):
@@ -33,7 +35,9 @@ class TestAbstractRepository(ABC):
         assert len(results) >= 1, "Lista vuota"
         record_found = False
         for record in results:
-            if all(getattr(record, field) == value for field, value in valid_data.items()):
+            if all(
+                getattr(record, field) == value for field, value in valid_data.items()
+            ):
                 record_found = True
             break
         assert record_found is True

@@ -7,8 +7,9 @@ import pytest
 from unittest.mock import MagicMock
 from API.services.abstract_service import AbstractService
 
+
 class AbstractServiceTestCase:
-    service_class = None  
+    service_class = None
     mock_repository = None
 
     @pytest.fixture(autouse=True)
@@ -44,7 +45,9 @@ class AbstractServiceTestCase:
         result = self.service_class.update(1, {"text": "aggiornato"})
 
         assert result["text"] == "aggiornato"
-        self.mock_repository.update.assert_called_once_with(instance_id=1, data={"text": "aggiornato"})
+        self.mock_repository.update.assert_called_once_with(
+            instance_id=1, data={"text": "aggiornato"}
+        )
 
     def test_delete(self):
         self.mock_repository.delete.return_value = True

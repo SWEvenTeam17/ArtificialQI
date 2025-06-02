@@ -2,16 +2,16 @@
 File che contiene i servizi riguardanti le valutazioni.
 """
 
-from API.repositories import EvaluationRepository, AbstractRepository
-from .abstract_service import AbstractService
 import os
 import re
 import logging
+from typing import ClassVar
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from langchain_google_genai import ChatGoogleGenerativeAI
 from google.api_core.exceptions import GoogleAPICallError, InternalServerError
-from typing import ClassVar
+from API.repositories import EvaluationRepository, AbstractRepository
+from .abstract_service import AbstractService
 
 
 class EvaluationService(AbstractService):
@@ -42,7 +42,9 @@ class EvaluationService(AbstractService):
         return approximated
 
     @staticmethod
-    def get_external_evaluation(llm_provider: str, expected_answer: str, llm_answer: str):
+    def get_external_evaluation(
+        llm_provider: str, expected_answer: str, llm_answer: str
+    ):
         """
         Funzione che ritorna la valutazione di Gemini su
         una risposta data da un LLM
@@ -90,7 +92,7 @@ class EvaluationService(AbstractService):
             except (GoogleAPICallError, InternalServerError) as e:
                 logging.error(f"Errore durante la chiamata a Gemini: {e}")
                 return "Errore API Gemini"
-            except Exception as e:
+            except Exception:
                 logging.exception("Errore imprevisto durante la valutazione esterna.")
                 return "Errore interno durante la valutazione"
 

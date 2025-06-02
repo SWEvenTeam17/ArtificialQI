@@ -1,4 +1,11 @@
-export function QuestionAnswerRow({ pair, index, inputRefs, onChange, onRemove, canRemove }) {
+export function QuestionAnswerRow({
+  pair,
+  index,
+  inputRefs,
+  onChange,
+  onRemove,
+  canRemove,
+}) {
   return (
     <>
       <div className="row g-3 align-items-center">
@@ -14,7 +21,9 @@ export function QuestionAnswerRow({ pair, index, inputRefs, onChange, onRemove, 
               value={pair.question}
               onChange={(e) => onChange(index, e)}
             />
-            <label htmlFor={`question-${index}`}>{`Domanda numero ${index + 1}`}</label>
+            <label
+              htmlFor={`question-${index}`}
+            >{`Domanda numero ${index + 1}`}</label>
           </div>
         </div>
         <div className={`${canRemove ? "col-md-5" : "col-md-6"} col-12`}>
@@ -29,7 +38,9 @@ export function QuestionAnswerRow({ pair, index, inputRefs, onChange, onRemove, 
               value={pair.answer}
               onChange={(e) => onChange(index, e)}
             />
-            <label htmlFor={`answer-${index}`}>{`Risposta attesa numero ${index + 1}`}</label>
+            <label
+              htmlFor={`answer-${index}`}
+            >{`Risposta attesa numero ${index + 1}`}</label>
           </div>
         </div>
         {canRemove && (

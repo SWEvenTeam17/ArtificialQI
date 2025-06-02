@@ -58,7 +58,9 @@ class TestRunService(AbstractServiceTestCase):
         assert res["averages_by_llm"]["GPT-Test"]["avg_semantic_scores"] == 0.95
         assert res["averages_by_llm"]["GPT-Test"]["avg_external_scores"] == 0.90
 
-    @patch("API.services.run_service.Prompt.objects.get", side_effect=Prompt.DoesNotExist)
+    @patch(
+        "API.services.run_service.Prompt.objects.get", side_effect=Prompt.DoesNotExist
+    )
     def test_get_formatted_by_prompt_prompt_not_found(self, mock_prompt_get):
         result = self.service_class.get_formatted_by_prompt(prompt_id=999)
 

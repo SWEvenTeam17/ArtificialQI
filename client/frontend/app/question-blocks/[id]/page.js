@@ -7,5 +7,9 @@ import { use } from "react";
 export default function QuestionBlockInspect({ params }) {
   const { id } = use(params);
 
-  return <InspectBlockProvider id={id}><InspectBlockPage /></InspectBlockProvider>;
+  return (
+    <InspectBlockProvider id={id}>
+      <InspectBlockPage />
+    </InspectBlockProvider>
+  );
 }

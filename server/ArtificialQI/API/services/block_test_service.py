@@ -8,13 +8,16 @@ import os
 from collections import defaultdict
 import requests
 from dotenv import load_dotenv
-from API.repositories import BlockTestRepository, SessionRepository, BlockRepository, AbstractRepository
+from API.repositories import (
+    BlockTestRepository,
+    SessionRepository,
+    BlockRepository,
+    AbstractRepository,
+)
 from API.models import Session, Block, BlockTest
-from API.services import EvaluationService
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
 from .run_service import RunService
-from typing import Dict
 
 
 class BlockTestService(AbstractService):
@@ -147,7 +150,7 @@ class BlockTestService(AbstractService):
             )
 
         return {"results": full_results}
-    
+
     @staticmethod
     def format_results(test: BlockTest) -> Dict[str, any]:
         block = test.block
@@ -167,15 +170,17 @@ class BlockTestService(AbstractService):
             semantic_eval = float(run.evaluation.semantic_evaluation)
             external_eval = float(run.evaluation.external_evaluation)
 
-            results.append({
-                "run_id": run.id,
-                "llm_name": llm_name,
-                "question": run.prompt.prompt_text,
-                "expected_answer": run.prompt.expected_answer,
-                "answer": run.llm_answer,
-                "semantic_evaluation": semantic_eval,
-                "external_evaluation": external_eval,
-            })
+            results.append(
+                {
+                    "run_id": run.id,
+                    "llm_name": llm_name,
+                    "question": run.prompt.prompt_text,
+                    "expected_answer": run.prompt.expected_answer,
+                    "answer": run.llm_answer,
+                    "semantic_evaluation": semantic_eval,
+                    "external_evaluation": external_eval,
+                }
+            )
 
             scores[llm_name]["semantic_sum"] += semantic_eval
             scores[llm_name]["semantic_count"] += 1
@@ -185,23 +190,28 @@ class BlockTestService(AbstractService):
         averages = {
             llm_name: {
                 "avg_semantic_scores": (
-                    scores[llm_name]["semantic_sum"] / scores[llm_name]["semantic_count"]
-                    if scores[llm_name]["semantic_count"] else None
+                    scores[llm_name]["semantic_sum"]
+                    / scores[llm_name]["semantic_count"]
+                    if scores[llm_name]["semantic_count"]
+                    else None
                 ),
                 "avg_external_scores": (
-                    scores[llm_name]["external_sum"] / scores[llm_name]["external_count"]
-                    if scores[llm_name]["external_count"] else None
+                    scores[llm_name]["external_sum"]
+                    / scores[llm_name]["external_count"]
+                    if scores[llm_name]["external_count"]
+                    else None
                 ),
             }
             for llm_name in scores
         }
 
         return {
-            "results": [{
-                "block_id": block.id,
-                "block_name": block.name,
-                "results": results,
-                "averages_by_llm": averages,
-            }]
+            "results": [
+                {
+                    "block_id": block.id,
+                    "block_name": block.name,
+                    "results": results,
+                    "averages_by_llm": averages,
+                }
+            ]
         }
-

@@ -1,6 +1,7 @@
 from .abstract_repository import AbstractRepository
 from API.models import BlockTest
 
+
 class PrevTestRepository(AbstractRepository):
 
     _model = BlockTest

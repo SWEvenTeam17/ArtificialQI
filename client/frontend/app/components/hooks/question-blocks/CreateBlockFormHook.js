@@ -104,7 +104,7 @@ export const useCreateBlockFormHook = () => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (response.status === 201) {

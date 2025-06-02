@@ -5,6 +5,7 @@ from rest_framework import status
 from api.services import LLMService
 from api.serializers import LLMRequestSerializer, LLMResponseSerializer
 
+
 class LLMView(APIView):
 
     authentication_classes = []
@@ -12,7 +13,7 @@ class LLMView(APIView):
 
     @extend_schema(
         responses=LLMResponseSerializer,
-        description="Restituisce la lista degli LLM disponibili"
+        description="Restituisce la lista degli LLM disponibili",
     )
     def get(self, request):
         result = LLMService.get_ollama_llms()
@@ -26,7 +27,7 @@ class LLMView(APIView):
     @extend_schema(
         request=LLMRequestSerializer,
         responses=LLMResponseSerializer,
-        description="Interroga un LLM specifico con un prompt"
+        description="Interroga un LLM specifico con un prompt",
     )
     def post(self, request):
         serializer = LLMRequestSerializer(data=request.data)

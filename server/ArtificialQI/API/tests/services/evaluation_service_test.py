@@ -7,7 +7,9 @@ class TestEvaluationService:
 
     @patch("API.services.evaluation_service.SentenceTransformer")
     def test_get_semantic_evaluation_exact_match(self, mock_st):
-        assert EvaluationService.get_semantic_evaluation("Risposta.", "risposta.") == 100
+        assert (
+            EvaluationService.get_semantic_evaluation("Risposta.", "risposta.") == 100
+        )
 
     @patch("API.services.evaluation_service.SentenceTransformer")
     def test_get_semantic_evaluation_similarity(self, mock_st):
@@ -32,7 +34,9 @@ class TestEvaluationService:
     @patch("API.services.evaluation_service.load_dotenv", return_value=True)
     @patch("API.services.evaluation_service.os.getenv", return_value="fake-key")
     @patch("API.services.evaluation_service.ChatGoogleGenerativeAI")
-    def test_get_external_evaluation_percentage_found(self, mock_chat, mock_getenv, mock_dotenv):
+    def test_get_external_evaluation_percentage_found(
+        self, mock_chat, mock_getenv, mock_dotenv
+    ):
         mock_llm = MagicMock()
         mock_chat.return_value = mock_llm
         mock_stream = iter([MagicMock(content="La risposta è 87.5%")])
@@ -43,7 +47,9 @@ class TestEvaluationService:
     @patch("API.services.evaluation_service.load_dotenv", return_value=True)
     @patch("API.services.evaluation_service.os.getenv", return_value="fake-key")
     @patch("API.services.evaluation_service.ChatGoogleGenerativeAI")
-    def test_get_external_evaluation_percentage_not_found(self, mock_chat, mock_getenv, mock_dotenv):
+    def test_get_external_evaluation_percentage_not_found(
+        self, mock_chat, mock_getenv, mock_dotenv
+    ):
         mock_llm = MagicMock()
         mock_chat.return_value = mock_llm
         mock_stream = iter([MagicMock(content="No number here")])
@@ -53,15 +59,25 @@ class TestEvaluationService:
 
     @patch("API.services.evaluation_service.load_dotenv", return_value=True)
     @patch("API.services.evaluation_service.os.getenv", return_value="fake-key")
-    @patch("API.services.evaluation_service.ChatGoogleGenerativeAI", side_effect=Exception("fail"))
-    def test_get_external_evaluation_generic_exception(self, mock_chat, mock_getenv, mock_dotenv):
+    @patch(
+        "API.services.evaluation_service.ChatGoogleGenerativeAI",
+        side_effect=Exception("fail"),
+    )
+    def test_get_external_evaluation_generic_exception(
+        self, mock_chat, mock_getenv, mock_dotenv
+    ):
         result = EvaluationService.get_external_evaluation("google", "a", "b")
         assert result == "Errore interno durante la valutazione"
 
     @patch("API.services.evaluation_service.load_dotenv", return_value=True)
     @patch("API.services.evaluation_service.os.getenv", return_value="fake-key")
-    @patch("API.services.evaluation_service.ChatGoogleGenerativeAI", side_effect=ImportError("fail"))
-    def test_get_external_evaluation_google_api_exception(self, mock_chat, mock_getenv, mock_dotenv):
+    @patch(
+        "API.services.evaluation_service.ChatGoogleGenerativeAI",
+        side_effect=ImportError("fail"),
+    )
+    def test_get_external_evaluation_google_api_exception(
+        self, mock_chat, mock_getenv, mock_dotenv
+    ):
         result = EvaluationService.get_external_evaluation("google", "a", "b")
         assert result in ["Errore API Gemini", "Errore interno durante la valutazione"]
 

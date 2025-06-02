@@ -29,14 +29,14 @@ export default function TestResults() {
           "Content-Type": "application/json",
           "X-CSRFToken": getCSRFToken(),
         },
-      }
+      },
     );
     if (response.ok) {
       setResults((prevResults) =>
         prevResults.map((block) => ({
           ...block,
           results: block.results.filter((res) => res.run_id !== runId),
-        }))
+        })),
       );
     }
   };
@@ -131,7 +131,7 @@ export default function TestResults() {
                   name: llm,
                   semantic: scores.avg_semantic_scores,
                   external: scores.avg_external_scores,
-                })
+                }),
               )}
               margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
             >

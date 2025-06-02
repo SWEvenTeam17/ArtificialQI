@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: ''
+  title: ""
   version: 0.0.0
 paths:
   /interrogate/:
@@ -10,12 +10,12 @@ paths:
       tags:
         - interrogate
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LLMResponse'
+                $ref: "#/components/schemas/LLMResponse"
     post:
       operationId: interrogate_create
       description: Interroga un LLM specifico con un prompt
@@ -26,20 +26,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LLMResponse'
+                $ref: "#/components/schemas/LLMResponse"
 components:
   schemas:
     LLMRequest:

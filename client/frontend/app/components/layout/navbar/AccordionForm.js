@@ -109,11 +109,16 @@ export default function AccordionForm() {
                 />
                 <label htmlFor="description">Descrizione</label>
                 {formErrors.description && (
-                  <div className="invalid-feedback">{formErrors.description}</div>
+                  <div className="invalid-feedback">
+                    {formErrors.description}
+                  </div>
                 )}
               </div>
               <div className="text-center">
-                <button type="submit" className="btn btn-primary w-50 rounded-5">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-50 rounded-5"
+                >
                   Crea
                 </button>
               </div>

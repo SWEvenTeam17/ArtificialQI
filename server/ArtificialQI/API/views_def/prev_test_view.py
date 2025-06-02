@@ -34,15 +34,19 @@ class PrevTestView(APIView):
             serializer = self.serializer(tests, many=True)
             return Response(serializer.data)
         except BlockTest.DoesNotExist:
-            return Response({"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
     def delete(self, request, instance_id: int) -> Response:
         try:
             BlockTestService.delete(instance_id=instance_id)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except BlockTest.DoesNotExist:
-            return Response({"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Test not found"}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

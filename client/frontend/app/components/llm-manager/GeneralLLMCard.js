@@ -1,11 +1,10 @@
-
 import { useLLMManagerContext } from "../contexts/llm-manager/LLMManagerContext";
 import delteIcon from "/public/images/icon.png";
 import Image from "next/image";
 
 export default function GeneralLLMCard({ llm }) {
   const { deleteLLM } = useLLMManagerContext();
-  
+
   return (
     <div className="card shadow-sm border-light rounded-5 h-100 justify-content-center text-center">
       <div className="card-body">

@@ -8,6 +8,7 @@ from API.models import Block, LLM
 from .abstract_service import AbstractService
 from typing import ClassVar
 
+
 class BlockService(AbstractService):
     """
     Classe che contiene i servizi riguardanti i blocchi.

@@ -1,5 +1,6 @@
 import django
 import os
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
@@ -10,9 +11,10 @@ from API.repositories.block_test_repository import BlockTestRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
 
+
 @pytest.mark.django_db
 class TestPrevTestRepository(TestAbstractRepository):
-    
+
     @pytest.fixture
     def setup_data(self, db):
         _llm = LLM.objects.create(name="llama3.2", n_parameters="3B")
@@ -27,8 +29,7 @@ class TestPrevTestRepository(TestAbstractRepository):
             expected_answer="Risposta 1",
         )
         _evaluation = Evaluation.objects.create(
-            semantic_evaluation = 98,
-            external_evaluation = 98
+            semantic_evaluation=98, external_evaluation=98
         )
         _block = Block.objects.create(name="blocco1")
         BlockRepository.add_prompt(_block, _prompt)
@@ -36,22 +37,44 @@ class TestPrevTestRepository(TestAbstractRepository):
         _block2 = Block.objects.create(name="blocco2")
         BlockRepository.add_prompt(_block2, _prompt)
 
-        _run = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 1")
-        _run2 = Run.objects.create(llm = _llm, prompt = _prompt, evaluation = _evaluation, llm_answer = "Risposta run 2")
+        _run = Run.objects.create(
+            llm=_llm,
+            prompt=_prompt,
+            evaluation=_evaluation,
+            llm_answer="Risposta run 1",
+        )
+        _run2 = Run.objects.create(
+            llm=_llm,
+            prompt=_prompt,
+            evaluation=_evaluation,
+            llm_answer="Risposta run 2",
+        )
 
-        return {"llm": _llm, "llm2": _llm2, "llm3": _llm3, "session": _session, "session2": _session2, "prompt": _prompt, "evaluation": _evaluation, "block": _block, "block2": _block2, "run": _run, "run2": _run2}
-    
+        return {
+            "llm": _llm,
+            "llm2": _llm2,
+            "llm3": _llm3,
+            "session": _session,
+            "session2": _session2,
+            "prompt": _prompt,
+            "evaluation": _evaluation,
+            "block": _block,
+            "block2": _block2,
+            "run": _run,
+            "run2": _run2,
+        }
+
     @pytest.fixture
     def repository(self):
         return PrevTestRepository()
-    
+
     @pytest.fixture
     def valid_data(self, setup_data):
         return {
             "session": setup_data["session"],
             "block": setup_data["block"],
         }
-    
+
     @pytest.fixture
     def update_data(self, setup_data):
         return {
@@ -61,10 +84,12 @@ class TestPrevTestRepository(TestAbstractRepository):
 
     def test_get_tests_by_session(self, repository, valid_data, setup_data):
         ptest = repository.create(valid_data)
-        ptest2 = repository.create({
-            "session": setup_data["session2"],
-            "block": setup_data["block"],
-        })
+        ptest2 = repository.create(
+            {
+                "session": setup_data["session2"],
+                "block": setup_data["block"],
+            }
+        )
         assert repository is not PrevTestRepository
         BlockTestRepository.add_run(ptest, setup_data["run"])
         results = repository.get_tests_by_session(setup_data["session"])

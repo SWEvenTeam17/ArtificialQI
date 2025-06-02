@@ -1,8 +1,6 @@
-
 import Link from "next/link";
 
 export default function QuestionBlockCard({ block, onDelete }) {
-
   return (
     <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">
       <Link
@@ -35,7 +33,10 @@ export default function QuestionBlockCard({ block, onDelete }) {
       <div className="card-body">
         <button
           className="btn btn-danger rounded-5 w-50 mt-2"
-          onClick={(e)=>{e.preventDefault();onDelete(block.id)}}
+          onClick={(e) => {
+            e.preventDefault();
+            onDelete(block.id);
+          }}
         >
           Elimina blocco
         </button>

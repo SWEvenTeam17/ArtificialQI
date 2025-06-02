@@ -4,8 +4,6 @@ import { TestComparatorContextProvider } from "../components/contexts/test-compa
 
 export default function Layout({ children }) {
   return (
-      <TestComparatorContextProvider>
-        {children}
-      </TestComparatorContextProvider>
+    <TestComparatorContextProvider>{children}</TestComparatorContextProvider>
   );
 }

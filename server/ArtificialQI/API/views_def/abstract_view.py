@@ -75,7 +75,9 @@ class AbstractView(APIView, ABC):
         """
         instance = self.service.read(instance_id)
         if not instance:
-            return Response({"error": "Sessione non trovata"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Sessione non trovata"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = self.serializer(instance, data=request.data)
         if serializer.is_valid():

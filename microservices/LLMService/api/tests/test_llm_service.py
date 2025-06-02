@@ -1,6 +1,7 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from api.services.llm_service import LLMService
 import pytest
 from unittest.mock import patch, MagicMock
@@ -9,6 +10,7 @@ from requests.exceptions import RequestException
 
 
 # --- Test get_llm ---
+
 
 @patch("api.services.llm_service.requests.get")
 @patch("api.services.llm_service.OllamaLLM")
@@ -22,13 +24,16 @@ def test_get_llm_success(mock_getenv, mock_ollama, mock_requests_get):
     mock_requests_get.assert_called_once_with("http://fake-url/api/version", timeout=5)
     mock_ollama.assert_called_once_with(model="test-model", base_url="http://fake-url")
 
+
 @patch("api.services.llm_service.requests.get", side_effect=RequestException)
 @patch("api.services.llm_service.os.getenv", return_value="http://fake-url")
 def test_get_llm_failure(mock_getenv, mock_requests_get):
     llm = LLMService.get_llm("test-model")
     assert llm is None
 
+
 # --- Test interrogate ---
+
 
 def test_interrogate():
     mock_llm = MagicMock()
@@ -38,7 +43,9 @@ def test_interrogate():
     assert result == "Hello world!"
     mock_llm.stream.assert_called_once_with("prompt")
 
+
 # --- Test get_ollama_llms ---
+
 
 @patch("api.services.llm_service.requests.get")
 @patch("api.services.llm_service.os.getenv", return_value="http://fake-url")
@@ -49,6 +56,7 @@ def test_get_ollama_llms_success(mock_getenv, mock_requests_get):
     result = LLMService.get_ollama_llms()
     assert result == [{"name": "llm1"}, {"name": "llm2"}]
     mock_requests_get.assert_called_once_with("http://fake-url/api/tags")
+
 
 @patch("api.services.llm_service.requests.get", side_effect=RequestException)
 @patch("api.services.llm_service.os.getenv", return_value="http://fake-url")

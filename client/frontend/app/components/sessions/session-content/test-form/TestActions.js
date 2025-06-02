@@ -4,7 +4,7 @@ import { useTestFormContext } from "@/app/components/contexts/session/test-form/
 export default function TestActions() {
   const { submitToBackend, selectedBlocks, showPrevTests, loading } =
     useTestFormContext();
-    const {sessionData} = useSessionLLMContext();
+  const { sessionData } = useSessionLLMContext();
   return (
     <>
       <div className="card border-0 mb-5">
@@ -16,7 +16,11 @@ export default function TestActions() {
                 submitToBackend();
               }}
               className="btn btn-outline-primary w-50 rounded-5"
-              disabled={loading || selectedBlocks.length === 0 || sessionData.llm?.length === 0}
+              disabled={
+                loading ||
+                selectedBlocks.length === 0 ||
+                sessionData.llm?.length === 0
+              }
             >
               {loading ? (
                 <div className="spinner-border text-primary" role="status">

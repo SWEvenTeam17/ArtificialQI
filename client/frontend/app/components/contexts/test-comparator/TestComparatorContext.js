@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-} from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 
 const TestComparatorContext = createContext();
 
@@ -24,7 +19,7 @@ export const TestComparatorContextProvider = ({ children }) => {
 
   const fetchSessionData = async (id) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${id}`,
     );
     const data = await response.json();
     setSelectedSessionData(data);
@@ -38,7 +33,7 @@ export const TestComparatorContextProvider = ({ children }) => {
 
   const fetchBlockComparisonData = async (firstLLM, secondLLM) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/compare/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/compare/?first_llm_id=${firstLLM}&second_llm_id=${secondLLM}`,
     );
     const data = await response.json();
     setBlockComparisonData(data.common_blocks);
@@ -75,7 +70,7 @@ export const TestComparatorContextProvider = ({ children }) => {
         setBlockComparisonData,
         fetchSessionData,
         fetchBlockComparisonData,
-        chartData
+        chartData,
       }}
     >
       {children}

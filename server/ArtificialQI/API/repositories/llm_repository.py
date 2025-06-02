@@ -7,6 +7,7 @@ from .abstract_repository import AbstractRepository
 from typing import ClassVar
 from django.db import models
 
+
 class LLMRepository(AbstractRepository):
     """
     Classe del repository che gestisce le istanze dei LLM in DB.

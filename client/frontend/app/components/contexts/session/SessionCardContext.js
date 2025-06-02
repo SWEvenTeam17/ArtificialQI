@@ -7,7 +7,9 @@ export function SessionCardProvider({ session, children }) {
   const { updateSession, deleteSession } = useSessionContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(session.title);
-  const [editedDescription, setEditedDescription] = useState(session.description);
+  const [editedDescription, setEditedDescription] = useState(
+    session.description,
+  );
 
   const startEditing = () => setIsEditing(true);
   const cancelEditing = () => {
@@ -51,7 +53,9 @@ export function SessionCardProvider({ session, children }) {
 export function useSessionCard() {
   const context = useContext(SessionCardContext);
   if (!context) {
-    throw new Error("useSessionCard deve essere usato dentro un <SessionCardProvider>");
+    throw new Error(
+      "useSessionCard deve essere usato dentro un <SessionCardProvider>",
+    );
   }
   return context;
 }

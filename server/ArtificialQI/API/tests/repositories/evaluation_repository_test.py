@@ -1,5 +1,6 @@
 import django
 import os
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
@@ -7,6 +8,7 @@ from API.models import Prompt, LLM, Session, Evaluation
 from API.repositories.evaluation_repository import EvaluationRepository
 from API.tests.repositories.abstract_repository_test import TestAbstractRepository
 import pytest
+
 
 @pytest.mark.django_db
 class TestEvaluationRepository(TestAbstractRepository):
@@ -32,7 +34,7 @@ class TestEvaluationRepository(TestAbstractRepository):
             "semantic_evaluation": 98,
             "external_evaluation": 98,
         }
-    
+
     @pytest.fixture
     def update_data(self, setup_data):
         return {

@@ -69,13 +69,10 @@ class BlockRepository(AbstractRepository):
         Restituisce i blocchi che hanno prompt usati in Run da entrambi gli LLM.
         """
         return (
-            cls._model.objects
-            .filter(
+            cls._model.objects.filter(
                 Q(prompt__run__llm=first_llm) | Q(prompt__run__llm=second_llm)
             )
-            .annotate(
-                llm_count=Count('prompt__run__llm', distinct=True)
-            )
+            .annotate(llm_count=Count("prompt__run__llm", distinct=True))
             .filter(llm_count=2)
             .distinct()
         )

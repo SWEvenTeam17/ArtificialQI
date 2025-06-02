@@ -7,6 +7,7 @@ from .abstract_repository import AbstractRepository
 from typing import ClassVar
 from django.db import models
 
+
 class BlockTestRepository(AbstractRepository):
     """
     Classe che contiene la definizione del repository che gestisce le istanze dei Test in DB.

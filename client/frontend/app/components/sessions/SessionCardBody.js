@@ -17,14 +17,16 @@ export default function SessionCardBody() {
   useEffect(() => {
     if (session?.id) {
       const stored = localStorage.getItem(`session_last_clicked_${session.id}`);
-      if (stored)
-        setLastClicked(new Date(stored));
+      if (stored) setLastClicked(new Date(stored));
     }
   }, [session?.id]);
 
   const handleCardClick = () => {
     const now = new Date();
-    localStorage.setItem(`session_last_clicked_${session.id}`, now.toISOString());
+    localStorage.setItem(
+      `session_last_clicked_${session.id}`,
+      now.toISOString(),
+    );
     setLastClicked(now);
   };
 
@@ -58,7 +60,8 @@ export default function SessionCardBody() {
       <h4 className="card-title text-primary">{session.title}</h4>
       <p className="card-text">{session.description}</p>
       <small className="text-muted">
-        Ultimo accesso: {lastClicked
+        Ultimo accesso:{" "}
+        {lastClicked
           ? lastClicked.toLocaleString("it-IT", {
               day: "2-digit",
               month: "2-digit",

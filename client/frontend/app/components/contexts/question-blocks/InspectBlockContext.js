@@ -22,7 +22,7 @@ export function InspectBlockProvider({ children, id }) {
   const fetchBlockData = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`,
       );
       if (!response.ok) throw new Error("Errore nel recupero del blocco");
       const parsed = await response.json();
@@ -40,12 +40,12 @@ export function InspectBlockProvider({ children, id }) {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_list/${promptId}/`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       if (response.status === 204) {
         const updatedPrompts = blockData.prompt.filter(
-          (prompt) => prompt.id !== promptId
+          (prompt) => prompt.id !== promptId,
         );
         setBlockData({ ...blockData, prompt: updatedPrompts });
       } else {
@@ -58,7 +58,7 @@ export function InspectBlockProvider({ children, id }) {
 
   const handleView = async (promptId) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?prompt_id=${promptId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?prompt_id=${promptId}`,
     );
     const data = await response.json();
     setUniqueId(promptId);
@@ -75,7 +75,7 @@ export function InspectBlockProvider({ children, id }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editedPrompt),
-        }
+        },
       );
       if (!response.ok)
         throw new Error("Errore durante la modifica del prompt.");
@@ -84,7 +84,7 @@ export function InspectBlockProvider({ children, id }) {
       setBlockData((prev) => ({
         ...prev,
         prompt: prev.prompt.map((p) =>
-          p.id === promptId ? { ...p, ...updated } : p
+          p.id === promptId ? { ...p, ...updated } : p,
         ),
       }));
     } catch (err) {

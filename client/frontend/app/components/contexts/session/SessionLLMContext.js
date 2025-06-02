@@ -21,7 +21,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
   const [remainingLLMs, setRemainingLLMs] = useState(null);
   const [limit, setLimit] = useState(null);
   const [isLLMDataEmpty, setIsLLMDataEmpty] = useState(
-    !remainingLLMs || remainingLLMs.length === 0
+    !remainingLLMs || remainingLLMs.length === 0,
   );
   useEffect(() => {
     setIsLLMDataEmpty(!remainingLLMs || remainingLLMs.length === 0);
@@ -62,7 +62,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
               "X-CSRFToken": getCSRFToken(),
             },
             body: JSONData,
-          }
+          },
         );
         const result = await response.json();
         setSessionData((prevSessionData) => ({
@@ -72,7 +72,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
         fetchRemainingLLMs();
       }
     },
-    [sessionId, setSessionData, setLimit, fetchRemainingLLMs, sessionData?.llm]
+    [sessionId, setSessionData, setLimit, fetchRemainingLLMs, sessionData?.llm],
   );
 
   const fetchSessionData = useCallback(async () => {
@@ -81,7 +81,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/session_list/${sessionId}`,
         {
           cache: "no-store",
-        }
+        },
       );
       const data = await response.json();
       setSessionData(data);
@@ -98,7 +98,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
         {
           method: "DELETE",
           headers: { "X-CSRFToken": getCSRFToken() },
-        }
+        },
       );
       if (!response.ok) {
         throw new Error(response.statusText);
@@ -112,7 +112,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
       }));
       fetchRemainingLLMs();
     },
-    [fetchRemainingLLMs, sessionId]
+    [fetchRemainingLLMs, sessionId],
   );
 
   useEffect(() => {
@@ -143,10 +143,12 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
       fetchRemainingLLMs,
       fetchSessionData,
       submitLLM,
-    ]
+    ],
   );
 
   return (
-    <SessionLLMContext.Provider value={contextValue}>{children}</SessionLLMContext.Provider>
+    <SessionLLMContext.Provider value={contextValue}>
+      {children}
+    </SessionLLMContext.Provider>
   );
 };

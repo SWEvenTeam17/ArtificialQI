@@ -25,14 +25,14 @@ export default function PromptResults() {
           "Content-Type": "application/json",
           "X-CSRFToken": getCSRFToken(),
         },
-      }
+      },
     );
     if (response.ok) {
       setResults((prevResults) =>
         prevResults.map((block) => ({
           ...block,
           results: block.results.filter((res) => res.run_id !== runId),
-        }))
+        })),
       );
     }
   };
@@ -52,21 +52,27 @@ export default function PromptResults() {
       ...res,
       block_name: block.block_name,
       avg: getAvg(res.semantic_evaluation, res.external_evaluation),
-    }))
+    })),
   );
-  
+
   const summaryResults = [
     {
       result:
         allResults.length > 0
-          ? allResults.reduce((best, curr) => (curr.avg > best.avg ? curr : best), allResults[0])
+          ? allResults.reduce(
+              (best, curr) => (curr.avg > best.avg ? curr : best),
+              allResults[0],
+            )
           : null,
       label: "Risultato migliore",
     },
     {
       result:
         allResults.length > 0
-          ? allResults.reduce((worst, curr) => (curr.avg < worst.avg ? curr: worst), allResults[0])
+          ? allResults.reduce(
+              (worst, curr) => (curr.avg < worst.avg ? curr : worst),
+              allResults[0],
+            )
           : null,
       label: "Risultato peggiore",
     },
@@ -84,7 +90,9 @@ export default function PromptResults() {
             result && (
               <div className="col-md-6 mb-3" key={label}>
                 <div className="card h-100 shadow-sm">
-                  <div className={`card-body d-flex flex-column ${getCardBgClass(result.semantic_evaluation, result.external_evaluation)}`}>
+                  <div
+                    className={`card-body d-flex flex-column ${getCardBgClass(result.semantic_evaluation, result.external_evaluation)}`}
+                  >
                     <h5 className="card-title text-primary">{label}</h5>
                     <p className="mb-1">
                       <strong>Blocco:</strong>
@@ -116,7 +124,9 @@ export default function PromptResults() {
                         <div className="w-100">
                           <strong>Valutazione semantica</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{result.semantic_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {result.semantic_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -124,7 +134,9 @@ export default function PromptResults() {
                         <div className="w-100">
                           <strong>Valutazione esterna</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{result.external_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {result.external_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -132,7 +144,7 @@ export default function PromptResults() {
                   </div>
                 </div>
               </div>
-            )
+            ),
         )}
       </div>
       {results.map((block, index) => (
@@ -144,7 +156,9 @@ export default function PromptResults() {
             {block.results.map((res, i) => (
               <div className="col" key={i}>
                 <div className="card h-100 shadow-sm">
-                  <div className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}>
+                  <div
+                    className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}
+                  >
                     <h5 className="card-title text-primary">{res.llm_name}</h5>
                     <p className="mb-1">
                       <strong>Domanda:</strong>
@@ -166,7 +180,9 @@ export default function PromptResults() {
                         <div className="w-100">
                           <strong>Valutazione semantica</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{res.semantic_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {res.semantic_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -174,7 +190,9 @@ export default function PromptResults() {
                         <div className="w-100">
                           <strong>Valutazione esterna</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{res.external_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {res.external_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -206,7 +224,7 @@ export default function PromptResults() {
                   name: llm,
                   semantic: scores.avg_semantic_scores,
                   external: scores.avg_external_scores,
-                })
+                }),
               )}
               margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
             >

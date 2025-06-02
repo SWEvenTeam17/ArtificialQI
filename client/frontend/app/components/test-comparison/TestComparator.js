@@ -3,7 +3,8 @@ import LLMSelector from "./LLMSelector";
 import LLMComparisonChart from "./LLMComparisonChart";
 import { useTestComparatorContext } from "../contexts/test-comparator/TestComparatorContext";
 export default function TestComparatorContainer() {
-  const { selectedSessionData, selectedLLMS, chartData } = useTestComparatorContext();
+  const { selectedSessionData, selectedLLMS, chartData } =
+    useTestComparatorContext();
   return (
     <div className="container-fluid p-5">
       <div className="row text-center justify-content-center">

@@ -1,5 +1,3 @@
-
-
 export default function BlockHeader({ name, promptCount }) {
   return (
     <div className="text-center mb-4">

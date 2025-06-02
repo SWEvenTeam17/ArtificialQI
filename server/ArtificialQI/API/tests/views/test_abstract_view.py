@@ -1,5 +1,6 @@
 import django
 import os
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 import sys
@@ -8,6 +9,7 @@ from rest_framework import status
 from rest_framework import serializers
 from API.views_def.abstract_view import AbstractView
 import pytest
+
 
 # Dummy serializer base
 class DummySerializer(serializers.Serializer):
@@ -23,7 +25,8 @@ class DummySerializer(serializers.Serializer):
 
     @property
     def validated_data(self):
-        return getattr(self, '_validated_data', self.initial_data)
+        return getattr(self, "_validated_data", self.initial_data)
+
 
 # Dummy service base
 class DummyService:
@@ -51,12 +54,15 @@ class DummyService:
             return None
         return True
 
+
 # Dummy view base
 class DummyView(AbstractView):
     serializer = DummySerializer
     service = DummyService
 
+
 factory = APIRequestFactory()
+
 
 def test_get_all():
     view = DummyView.as_view()
@@ -65,11 +71,13 @@ def test_get_all():
     assert response.status_code == status.HTTP_200_OK
     assert response.data == [{"value": "data1"}, {"value": "data2"}]
 
+
 def test_get_by_id():
     request = factory.get("/")
     response = DummyView().get(request, instance_id=1)
     assert response.status_code == status.HTTP_200_OK
     assert response.data == {"value": "data1"}
+
 
 def test_get_by_id_as_view():
     view = DummyView.as_view()
@@ -78,12 +86,14 @@ def test_get_by_id_as_view():
     assert response.status_code == status.HTTP_200_OK
     assert response.data == {"value": "data1"}
 
+
 def test_post_valid():
     view = DummyView.as_view()
     request = factory.post("/", data={"key": "value"}, format="json")
     response = view(request)
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data == {"key": "value"}
+
 
 def test_put_valid():
     view = DummyView.as_view()
@@ -93,10 +103,12 @@ def test_put_valid():
     assert response.status_code == status.HTTP_200_OK
     assert response.data == payload
 
+
 def test_delete():
     request = factory.delete("/")
     response = DummyView().delete(request, instance_id=1)
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
 
 def test_put_without_instance_id():
     view = DummyView.as_view()
@@ -106,12 +118,15 @@ def test_put_without_instance_id():
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.data == {"error": "Sessione non trovata"}
 
+
 def test_delete_without_instance_id():
     request = factory.delete("/")
     response = DummyView().delete(request)
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
+
 # --- ERROR CASES ---
+
 
 # Serializer non valido
 class InvalidSerializer(DummySerializer):
@@ -122,9 +137,11 @@ class InvalidSerializer(DummySerializer):
     def errors(self):
         return {"error": "invalid"}
 
+
 class InvalidView(AbstractView):
     serializer = InvalidSerializer
     service = DummyService
+
 
 def test_post_invalid_serializer():
     view = InvalidView.as_view()
@@ -133,12 +150,14 @@ def test_post_invalid_serializer():
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
 
+
 def test_put_invalid_serializer():
     view = InvalidView.as_view()
     request = factory.put("/", data={"key": "value"}, format="json")
     response = view(request, instance_id=1)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
+
 
 # Service che solleva eccezione
 class FailingService(DummyService):
@@ -154,9 +173,11 @@ class FailingService(DummyService):
     def delete(instance_id):
         raise Exception("Errore di delete")
 
+
 class FailingView(AbstractView):
     serializer = DummySerializer
     service = FailingService
+
 
 def test_post_service_exception():
     view = FailingView.as_view()
@@ -165,6 +186,7 @@ def test_post_service_exception():
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
 
+
 def test_put_service_exception():
     view = FailingView.as_view()
     request = factory.put("/", data={"key": "value"}, format="json")
@@ -172,11 +194,13 @@ def test_put_service_exception():
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
 
+
 def test_delete_service_exception():
     request = factory.delete("/")
     response = FailingView().delete(request, instance_id=1)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
+
 
 # Service che solleva eccezione in read_all e read
 class FailingGetService(DummyService):
@@ -188,9 +212,11 @@ class FailingGetService(DummyService):
     def read(instance_id):
         raise Exception("Errore in read")
 
+
 class FailingGetView(AbstractView):
     serializer = DummySerializer
     service = FailingGetService
+
 
 def test_get_all_exception():
     view = FailingGetView.as_view()
@@ -198,6 +224,7 @@ def test_get_all_exception():
     response = view(request)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
+
 
 def test_get_by_id_exception():
     request = factory.get("/")

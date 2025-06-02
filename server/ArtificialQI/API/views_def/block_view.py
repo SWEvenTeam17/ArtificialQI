@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
+
 class BlockView(AbstractView):
     """
     Classe che contiene la definizione della vista dedicata
@@ -30,7 +31,7 @@ class BlockView(AbstractView):
         """
         data: dict = {
             "name": request.data.get("name"),
-            "questions": request.data.get("questions")        
+            "questions": request.data.get("questions"),
         }
         try:
             result = self.service.create(data=data)
@@ -64,7 +65,9 @@ class BlockTestView(APIView):
 
         for run in runs:
             prompt = run.prompt
-            related_blocks = Block.objects.filter(prompt=prompt, id__in=common_block_ids)
+            related_blocks = Block.objects.filter(
+                prompt=prompt, id__in=common_block_ids
+            )
 
             for block in related_blocks:
                 key = (block.id, run.llm.id)
@@ -87,21 +90,26 @@ class BlockTestView(APIView):
 
             for llm_id in [first_llm.id, second_llm.id]:
                 key = (block.id, llm_id)
-                scores = evaluations_map.get(key, {
-                    "semantic_scores": [],
-                    "external_scores": [],
-                })
+                scores = evaluations_map.get(
+                    key,
+                    {
+                        "semantic_scores": [],
+                        "external_scores": [],
+                    },
+                )
 
                 semantic_list = scores["semantic_scores"]
                 external_list = scores["external_scores"]
 
                 semantic_avg = (
                     round(sum(semantic_list) / len(semantic_list), 2)
-                    if semantic_list else 0
+                    if semantic_list
+                    else 0
                 )
                 external_avg = (
                     round(sum(external_list) / len(external_list), 2)
-                    if external_list else 0
+                    if external_list
+                    else 0
                 )
 
                 block_entry["llms"][llm_id] = {
@@ -114,4 +122,3 @@ class BlockTestView(APIView):
             response_data.append(block_entry)
 
         return Response({"common_blocks": response_data})
-

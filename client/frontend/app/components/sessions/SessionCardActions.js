@@ -6,13 +6,8 @@ import editIcon from "/public/images/edit.png";
 import { useSessionCard } from "@/app/components/contexts/session/SessionCardContext";
 
 export default function SessionCardActions() {
-  const {
-    isEditing,
-    startEditing,
-    cancelEditing,
-    saveChanges,
-    removeSession,
-  } = useSessionCard();
+  const { isEditing, startEditing, cancelEditing, saveChanges, removeSession } =
+    useSessionCard();
 
   return (
     <div className="row justify-content-center">

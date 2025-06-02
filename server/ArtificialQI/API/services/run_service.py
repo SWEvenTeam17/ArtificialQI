@@ -7,6 +7,7 @@ from API.models import Prompt
 from .abstract_service import AbstractService
 from typing import ClassVar
 
+
 class RunService(AbstractService):
     """
     Classe che contiene i servizi riguardanti i prompt.
@@ -29,7 +30,7 @@ class RunService(AbstractService):
             blocks = list(prompt.block_set.all())
         except Prompt.DoesNotExist:
             return None
-        
+
         for run in runs:
             llm_name = run.llm.name
             if llm_name not in scores:
@@ -42,30 +43,36 @@ class RunService(AbstractService):
             semantic_eval = float(run.evaluation.semantic_evaluation)
             external_eval = float(run.evaluation.external_evaluation)
 
-            results.append({
-                "run_id": run.id,
-                "llm_name": llm_name,
-                "question": run.prompt.prompt_text,
-                "expected_answer": run.prompt.expected_answer,
-                "answer": run.llm_answer,
-                "semantic_evaluation": semantic_eval,
-                "external_evaluation": external_eval,
-            })
+            results.append(
+                {
+                    "run_id": run.id,
+                    "llm_name": llm_name,
+                    "question": run.prompt.prompt_text,
+                    "expected_answer": run.prompt.expected_answer,
+                    "answer": run.llm_answer,
+                    "semantic_evaluation": semantic_eval,
+                    "external_evaluation": external_eval,
+                }
+            )
 
             scores[llm_name]["semantic_sum"] += semantic_eval
             scores[llm_name]["semantic_count"] += 1
             scores[llm_name]["external_sum"] += external_eval
             scores[llm_name]["external_count"] += 1
-        
+
         averages = {
             llm_name: {
                 "avg_semantic_scores": (
-                    scores[llm_name]["semantic_sum"] / scores[llm_name]["semantic_count"]
-                    if scores[llm_name]["semantic_count"] else None
+                    scores[llm_name]["semantic_sum"]
+                    / scores[llm_name]["semantic_count"]
+                    if scores[llm_name]["semantic_count"]
+                    else None
                 ),
                 "avg_external_scores": (
-                    scores[llm_name]["external_sum"] / scores[llm_name]["external_count"]
-                    if scores[llm_name]["external_count"] else None
+                    scores[llm_name]["external_sum"]
+                    / scores[llm_name]["external_count"]
+                    if scores[llm_name]["external_count"]
+                    else None
                 ),
             }
             for llm_name in scores

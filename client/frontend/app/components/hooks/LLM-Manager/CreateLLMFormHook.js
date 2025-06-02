@@ -37,7 +37,7 @@ export const useCreateLLMFormHook = (fetchLLMList) => {
             "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const responseData = await response.json();
@@ -62,7 +62,7 @@ export const useCreateLLMFormHook = (fetchLLMList) => {
         {
           method: "POST",
           headers: { "X-CSRFToken": getCSRFToken() },
-        }
+        },
       );
 
       if (res.status === 200) {

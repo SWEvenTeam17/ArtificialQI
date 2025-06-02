@@ -19,7 +19,7 @@ export function LLMManagerContextProvider({ children }) {
   const fetchLLMList = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/llm_list/`,
       );
       const data = await response.json();
       setLLMList(data);
@@ -48,7 +48,7 @@ export function LLMManagerContextProvider({ children }) {
         console.error(error);
       }
     },
-    [fetchLLMList]
+    [fetchLLMList],
   );
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export function LLMManagerContextProvider({ children }) {
       fetchLLMList,
       deleteLLM,
     }),
-    [LLMList, fetchLLMList, deleteLLM]
+    [LLMList, fetchLLMList, deleteLLM],
   );
 
   return (
