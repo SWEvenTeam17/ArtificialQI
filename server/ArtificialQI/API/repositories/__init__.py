@@ -12,4 +12,3 @@ from .block_test_repository import BlockTestRepository
 from .abstract_repository import AbstractRepository
 from .session_repository import SessionRepository
 from .block_repository import BlockRepository
-from .prev_test_repository import PrevTestRepository

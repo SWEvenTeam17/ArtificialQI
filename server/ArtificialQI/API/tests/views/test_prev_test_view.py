@@ -20,7 +20,7 @@ def url():
 
 # --- GET con test_id (ramo TestService.format_results) ---
 @patch("API.views_def.prev_test_view.BlockTestService.format_results")
-@patch("API.views_def.prev_test_view.PrevTestService.read")
+@patch("API.views_def.prev_test_view.BlockTestService.read")
 def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client, url):
     mock_read.return_value = MagicMock()
     mock_format_results.return_value = {"result": "ok"}
@@ -32,7 +32,7 @@ def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client,
 
 
 @patch("API.views_def.prev_test_view.BlockTestSerializer")
-@patch("API.views_def.prev_test_view.PrevTestService.get_tests_by_session")
+@patch("API.views_def.prev_test_view.SessionService.get_tests_by_session")
 def test_get_previous_tests_by_session(mock_get_tests, mock_serializer, client, url):
     mock_get_tests.return_value = [
         {
@@ -83,7 +83,7 @@ def test_get_previous_tests_by_session(mock_get_tests, mock_serializer, client, 
 
 # --- GET: Test.DoesNotExist ---
 @patch(
-    "API.views_def.prev_test_view.PrevTestService.get_tests_by_session",
+    "API.views_def.prev_test_view.SessionService.get_tests_by_session",
     side_effect=Exception("Test not found"),
 )
 def test_get_previous_tests_not_found(mock_get_tests, client, url):
@@ -94,7 +94,7 @@ def test_get_previous_tests_not_found(mock_get_tests, client, url):
 
 # --- GET: generic Exception ---
 @patch(
-    "API.views_def.prev_test_view.PrevTestService.get_tests_by_session",
+    "API.views_def.prev_test_view.SessionService.get_tests_by_session",
     side_effect=Exception("Errore generico"),
 )
 def test_get_previous_tests_generic_error(mock_get_tests, client, url):
