@@ -14,14 +14,14 @@ class AbstractRepository(ABC):
     per tutte le classi derivate. Ogni repository è collegato ad una classe Model specifica.
     """
 
-    model: ClassVar[models.Model]
+    _model: ClassVar[models.Model]
 
     @classmethod
     def get_all(cls):
         """
         Ritorna tutte le istanze presenti in DB del model.
         """
-        return cls.model.objects.all()
+        return cls._model.objects.all()
 
     @classmethod
     def get_by_id(cls, instance_id: int) -> models.Model | None:
@@ -29,8 +29,8 @@ class AbstractRepository(ABC):
         Ritorna una istanza specifica del model, filtrandolo per id.
         """
         try:
-            return cls.model.objects.get(pk=instance_id)
-        except cls.model.DoesNotExist:
+            return cls._model.objects.get(pk=instance_id)
+        except cls._model.DoesNotExist:
             return None
 
     @classmethod
@@ -38,7 +38,7 @@ class AbstractRepository(ABC):
         """
         Crea una nuova istanza del Model in DB.
         """
-        return cls.model.objects.create(**data)
+        return cls._model.objects.create(**data)
 
     @classmethod
     def delete(cls, instance_id: int) -> bool:

@@ -16,6 +16,10 @@ export default function TestResults() {
   const { testResults } = useTestFormContext();
   const [results, setResults] = useState(testResults.results);
 
+  useEffect(() => {
+    setResults(testResults.results);
+  }, [testResults]);
+
   const handleDeleteRun = async (runId) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?run_id=${runId}`,
@@ -59,7 +63,9 @@ export default function TestResults() {
             {block.results.map((res, i) => (
               <div className="col" key={i}>
                 <div className="card h-100 shadow-sm">
-                  <div className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}>
+                  <div
+                    className={`card-body d-flex flex-column ${getCardBgClass(res.semantic_evaluation, res.external_evaluation)}`}
+                  >
                     <h5 className="card-title text-primary">{res.llm_name}</h5>
                     <p className="mb-1">
                       <strong>Domanda:</strong>
@@ -81,7 +87,9 @@ export default function TestResults() {
                         <div className="w-100">
                           <strong>Valutazione semantica</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{res.semantic_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {res.semantic_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -89,7 +97,9 @@ export default function TestResults() {
                         <div className="w-100">
                           <strong>Valutazione esterna</strong>
                           <div className="mt-2">
-                            <span className="badge text-dark fs-5">{res.external_evaluation}</span>
+                            <span className="badge text-dark fs-5">
+                              {res.external_evaluation}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -116,11 +126,13 @@ export default function TestResults() {
           >
             <BarChart
               layout="vertical"
-              data={Object.entries(block.averages_by_llm).map(([llm, scores]) => ({
-                name: llm,
-                semantic: scores.avg_semantic_scores,
-                external: scores.avg_external_scores,
-              }))}
+              data={Object.entries(block.averages_by_llm).map(
+                ([llm, scores]) => ({
+                  name: llm,
+                  semantic: scores.avg_semantic_scores,
+                  external: scores.avg_external_scores,
+                })
+              )}
               margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />

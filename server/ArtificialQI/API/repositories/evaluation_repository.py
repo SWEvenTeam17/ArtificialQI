@@ -5,7 +5,8 @@ delle Valutazioni in DB.
 
 from API.models import Evaluation
 from .abstract_repository import AbstractRepository
-
+from typing import ClassVar
+from django.db import models
 
 class EvaluationRepository(AbstractRepository):
     """
@@ -13,4 +14,4 @@ class EvaluationRepository(AbstractRepository):
     che gestisce le istanze delle Valutazioni in DB.
     """
 
-    model = Evaluation
+    _model: ClassVar[models.Model] = Evaluation

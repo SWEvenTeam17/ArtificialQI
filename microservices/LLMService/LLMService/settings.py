@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['llm_service', 'localhost', '127.0.0.1']
 
 # Application definition
 
-INSTALLED_APPS = ["django.contrib.staticfiles", "api", "rest_framework", "drf_spectacular"]
+INSTALLED_APPS = ["django.contrib.staticfiles", "api", "rest_framework"]
 
 MIDDLEWARE = []
 

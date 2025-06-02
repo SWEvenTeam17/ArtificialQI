@@ -5,9 +5,8 @@ File che contiene i servizi riguardanti i LLM.
 import os
 import requests
 from dotenv import load_dotenv
-from API.repositories import LLMRepository
-from API.models import BlockTest
-from typing import List, Dict
+from typing import ClassVar
+from API.repositories import LLMRepository, AbstractRepository
 from .abstract_service import AbstractService
 
 
@@ -16,7 +15,7 @@ class LLMService(AbstractService):
     Classe che contiene i servizi riguardanti i LLM.
     """
 
-    repository = LLMRepository
+    _repository: ClassVar[AbstractRepository] = LLMRepository
 
     @staticmethod
     def fetch_ollama_models():
@@ -36,4 +35,4 @@ class LLMService(AbstractService):
         for model in models:
             name = model["name"]
             size = model["details"]["parameter_size"]
-            cls.repository.update_or_create(name=name, parameters=size)
+            cls._repository.update_or_create(name=name, parameters=size)

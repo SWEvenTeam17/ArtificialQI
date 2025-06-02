@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import patch, MagicMock
 from API.services.block_test_service import BlockTestService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
@@ -26,8 +25,8 @@ class TestBlockTestService(AbstractServiceTestCase):
     @patch("API.services.block_test_service.BlockTestRepository.add_run")
     @patch("API.services.block_test_service.RunService.create")
     @patch("API.services.block_test_service.EvaluationService.create")
-    @patch("API.services.block_test_service.LLMController.get_external_evaluation", return_value=0.9)
-    @patch("API.services.block_test_service.LLMController.get_semantic_evaluation", return_value=0.8)
+    @patch("API.services.block_test_service.EvaluationService.get_external_evaluation", return_value=0.9)
+    @patch("API.services.block_test_service.EvaluationService.get_semantic_evaluation", return_value=0.8)
     @patch("API.services.block_test_service.BlockTestService.interrogate", return_value="Risposta LLM")
     @patch("API.services.block_test_service.BlockRepository.get_prompts")
     @patch("API.services.block_test_service.SessionRepository.get_llms")

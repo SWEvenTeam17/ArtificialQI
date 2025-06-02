@@ -4,14 +4,15 @@ File che contiene il repository che gestisce le istanze dei Test in DB.
 
 from API.models import BlockTest, Run
 from .abstract_repository import AbstractRepository
-
+from typing import ClassVar
+from django.db import models
 
 class BlockTestRepository(AbstractRepository):
     """
     Classe che contiene la definizione del repository che gestisce le istanze dei Test in DB.
     """
 
-    model = BlockTest
+    _model: ClassVar[models.Model] = BlockTest
 
     @staticmethod
     def add_run(test: BlockTest, run: Run) -> BlockTest:

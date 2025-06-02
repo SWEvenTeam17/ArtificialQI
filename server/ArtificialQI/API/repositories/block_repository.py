@@ -7,6 +7,8 @@ from typing import List
 from API.models import Block, Prompt, LLM
 from django.db.models import Count, Q
 from .abstract_repository import AbstractRepository
+from typing import ClassVar
+from django.db import models
 
 
 class BlockRepository(AbstractRepository):
@@ -15,7 +17,7 @@ class BlockRepository(AbstractRepository):
     che gestisce le istanze dei blocchi in DB.
     """
 
-    model = Block
+    _model: ClassVar[models.Model] = Block
 
     @staticmethod
     def add_prompt(block: Block, prompt: Prompt) -> Block:
@@ -33,12 +35,12 @@ class BlockRepository(AbstractRepository):
         block.prompt.remove(prompt)
         return block
 
-    @staticmethod
-    def get_by_name(name: str) -> Block | None:
+    @classmethod
+    def get_by_name(cls, name: str) -> Block | None:
         """
         Trova un blocco tramite il suo nome.
         """
-        return Block.objects.filter(name=name).first()
+        return cls._model.objects.filter(name=name).first()
 
     @staticmethod
     def get_prompts(block: Block) -> List[Prompt]:
@@ -47,27 +49,27 @@ class BlockRepository(AbstractRepository):
         """
         return list(block.prompt.all())
 
-    @staticmethod
-    def filter_by_llm(llm: LLM) -> List[Block]:
+    @classmethod
+    def filter_by_llm(cls, llm: LLM) -> List[Block]:
         """
         Ritorna tutti i blocchi eseguiti da un LLM sotto forma di lista.
         """
-        return list(Block.objects.filter(prompt__run__llm__id=llm.id))
+        return list(cls._model.objects.filter(prompt__run__llm__id=llm.id))
 
-    @staticmethod
-    def filter_by_ids(ids: List[int]) -> List[Block]:
+    @classmethod
+    def filter_by_ids(cls, ids: List[int]) -> List[Block]:
         """
         Filtra i blocchi prendendo quelli con id all'interno della lista di id passata.
         """
-        return list(Block.objects.filter(id__in=ids))
+        return list(cls._model.objects.filter(id__in=ids))
 
-    @staticmethod
-    def get_common_blocks_for_llms(first_llm: LLM, second_llm: LLM) -> List[Block]:
+    @classmethod
+    def get_common_blocks_for_llms(cls, first_llm: LLM, second_llm: LLM) -> List[Block]:
         """
         Restituisce i blocchi che hanno prompt usati in Run da entrambi gli LLM.
         """
         return (
-            Block.objects
+            cls._model.objects
             .filter(
                 Q(prompt__run__llm=first_llm) | Q(prompt__run__llm=second_llm)
             )

@@ -2,26 +2,30 @@
 File che contiene i servizi riguardanti i prompt.
 """
 
-from API.repositories import RunRepository
+from API.repositories import RunRepository, AbstractRepository, PromptRepository
 from API.models import Prompt
 from .abstract_service import AbstractService
-
+from typing import ClassVar
 
 class RunService(AbstractService):
     """
     Classe che contiene i servizi riguardanti i prompt.
     """
 
-    repository = RunRepository
+    _repository: ClassVar[AbstractRepository] = RunRepository
 
     @classmethod
     def get_formatted_by_prompt(cls, prompt_id: int):
-        runs = cls.repository.get_by_prompt(prompt_id=prompt_id)
+        """
+        Ritorna i dati correttamente formattati per la visualizzazione dei
+        dati di un prompt nel frontend.
+        """
+        runs = cls._repository.get_by_prompt(prompt_id=prompt_id)
         results = []
         scores = {}
 
         try:
-            prompt = Prompt.objects.get(id=prompt_id)
+            prompt: Prompt = PromptRepository.get_by_id(instance_id=prompt_id)
             blocks = list(prompt.block_set.all())
         except Prompt.DoesNotExist:
             return None

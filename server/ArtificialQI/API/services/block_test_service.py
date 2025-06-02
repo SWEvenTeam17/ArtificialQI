@@ -3,14 +3,14 @@ File che contiene le funzioni utili a gestire
 la logica di business quando si esegue un test.
 """
 
-from typing import List, Dict
+from typing import List, Dict, ClassVar
 import os
 from collections import defaultdict
 import requests
 from dotenv import load_dotenv
-from API.repositories import BlockTestRepository, SessionRepository, BlockRepository
+from API.repositories import BlockTestRepository, SessionRepository, BlockRepository, AbstractRepository
 from API.models import Session, Block, BlockTest
-from API.classes.llm_controller import LLMController
+from API.services import EvaluationService
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService
 from .run_service import RunService
@@ -22,7 +22,7 @@ class BlockTestService(AbstractService):
     Classe che contiene tutti i servizi riguardanti i test.
     """
 
-    repository = BlockTestRepository
+    _repository: ClassVar[AbstractRepository] = BlockTestRepository
 
     @staticmethod
     def interrogate(llm_name: str, prompt: str) -> str:
@@ -38,8 +38,8 @@ class BlockTestService(AbstractService):
             .get("answer")
         )
 
-    @staticmethod
-    def runtest(session: Session, blocks: List[Block]) -> Dict[str, any]:
+    @classmethod
+    def runtest(cls, session: Session, blocks: List[Block]) -> Dict[str, any]:
         """
         Funzione che esegue un test, prende come parametri una sessione
         e una lista di domande (un blocco).
@@ -72,11 +72,11 @@ class BlockTestService(AbstractService):
             for block_id, prompt in all_prompts:
                 output = BlockTestService.interrogate(llm.name, prompt.prompt_text)
                 semantic_eval = float(
-                    LLMController.get_semantic_evaluation(
+                    EvaluationService.get_semantic_evaluation(
                         prompt.expected_answer, output
                     )
                 )
-                external_eval_raw = LLMController.get_external_evaluation(
+                external_eval_raw = EvaluationService.get_external_evaluation(
                     "google", prompt.expected_answer, output
                 )
                 try:
@@ -100,7 +100,7 @@ class BlockTestService(AbstractService):
                     }
                 )
 
-                BlockTestRepository.add_run(block_map[block_id]["test"], run)
+                cls._repository.add_run(block_map[block_id]["test"], run)
 
                 block_map[block_id]["results"].append(
                     {

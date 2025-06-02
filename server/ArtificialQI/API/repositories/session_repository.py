@@ -4,14 +4,15 @@ Repository che gestisce le istanze delle Sessioni in DB.
 
 from API.models import Session, LLM
 from .abstract_repository import AbstractRepository
-
+from typing import ClassVar
+from django.db import models
 
 class SessionRepository(AbstractRepository):
     """
     Classe del repository che gestisce le istanze delle Sessioni in DB.
     """
 
-    model = Session
+    _model: ClassVar[models.Model] = Session
 
     @classmethod
     def get_remaining_llm(cls, session_id: int):
