@@ -41,7 +41,6 @@ jobs:
 
       - name: Run tests with pytest
         env:
-          DJANGO_SETTINGS_MODULE: server.ArtificialQI.settings
           PYTHONPATH: ${{ github.workspace }}
         run: |
           pytest ./server/ArtificialQI
