@@ -5,7 +5,7 @@ from langchain_ollama import OllamaLLM
 from typing import List, Dict, Any
 
 
-class LLMService:
+class OllamaLLMIntegrationService:
 
     @staticmethod
     def get_llm(name: str) -> OllamaLLM | None:

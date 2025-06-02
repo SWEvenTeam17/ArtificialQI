@@ -1,1 +1,1 @@
-from .llm_service import LLMService
+from .ollama_llm_integration_service import OllamaLLMIntegrationService

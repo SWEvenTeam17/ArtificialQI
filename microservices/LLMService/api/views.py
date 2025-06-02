@@ -2,11 +2,11 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from api.services import LLMService
+from api.services import OllamaLLMIntegrationService
 from api.serializers import LLMRequestSerializer, LLMResponseSerializer
 
 
-class LLMView(APIView):
+class LLMServiceView(APIView):
 
     authentication_classes = []
     permission_classes = []
@@ -16,7 +16,7 @@ class LLMView(APIView):
         description="Restituisce la lista degli LLM disponibili",
     )
     def get(self, request):
-        result = LLMService.get_ollama_llms()
+        result = OllamaLLMIntegrationService.get_ollama_llms()
         if result is None:
             return Response(
                 {"error": "Connessione con Ollama fallita"},
@@ -36,12 +36,12 @@ class LLMView(APIView):
         llm_name = serializer.validated_data["llm_name"]
         prompt = serializer.validated_data["prompt"]
 
-        llm_object = LLMService.get_llm(llm_name)
+        llm_object = OllamaLLMIntegrationService.get_llm(llm_name)
         if llm_object is None:
             return Response(
                 {"error": "Connessione con Ollama fallita"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        answer = LLMService.interrogate(llm=llm_object, prompt=prompt)
+        answer = OllamaLLMIntegrationService.interrogate(llm=llm_object, prompt=prompt)
         response_data = {"llm_name": llm_name, "prompt": prompt, "answer": answer}
         return Response(response_data)
