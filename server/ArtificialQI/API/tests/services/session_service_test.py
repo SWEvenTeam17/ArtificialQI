@@ -49,3 +49,12 @@ class TestSessionService(AbstractServiceTestCase):
         mock_get_llm.assert_called_once_with(42)
         mock_repo.delete_llm.assert_called_once_with(mock_session, mock_llm)
         assert result is None
+
+    @patch("API.services.session_service.SessionService.repository")
+    def test_get_tests_by_session(self, mock_repository):
+        mock_repository.get_tests_by_session.return_value = ["test1", "test2"]
+
+        result = self.service_class.get_tests_by_session(session_id=123)
+
+        mock_repository.get_tests_by_session.assert_called_once_with(session_id=123)
+        assert result == ["test1", "test2"]

@@ -39,3 +39,7 @@ class SessionService(AbstractService):
         session = cls._repository.get_by_id(session_id)
         llm = LLMRepository.get_by_id(llm_id)
         return cls._repository.delete_llm(session, llm)
+    
+    @classmethod
+    def get_tests_by_session(cls, session_id: int):
+        return cls._repository.get_tests_by_session(session_id=session_id)

@@ -2,7 +2,7 @@
 Repository che gestisce le istanze delle Sessioni in DB.
 """
 
-from API.models import Session, LLM
+from API.models import Session, LLM, BlockTest
 from .abstract_repository import AbstractRepository
 from typing import ClassVar
 from django.db import models
@@ -41,3 +41,7 @@ class SessionRepository(AbstractRepository):
         Rimuove un collegamento LLM-Sessione.
         """
         session.llm.remove(llm)
+
+    @classmethod
+    def get_tests_by_session(cls, session_id: int):
+        return BlockTest.objects.filter(session_id=session_id)
