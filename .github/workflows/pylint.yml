@@ -25,7 +25,7 @@ jobs:
             pylint pylint-django \
             django django-rest-framework \
             requests black django-cors-headers \
-            pytest pytest-mock pytest-db pytest-django
+            pytest pytest-mock pytest-db pytest-django python-dotenv \
 
       - name: Format code with black
         run: |
