@@ -17,10 +17,6 @@ jobs:
         with:
             python-version: '3.13.3'
             cache: 'pip'
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
@@ -40,8 +36,6 @@ jobs:
           ./server/ArtificialQI/
 
       - name: Run tests with pytest
-        env:
-          PYTHONPATH: ${{ github.workspace }}/server
         run: |
           pytest ./server/ArtificialQI
           pytest ./microservices/LLMService
