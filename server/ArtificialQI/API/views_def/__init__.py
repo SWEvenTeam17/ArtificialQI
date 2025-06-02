@@ -7,4 +7,4 @@ dal server
 from .llm_view import *
 from .prompt_view import *
 from .sessions_view import *
-from .block_test_view import *
+from .run_block_test_view import *

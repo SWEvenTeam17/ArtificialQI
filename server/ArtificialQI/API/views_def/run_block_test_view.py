@@ -15,10 +15,10 @@ from API.services import AbstractService, BlockService, BlockTestService, Sessio
 from .abstract_view import AbstractView
 
 
-class BlockTestView(AbstractView):
+class RunBlockTestView(AbstractView):
     """
     Classe che contiene la definizione della vista dedicata
-    alla gestione dei test precedentemente eseguiti in una sessione..
+    alla esecuzione dei test.
     """
 
     _serializer: ClassVar[type[serializers.Serializer]] = BlockTestSerializer
