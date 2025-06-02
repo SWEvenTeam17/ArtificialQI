@@ -76,7 +76,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/runtest/`,
         {
           method: "POST",
           headers: {

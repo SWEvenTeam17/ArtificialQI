@@ -25,6 +25,6 @@ urlpatterns = [
     path("llm_add/", SessionLLMView.as_view()),
     path("llm_remaining/<int:instance_id>", SessionLLMView.as_view()),
     path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
-    path("runtest", RunBlockTestView.as_view()),
-    path("prompt_runs", RunPromptView.as_view()),
+    path("runtest/", RunBlockTestView.as_view()),
+    path("prompt_runs/", RunPromptView.as_view())
 ]

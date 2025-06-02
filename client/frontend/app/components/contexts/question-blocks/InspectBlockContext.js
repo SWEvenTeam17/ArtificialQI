@@ -58,7 +58,7 @@ export function InspectBlockProvider({ children, id }) {
 
   const handleView = async (promptId) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?prompt_id=${promptId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs/?prompt_id=${promptId}`,
     );
     const data = await response.json();
     setUniqueId(promptId);

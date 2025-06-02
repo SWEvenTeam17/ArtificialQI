@@ -46,6 +46,6 @@ class AbstractService(ABC):
     @classmethod
     def delete(cls, instance_id: int):
         """
-        Funzione che gestisce la canellazione di una istanza in DB.
+        Funzione che gestisce la cancellazione di una istanza in DB.
         """
         return cls._repository.delete(instance_id=instance_id)

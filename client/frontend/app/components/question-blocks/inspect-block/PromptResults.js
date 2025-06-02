@@ -18,7 +18,7 @@ export default function PromptResults() {
 
   const handleDeleteRun = async (runId) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs?run_id=${runId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/prompt_runs/?run_id=${runId}`,
       {
         method: "DELETE",
         headers: {

@@ -18,7 +18,7 @@ def client():
 
 @pytest.fixture
 def url():
-    return "/runtest"
+    return "/runtest/"
 
 
 # --- POST SUCCESS ---

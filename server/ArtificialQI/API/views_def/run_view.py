@@ -2,26 +2,10 @@
 File che contiene la classe PromptView.
 """
 
-from typing import ClassVar
-
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from API.serializers import RunSerializer
-from API.services import AbstractService, RunService
-
-from .abstract_view import AbstractView
-
-
-class RunView(AbstractView):
-    """
-    Classe che contiene le definizioni delle viste dedicate alla gestione dei Prompt.
-    """
-
-    _serializer: ClassVar[type[serializers.Serializer]] = RunSerializer
-    _service: ClassVar[type[AbstractService]] = RunService
-
+from API.services import RunService
 
 class RunPromptView(APIView):
     def get(self, request):
