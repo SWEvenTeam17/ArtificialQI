@@ -21,17 +21,17 @@ class AbstractView(APIView, ABC):
     contiene un serializer e un service.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]]
-    service: ClassVar[type[AbstractService]]
+    _serializer: ClassVar[type[serializers.Serializer]]
+    _service: ClassVar[type[AbstractService]]
 
     @property
     @abstractmethod
-    def serializer(self) -> type[serializers.Serializer]:
+    def _serializer(self) -> type[serializers.Serializer]:
         """Le sottoclassi devono definire un serializer"""
 
     @property
     @abstractmethod
-    def service(self) -> type[AbstractService]:
+    def _service(self) -> type[AbstractService]:
         """Le sottoclassi devono definire un service"""
 
     def get(self, request, instance_id: int = None) -> Response:
@@ -41,11 +41,11 @@ class AbstractView(APIView, ABC):
         """
         try:
             if instance_id:
-                data = self.service.read(instance_id=instance_id)
-                serializer = self.serializer(data)
+                data = self._service.read(instance_id=instance_id)
+                serializer = self._serializer(data)
             else:
-                data = self.service.read_all()
-                serializer = self.serializer(data, many=True)
+                data = self._service.read_all()
+                serializer = self._serializer(data, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -57,10 +57,10 @@ class AbstractView(APIView, ABC):
         e crea una nuova istanza del Model in DB utilizzando
         il service corrispondente.
         """
-        serializer = self.serializer(data=request.data)
+        serializer = self._serializer(data=request.data)
         if serializer.is_valid():
             try:
-                self.service.create(serializer.validated_data)
+                self._service.create(serializer.validated_data)
                 return Response(
                     serializer.validated_data, status=status.HTTP_201_CREATED
                 )
@@ -75,16 +75,16 @@ class AbstractView(APIView, ABC):
         e aggiorna una istanza del Model in DB utilizzando
         il service corrispondente.
         """
-        instance = self.service.read(instance_id)
+        instance = self._service.read(instance_id)
         if not instance:
             return Response(
                 {"error": "Sessione non trovata"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = self.serializer(instance, data=request.data)
+        serializer = self._serializer(instance, data=request.data)
         if serializer.is_valid():
             try:
-                self.service.update(
+                self._service.update(
                     instance_id=instance_id, data=serializer.validated_data
                 )
                 return Response(serializer.validated_data, status=status.HTTP_200_OK)
@@ -98,7 +98,7 @@ class AbstractView(APIView, ABC):
         Rimuove l'istanza corrispondende in DB.
         """
         try:
-            self.service.delete(instance_id=instance_id)
+            self._service.delete(instance_id=instance_id)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

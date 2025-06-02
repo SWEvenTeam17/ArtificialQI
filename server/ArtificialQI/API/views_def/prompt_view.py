@@ -17,5 +17,5 @@ class PromptView(AbstractView):
     Classe che contiene le definizioni delle viste dedicate alla gestione dei Prompt.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = PromptSerializer
-    service: ClassVar[type[AbstractService]] = PromptService
+    _serializer: ClassVar[type[serializers.Serializer]] = PromptSerializer
+    _service: ClassVar[type[AbstractService]] = PromptService

@@ -57,8 +57,8 @@ def test_llm_get_all_exception(client):
         def data(self):
             return self._data
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     response = client.get("/llm_list/")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
@@ -80,8 +80,8 @@ def test_llm_get_by_id_success(client):
         def data(self):
             return self._data
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     response = client.get("/llm_list/1/")
     assert response.status_code == status.HTTP_200_OK
     assert response.data["name"] == "GPT-4"
@@ -102,8 +102,8 @@ def test_llm_get_by_id_exception(client):
         def data(self):
             return self._data
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     response = client.get("/llm_list/1/")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
@@ -130,8 +130,8 @@ def test_llm_post_success(client):
         def create(data):
             return data
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     payload = {"name": "NuovoLLM", "n_parameters": "500B"}
     response = client.post("/llm_list/", data=payload, format="json")
     assert response.status_code == status.HTTP_201_CREATED
@@ -152,7 +152,7 @@ def test_llm_post_invalid_serializer(client):
         def data(self):
             return self._data
 
-    LLMView.serializer = FakeSerializer
+    LLMView._serializer = FakeSerializer
     payload = {}
     response = client.post("/llm_list/", data=payload, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -179,8 +179,8 @@ def test_llm_post_exception(client):
         def create(data):
             raise Exception("Errore finto post")
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     payload = {"name": "NuovoLLM", "n_parameters": "500B"}
     response = client.post("/llm_list/", data=payload, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -212,8 +212,8 @@ def test_llm_put_success(client):
         def read(instance_id):
             return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     payload = {"name": "LLM Updated", "n_parameters": "1.2T"}
     response = client.put("/llm_list/1/", data=payload, format="json")
     assert response.status_code == status.HTTP_200_OK
@@ -243,8 +243,8 @@ def test_llm_put_invalid_serializer(client):
         def read(instance_id):
             return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     payload = {}
     response = client.put("/llm_list/1/", data=payload, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -275,8 +275,8 @@ def test_llm_put_exception(client):
         def read(instance_id):
             return {"id": instance_id, "name": "LLM Updated", "n_parameters": "1.2T"}
 
-    LLMView.service = FakeService
-    LLMView.serializer = FakeSerializer
+    LLMView._service = FakeService
+    LLMView._serializer = FakeSerializer
     payload = {"name": "LLM Updated", "n_parameters": "1.2T"}
     response = client.put("/llm_list/1/", data=payload, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -291,7 +291,7 @@ def test_llm_delete_success(client):
         def delete(instance_id):
             return None
 
-    LLMView.service = FakeService
+    LLMView._service = FakeService
     response = client.delete("/llm_list/1/")
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -303,7 +303,7 @@ def test_llm_delete_exception(client):
         def delete(instance_id):
             raise Exception("Errore finto delete")
 
-    LLMView.service = FakeService
+    LLMView._service = FakeService
     response = client.delete("/llm_list/1/")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data

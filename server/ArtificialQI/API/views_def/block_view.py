@@ -23,8 +23,8 @@ class BlockView(AbstractView):
     alla gestione dei blocchi di domande.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = BlockSerializer
-    service: ClassVar[type[AbstractService]] = BlockService
+    _serializer: ClassVar[type[serializers.Serializer]] = BlockSerializer
+    _service: ClassVar[type[AbstractService]] = BlockService
 
     def post(self, request) -> Response:
         """
@@ -38,13 +38,13 @@ class BlockView(AbstractView):
             "questions": request.data.get("questions"),
         }
         try:
-            result = self.service.create(data=data)
+            result = self._service.create(data=data)
             if result == False:
                 return Response(
                     {"error": "Nome duplicato"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
-            serialized = self.serializer(result)
+            serialized = self._serializer(result)
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

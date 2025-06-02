@@ -19,16 +19,16 @@ class SessionLLMView(APIView):
     alla gestione della connessione sessione-llm.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
-    service: ClassVar[type[AbstractService]] = SessionService
+    _serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
+    _service: ClassVar[type[AbstractService]] = SessionService
 
     def get(self, request, instance_id: int) -> Response:
         """
         Ritorna tutti i modelli collegati ad una sessione.
         """
         try:
-            result = self.service.get_excluded_llm(session_id=instance_id)
-            serializer = self.serializer(result, many=True)
+            result = self._service.get_excluded_llm(session_id=instance_id)
+            serializer = self._serializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Session.DoesNotExist:
             return Response(
@@ -50,8 +50,8 @@ class SessionLLMView(APIView):
         try:
             session_id = request.data.get("sessionId")
             llm_id = request.data.get("llmId")
-            serializer = self.serializer(
-                self.service.add_llm(session_id=session_id, llm_id=llm_id)
+            serializer = self._serializer(
+                self._service.add_llm(session_id=session_id, llm_id=llm_id)
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Session.DoesNotExist:
@@ -72,7 +72,7 @@ class SessionLLMView(APIView):
         Rimuove un LLM da una sessione.
         """
         try:
-            self.service.delete_llm(session_id, llm_id)
+            self._service.delete_llm(session_id, llm_id)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Session.DoesNotExist:
             return Response(

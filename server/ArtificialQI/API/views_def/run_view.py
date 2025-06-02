@@ -19,8 +19,8 @@ class RunView(AbstractView):
     Classe che contiene le definizioni delle viste dedicate alla gestione dei Prompt.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = RunSerializer
-    service: ClassVar[type[AbstractService]] = RunService
+    _serializer: ClassVar[type[serializers.Serializer]] = RunSerializer
+    _service: ClassVar[type[AbstractService]] = RunService
 
 
 class RunPromptView(APIView):

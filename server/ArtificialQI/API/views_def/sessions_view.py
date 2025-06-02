@@ -19,5 +19,5 @@ class SessionsView(AbstractView):
     alla gestione delle sessioni.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = SessionSerializer
-    service: ClassVar[type[AbstractService]] = SessionService
+    _serializer: ClassVar[type[serializers.Serializer]] = SessionSerializer
+    _service: ClassVar[type[AbstractService]] = SessionService

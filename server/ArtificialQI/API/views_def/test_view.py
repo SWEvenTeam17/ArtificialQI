@@ -21,14 +21,14 @@ class TestView(AbstractView):
     alla gestione dei test precedentemente eseguiti in una sessione..
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = BlockTestSerializer
-    service: ClassVar[type[AbstractService]] = BlockTestService
+    _serializer: ClassVar[type[serializers.Serializer]] = BlockTestSerializer
+    _service: ClassVar[type[AbstractService]] = BlockTestService
 
     def post(self, request) -> Response:
         session = SessionService.read(request.data.get("sessionId"))
         blocks: List[Block] = BlockService.retrieve_blocks(request.data.get("blocks"))
         try:
-            test = self.service.runtest(session=session, blocks=blocks)
+            test = self._service.runtest(session=session, blocks=blocks)
             return Response(test, status=status.HTTP_200_OK)
         except (ConnectionError, FileNotFoundError) as e:
             if isinstance(e, ConnectionError):

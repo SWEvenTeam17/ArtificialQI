@@ -59,8 +59,8 @@ class DummyService:
 
 # Dummy view base
 class DummyView(AbstractView):
-    serializer = DummySerializer
-    service = DummyService
+    _serializer = DummySerializer
+    _service = DummyService
 
 
 factory = APIRequestFactory()
@@ -141,8 +141,8 @@ class InvalidSerializer(DummySerializer):
 
 
 class InvalidView(AbstractView):
-    serializer = InvalidSerializer
-    service = DummyService
+    _serializer = InvalidSerializer
+    _service = DummyService
 
 
 def test_post_invalid_serializer():
@@ -177,8 +177,8 @@ class FailingService(DummyService):
 
 
 class FailingView(AbstractView):
-    serializer = DummySerializer
-    service = FailingService
+    _serializer = DummySerializer
+    _service = FailingService
 
 
 def test_post_service_exception():
@@ -216,8 +216,8 @@ class FailingGetService(DummyService):
 
 
 class FailingGetView(AbstractView):
-    serializer = DummySerializer
-    service = FailingGetService
+    _serializer = DummySerializer
+    _service = FailingGetService
 
 
 def test_get_all_exception():

@@ -37,7 +37,7 @@ def test_post_block_success(monkeypatch, client):
 
             return Obj()
 
-    monkeypatch.setattr(BlockView, "service", FakeService)
+    monkeypatch.setattr(BlockView, "_service", FakeService)
     data = {"name": "block1", "prompt": []}
     response = client.post("/question_blocks/", data, format="json")
     assert response.status_code == status.HTTP_201_CREATED
@@ -51,7 +51,7 @@ def test_post_block_duplicate(monkeypatch, client):
         def create(data):
             return False
 
-    monkeypatch.setattr(BlockView, "service", FakeService)
+    monkeypatch.setattr(BlockView, "_service", FakeService)
     data = {"name": "block1", "prompt": []}
     response = client.post("/question_blocks/", data, format="json")
     assert response.status_code == 500
@@ -66,7 +66,7 @@ def test_post_block_exception(monkeypatch, client):
         def create(data):
             raise Exception("Errore finto")
 
-    monkeypatch.setattr(BlockView, "service", FakeService)
+    monkeypatch.setattr(BlockView, "_service", FakeService)
     data = {"name": "block1", "prompt": []}
     response = client.post("/question_blocks/", data, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST

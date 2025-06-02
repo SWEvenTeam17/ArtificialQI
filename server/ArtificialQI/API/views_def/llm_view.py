@@ -19,8 +19,8 @@ class LLMView(AbstractView):
     Classe che gestisce le richieste per creare,modificare e cancellare LLM.
     """
 
-    serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
-    service: ClassVar[type[AbstractService]] = LLMService
+    _serializer: ClassVar[type[serializers.Serializer]] = LLMSerializer
+    _service: ClassVar[type[AbstractService]] = LLMService
 
 
 class OllamaView(APIView):
