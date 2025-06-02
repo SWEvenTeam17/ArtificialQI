@@ -18,14 +18,14 @@ class TestLLMService(AbstractServiceTestCase):
         mock_response.json.return_value = [{"name": "llama2", "details": {"parameter_size": "7B"}}]
         mock_get.return_value = mock_response
 
-        result = LLMService.fetch_ollama_models()
+        result = LLMService._LLMService__fetch_ollama_models()
 
         mock_load.assert_called_once()
         mock_getenv.assert_called_with("LLM_SERVICE_URL")
         mock_get.assert_called_with("http://ollama:11434/interrogate/", timeout=5)
         assert result == [{"name": "llama2", "details": {"parameter_size": "7B"}}]
 
-    @patch('API.services.llm_service.LLMService.fetch_ollama_models')
+    @patch('API.services.llm_service.LLMService._LLMService__fetch_ollama_models')
     def test_sync_ollama_llms(self, mock_fetch):
         """Test sincronizzazione modelli nel database"""
         mock_fetch.return_value = [
@@ -49,9 +49,9 @@ class TestLLMService(AbstractServiceTestCase):
         mock_get.side_effect = requests.exceptions.Timeout
 
         with pytest.raises(requests.exceptions.Timeout):
-            LLMService.fetch_ollama_models()
+            LLMService._LLMService__fetch_ollama_models()
 
-    @patch('API.services.llm_service.LLMService.fetch_ollama_models')
+    @patch('API.services.llm_service.LLMService._LLMService__fetch_ollama_models')
     @patch('API.services.llm_service.LLMRepository')
     def test_sync_empty_models(self, mock_repo, mock_fetch):
         """Test con lista modelli vuota"""

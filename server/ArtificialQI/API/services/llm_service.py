@@ -18,7 +18,7 @@ class LLMService(AbstractService):
     _repository: ClassVar[AbstractRepository] = LLMRepository
 
     @staticmethod
-    def fetch_ollama_models():
+    def __fetch_ollama_models():
         """
         Funzione che esegue un fetch di tutti i modelli installati su Ollama.
         """
@@ -31,7 +31,7 @@ class LLMService(AbstractService):
         """
         Funzione che aggiunge tutti i LLM di Ollama in DB.
         """
-        models = cls.fetch_ollama_models()
+        models = cls.__fetch_ollama_models()
         for model in models:
             name = model["name"]
             size = model["details"]["parameter_size"]
