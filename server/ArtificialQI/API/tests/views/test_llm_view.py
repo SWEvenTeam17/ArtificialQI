@@ -19,7 +19,6 @@ def client():
 from API.views_def.llm_view import LLMView
 
 
-# --- GET ALL ---
 @pytest.mark.django_db
 def test_llm_get_all_success(client):
     class FakeService:
@@ -64,7 +63,6 @@ def test_llm_get_all_exception(client):
     assert "error" in response.data
 
 
-# --- GET BY ID ---
 @pytest.mark.django_db
 def test_llm_get_by_id_success(client):
     class FakeService:
@@ -109,7 +107,6 @@ def test_llm_get_by_id_exception(client):
     assert "error" in response.data
 
 
-# --- POST ---
 @pytest.mark.django_db
 def test_llm_post_success(client):
     class FakeSerializer:
@@ -187,7 +184,6 @@ def test_llm_post_exception(client):
     assert "error" in response.data
 
 
-# --- PUT ---
 @pytest.mark.django_db
 def test_llm_put_success(client):
     class FakeSerializer:
@@ -283,7 +279,6 @@ def test_llm_put_exception(client):
     assert "error" in response.data
 
 
-# --- DELETE ---
 @pytest.mark.django_db
 def test_llm_delete_success(client):
     class FakeService:

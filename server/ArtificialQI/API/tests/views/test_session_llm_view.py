@@ -47,10 +47,8 @@ def delete_url(session, llm):
     return f"/llm_delete/{session.pk}/{llm.pk}"
 
 
-# --- GET SUCCESS ---
 @patch("API.views_def.session_llm_view.SessionService.get_excluded_llm")
 def test_get_llms_by_session(mock_get_excluded_llm, client, get_url, llm):
-    # Simula che il service restituisca una lista di LLM finti
     mock_get_excluded_llm.return_value = [{"id": 2, "name": "Fake LLM"}]
     response = client.get(get_url)
     assert response.status_code == status.HTTP_200_OK
@@ -70,7 +68,6 @@ def test_get_llms_by_session(client, get_url, session, llm):
     assert llm.id not in ids
 
 
-# --- GET: Session DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.get_excluded_llm",
     side_effect=Session.DoesNotExist,
@@ -82,7 +79,6 @@ def test_get_llms_by_session_not_found(mock_get_llm, client, session):
     assert response.data["error"] == "Session not found"
 
 
-# --- GET: LLM DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.get_excluded_llm",
     side_effect=LLM.DoesNotExist,
@@ -94,7 +90,6 @@ def test_get_llms_by_session_llm_not_found(mock_get_llm, client, session):
     assert response.data["error"] == "LLM not found"
 
 
-# --- GET: Generic Exception ---
 @patch(
     "API.views_def.session_llm_view.SessionService.get_excluded_llm",
     side_effect=Exception("Errore generico"),
@@ -106,7 +101,6 @@ def test_get_llms_by_session_generic_error(mock_get_llm, client, session):
     assert "error" in response.data
 
 
-# --- POST SUCCESS ---
 @patch("API.views_def.session_llm_view.SessionService.add_llm")
 def test_post_add_llm_to_session(mock_add_llm, client, post_url):
     llm = LLM(id=123, name="Fake LLM", n_parameters="1T")
@@ -117,7 +111,6 @@ def test_post_add_llm_to_session(mock_add_llm, client, post_url):
     mock_add_llm.assert_called_once_with(session_id=1, llm_id=123)
 
 
-# --- POST: Session DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.add_llm",
     side_effect=Session.DoesNotExist,
@@ -128,7 +121,6 @@ def test_post_add_llm_session_not_found(mock_add_llm, client, post_url):
     assert response.data["error"] == "Session not found"
 
 
-# --- POST: LLM DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.add_llm",
     side_effect=LLM.DoesNotExist,
@@ -141,7 +133,6 @@ def test_post_add_llm_llm_not_found(mock_add_llm, client, post_url, session):
     assert response.data["error"] == "LLM not found"
 
 
-# --- POST: Generic Exception ---
 @patch(
     "API.views_def.session_llm_view.SessionService.add_llm",
     side_effect=Exception("Errore generico"),
@@ -154,7 +145,6 @@ def test_post_add_llm_generic_error(mock_add_llm, client, post_url, session):
     assert "error" in response.data
 
 
-# --- DELETE SUCCESS ---
 @patch("API.views_def.session_llm_view.SessionService.delete_llm")
 def test_delete_llm_from_session_unit(mock_delete_llm, client, delete_url):
     mock_delete_llm.return_value = None
@@ -163,7 +153,6 @@ def test_delete_llm_from_session_unit(mock_delete_llm, client, delete_url):
     mock_delete_llm.assert_called_once()
 
 
-# --- DELETE: Session DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.delete_llm",
     side_effect=Session.DoesNotExist,
@@ -175,7 +164,6 @@ def test_delete_llm_session_not_found(mock_delete_llm, client, session, llm):
     assert response.data["error"] == "Session not found"
 
 
-# --- DELETE: LLM DoesNotExist ---
 @patch(
     "API.views_def.session_llm_view.SessionService.delete_llm",
     side_effect=LLM.DoesNotExist,
@@ -187,7 +175,6 @@ def test_delete_llm_llm_not_found(mock_delete_llm, client, session, llm):
     assert response.data["error"] == "LLM not found"
 
 
-# --- DELETE: Generic Exception ---
 @patch(
     "API.views_def.session_llm_view.SessionService.delete_llm",
     side_effect=Exception("Errore generico"),

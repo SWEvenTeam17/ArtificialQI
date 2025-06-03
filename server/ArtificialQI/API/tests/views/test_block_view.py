@@ -21,7 +21,6 @@ def factory():
     return APIRequestFactory()
 
 
-# ----------- BlockView POST -----------
 
 
 @pytest.mark.django_db
@@ -74,12 +73,10 @@ def test_post_block_exception(monkeypatch, client):
     assert response.data["error"] == "Errore finto"
 
 
-# ----------- BlockTestView GET -----------
 
 
 @pytest.mark.django_db
 def test_blocktestview_get_success(monkeypatch, factory):
-    # Successo con blocchi e run
     class FakeLLM:
         def __init__(self, id):
             self.id = id
@@ -133,7 +130,6 @@ def test_blocktestview_get_success(monkeypatch, factory):
 
 @pytest.mark.django_db
 def test_blocktestview_get_missing_llm(monkeypatch, factory):
-    # Uno dei due LLM non esiste
     monkeypatch.setattr("API.views_def.block_view.LLMService.read", lambda x: None)
     request = factory.get("/question_blocks/", {"first_llm_id": 1, "second_llm_id": 2})
     response = BlockTestView.as_view()(request)
@@ -143,7 +139,6 @@ def test_blocktestview_get_missing_llm(monkeypatch, factory):
 
 @pytest.mark.django_db
 def test_blocktestview_get_no_common_blocks(monkeypatch, factory):
-    # Nessun blocco comune
     class FakeLLM:
         def __init__(self, id):
             self.id = id
@@ -176,7 +171,6 @@ def test_blocktestview_get_no_common_blocks(monkeypatch, factory):
 
 @pytest.mark.django_db
 def test_blocktestview_get_multiple_runs(monkeypatch, factory):
-    # Più run e blocchi, copre for annidati
     class FakeLLM:
         def __init__(self, id):
             self.id = id
@@ -218,7 +212,6 @@ def test_blocktestview_get_multiple_runs(monkeypatch, factory):
     class FakeBlockManager:
         @staticmethod
         def filter(**kwargs):
-            # Restituisce entrambi i blocchi
             return [FakeBlock(1, "block1"), FakeBlock(2, "block2")]
 
     monkeypatch.setattr(

@@ -35,19 +35,17 @@ def prompt(db, session):
     return Prompt.objects.create(prompt_text="Test?", expected_answer="42")
 
 
-# --- GET ALL SUCCESS ---
 @patch("API.views_def.prompt_view.PromptService.read_all")
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_get_all_prompts_success(
     mock_serializer, mock_service, client, base_url, prompt
 ):
-    # Aggiungi anche 'expected_answer' e 'timestamp'
     mock_service.return_value = [
         {
             "id": prompt.id,
             "prompt_text": "Test?",
             "expected_answer": "42",
-            "timestamp": str(prompt.timestamp),  # deve essere una stringa ISO
+            "timestamp": str(prompt.timestamp), 
             "evaluation_set": [],
         }
     ]
@@ -66,7 +64,6 @@ def test_get_all_prompts_success(
     assert isinstance(response.data, list)
 
 
-# --- GET ALL EXCEPTION ---
 @patch(
     "API.views_def.prompt_view.PromptService.read_all",
     side_effect=Exception("Errore get all"),
@@ -77,7 +74,6 @@ def test_get_all_prompts_exception(mock_service, client, base_url):
     assert "error" in response.data
 
 
-# --- GET BY ID SUCCESS ---
 @patch("API.views_def.prompt_view.PromptService.read")
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_get_prompt_by_id_success(mock_serializer, mock_service, client, prompt):
@@ -104,7 +100,6 @@ def test_get_prompt_by_id_success(mock_serializer, mock_service, client, prompt)
     assert response.data["id"] == prompt.id
 
 
-# --- GET BY ID EXCEPTION ---
 @patch(
     "API.views_def.prompt_view.PromptService.read",
     side_effect=Exception("Errore get by id"),
@@ -116,7 +111,6 @@ def test_get_prompt_by_id_exception(mock_service, client, prompt):
     assert "error" in response.data
 
 
-# --- POST SUCCESS ---
 @patch("API.views_def.prompt_view.PromptService.create")
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_post_prompt_success(mock_serializer, mock_service, client, session):
@@ -134,7 +128,6 @@ def test_post_prompt_success(mock_serializer, mock_service, client, session):
     assert response.data["prompt_text"] == "Test?"
 
 
-# --- POST INVALID SERIALIZER ---
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_post_prompt_invalid_serializer(mock_serializer, client):
     instance = mock_serializer.return_value
@@ -145,7 +138,6 @@ def test_post_prompt_invalid_serializer(mock_serializer, client):
     assert "prompt_text" in response.data
 
 
-# --- POST EXCEPTION ---
 @patch(
     "API.views_def.prompt_view.PromptService.create",
     side_effect=Exception("Errore post"),
@@ -166,7 +158,6 @@ def test_post_prompt_exception(mock_serializer, mock_service, client, session):
     assert "error" in response.data
 
 
-# --- PUT SUCCESS ---
 @patch("API.views_def.prompt_view.PromptService.update")
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_put_prompt_success(mock_serializer, mock_service, client, prompt, session):
@@ -185,7 +176,6 @@ def test_put_prompt_success(mock_serializer, mock_service, client, prompt, sessi
     assert response.data["prompt_text"] == "Updated?"
 
 
-# --- PUT INVALID SERIALIZER ---
 @patch("API.views_def.prompt_view.PromptSerializer")
 def test_put_prompt_invalid_serializer(mock_serializer, client, prompt):
     instance = mock_serializer.return_value
@@ -197,7 +187,6 @@ def test_put_prompt_invalid_serializer(mock_serializer, client, prompt):
     assert "prompt_text" in response.data
 
 
-# --- PUT EXCEPTION ---
 @patch(
     "API.views_def.prompt_view.PromptService.update",
     side_effect=Exception("Errore put"),
@@ -219,7 +208,6 @@ def test_put_prompt_exception(mock_serializer, mock_service, client, prompt, ses
     assert "error" in response.data
 
 
-# --- DELETE SUCCESS ---
 @patch("API.views_def.prompt_view.PromptService.delete")
 def test_delete_prompt_success(mock_service, client, prompt):
     url = f"/prompt_list/{prompt.id}/"
@@ -227,7 +215,6 @@ def test_delete_prompt_success(mock_service, client, prompt):
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
-# --- DELETE EXCEPTION ---
 @patch(
     "API.views_def.prompt_view.PromptService.delete",
     side_effect=Exception("Errore delete"),

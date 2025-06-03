@@ -21,7 +21,6 @@ def url():
     return "/runtest/"
 
 
-# --- POST SUCCESS ---
 @patch("API.views_def.run_block_test_view.BlockTestService.runtest")
 @patch("API.views_def.run_block_test_view.BlockService.retrieve_blocks")
 @patch("API.views_def.run_block_test_view.SessionService.read")
@@ -37,7 +36,6 @@ def test_post_test_success(
     assert response.data == {"result": "ok"}
 
 
-# --- POST ConnectionError ---
 @patch(
     "API.views_def.run_block_test_view.BlockTestService.runtest",
     side_effect=ConnectionError("Connessione persa"),
@@ -55,7 +53,6 @@ def test_post_test_connection_error(
     assert response.data["error"] == "Connessione persa"
 
 
-# --- POST FileNotFoundError ---
 @patch(
     "API.views_def.run_block_test_view.BlockTestService.runtest",
     side_effect=FileNotFoundError("File mancante"),
@@ -73,7 +70,6 @@ def test_post_test_file_not_found_error(
     assert response.data["error"] == "File mancante"
 
 
-# --- POST errore sconosciuto ---
 @patch(
     "API.views_def.run_block_test_view.BlockTestService.runtest",
     side_effect=Exception("Errore generico"),

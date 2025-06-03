@@ -20,7 +20,6 @@ def url():
     return "/previous_tests/"
 
 
-# --- GET con test_id (ramo TestService.format_results) ---
 @patch("API.views_def.prev_test_view.BlockTestService.format_results")
 @patch("API.views_def.prev_test_view.BlockTestService.read")
 def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client, url):
@@ -29,7 +28,7 @@ def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client,
     response = client.get(f"{url}1/?test_id=5")
     assert response.status_code == 200
     assert response.json() == {"result": "ok"}
-    mock_read.assert_called_once_with(instance_id="5")  # test_id è una stringa da GET
+    mock_read.assert_called_once_with(instance_id="5")  
     mock_format_results.assert_called_once()
 
 
@@ -83,7 +82,6 @@ def test_get_previous_tests_by_session(mock_get_tests, mock_serializer, client, 
     mock_get_tests.assert_called_once_with(1)
 
 
-# --- GET: Test.DoesNotExist ---
 @patch(
     "API.views_def.prev_test_view.SessionService.get_tests_by_session",
     side_effect=Exception("Test not found"),
@@ -94,7 +92,6 @@ def test_get_previous_tests_not_found(mock_get_tests, client, url):
     assert "error" in response.json()
 
 
-# --- GET: generic Exception ---
 @patch(
     "API.views_def.prev_test_view.SessionService.get_tests_by_session",
     side_effect=Exception("Errore generico"),
@@ -105,7 +102,6 @@ def test_get_previous_tests_generic_error(mock_get_tests, client, url):
     assert "error" in response.json()
 
 
-# --- DELETE successo ---
 @patch("API.views_def.prev_test_view.BlockTestService.delete")
 def test_delete_previous_tests_success(mock_delete, client, url):
     mock_delete.return_value = None
@@ -115,7 +111,6 @@ def test_delete_previous_tests_success(mock_delete, client, url):
     assert response.status_code == 204
 
 
-# --- DELETE: Test.DoesNotExist ---
 @patch(
     "API.views_def.prev_test_view.BlockTestService.delete",
     side_effect=Exception("Test not found"),
@@ -126,7 +121,6 @@ def test_delete_previous_tests_not_found(mock_delete, client, url):
     assert "error" in response.json()
 
 
-# --- DELETE: generic Exception ---
 @patch(
     "API.views_def.prev_test_view.BlockTestService.delete",
     side_effect=Exception("Errore cancellazione"),

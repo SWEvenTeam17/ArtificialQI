@@ -13,13 +13,12 @@ from rest_framework.test import APIRequestFactory
 from API.views_def.abstract_view import AbstractView
 
 
-# Dummy serializer base
 class DummySerializer(serializers.Serializer):
     def to_internal_value(self, data):
-        return data  # accetta qualsiasi input
+        return data
 
     def to_representation(self, instance):
-        return instance  # restituisce qualsiasi cosa
+        return instance
 
     def is_valid(self, raise_exception=False):
         self._validated_data = self.initial_data
@@ -30,7 +29,7 @@ class DummySerializer(serializers.Serializer):
         return getattr(self, "_validated_data", self.initial_data)
 
 
-# Dummy service base
+
 class DummyService:
     @staticmethod
     def read_all():
@@ -39,7 +38,7 @@ class DummyService:
     @staticmethod
     def read(instance_id):
         if instance_id is None:
-            return None  # Simula oggetto non trovato
+            return None  
         return {"value": f"data{instance_id}"}
 
     @staticmethod
@@ -57,7 +56,7 @@ class DummyService:
         return True
 
 
-# Dummy view base
+
 class DummyView(AbstractView):
     _serializer = DummySerializer
     _service = DummyService
@@ -127,10 +126,8 @@ def test_delete_without_instance_id():
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
-# --- ERROR CASES ---
 
 
-# Serializer non valido
 class InvalidSerializer(DummySerializer):
     def is_valid(self, raise_exception=False):
         return False
@@ -161,7 +158,7 @@ def test_put_invalid_serializer():
     assert "error" in response.data
 
 
-# Service che solleva eccezione
+
 class FailingService(DummyService):
     @staticmethod
     def create(data):
@@ -204,7 +201,6 @@ def test_delete_service_exception():
     assert "error" in response.data
 
 
-# Service che solleva eccezione in read_all e read
 class FailingGetService(DummyService):
     @staticmethod
     def read_all():
