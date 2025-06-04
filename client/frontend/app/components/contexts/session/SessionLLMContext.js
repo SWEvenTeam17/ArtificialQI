@@ -72,7 +72,7 @@ export const SessionLLMContextProvider = ({ children, sessionId }) => {
         fetchRemainingLLMs();
       }
     },
-    [sessionId, setSessionData, setLimit, fetchRemainingLLMs, sessionData?.llm],
+    [sessionData?.id, setSessionData, setLimit, fetchRemainingLLMs, sessionData?.llm],
   );
 
   const fetchSessionData = useCallback(async () => {
