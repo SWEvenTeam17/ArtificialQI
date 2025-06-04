@@ -5,3 +5,4 @@ django-cors-headers
 langchain-ollama
 daphne
 requests
+drf-spectacular
