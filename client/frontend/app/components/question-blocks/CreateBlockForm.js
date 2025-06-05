@@ -21,7 +21,7 @@ export default function CreateBlockForm() {
       <div className="card bg-light border-light rounded-5 m-5">
         <div className="card-body">
           <p className="card-title text-center fs-1 text-primary">
-            Crea nuovo blocco
+            Crea nuovo insieme di domande
           </p>
           <Form
             onSubmit={handleSubmit}
@@ -53,7 +53,7 @@ export default function CreateBlockForm() {
                   type="submit"
                   className="btn btn-primary rounded-5 w-100"
                 >
-                  Crea blocco
+                  Crea insieme
                 </button>
               </div>
               <div className="col">

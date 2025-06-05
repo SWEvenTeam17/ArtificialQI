@@ -51,7 +51,7 @@ export default function PrevTests() {
                 <div className="card-body">
                   <h5 className="card-title text-primary">Test #{test.id}</h5>
                   <p className="mb-1">
-                    <strong>Blocco di domande:</strong>
+                    <strong>Insieme di domande:</strong>
                     <br />
                     <span className="text-dark">{test.block.name}</span>
                   </p>

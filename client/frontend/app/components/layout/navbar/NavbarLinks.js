@@ -20,7 +20,7 @@ export default function NavbarLinks() {
       </li>
       <li className="nav-item me-3">
         <Link className="nav-link" href="/question-blocks">
-          Blocchi di domande
+          Insiemi di domande
         </Link>
       </li>
     </ul>

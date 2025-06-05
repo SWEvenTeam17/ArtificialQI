@@ -8,7 +8,7 @@ export default function QuestionBlocksSelector() {
       <div className="card border-0 mb-5">
         <div className="card-body">
           <h5 className="card-title text-center text-primary fw-bold">
-            Blocchi di domande disponibili
+            Insiemi di domande disponibili
           </h5>
           <ul
             className="list-group list-group-flush"

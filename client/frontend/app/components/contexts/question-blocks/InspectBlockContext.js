@@ -24,7 +24,7 @@ export function InspectBlockProvider({ children, id }) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}`,
       );
-      if (!response.ok) throw new Error("Errore nel recupero del blocco");
+      if (!response.ok) throw new Error("Errore nel recupero dell'insieme di domande");
       const parsed = await response.json();
       setBlockData(parsed);
     } catch (err) {

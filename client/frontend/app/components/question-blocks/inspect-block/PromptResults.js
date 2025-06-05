@@ -95,7 +95,7 @@ export default function PromptResults() {
                   >
                     <h5 className="card-title text-primary">{label}</h5>
                     <p className="mb-1">
-                      <strong>Blocco:</strong>
+                      <strong>Insieme di domande:</strong>
                       <br />
                       {result.block_name}
                     </p>

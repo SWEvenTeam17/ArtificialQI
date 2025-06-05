@@ -8,9 +8,9 @@ export function BlockNameInput({ inputRefs }) {
             id="block_name"
             name="block_name"
             className="form-control rounded-5"
-            placeholder="Nome blocco"
+            placeholder="Nome insieme"
           />
-          <label htmlFor="block_name">Nome del blocco</label>
+          <label htmlFor="block_name">Nome dell&apos;insieme di domande</label>
         </div>
       </div>
     </div>

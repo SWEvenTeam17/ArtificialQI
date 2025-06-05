@@ -34,7 +34,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/`,
       );
-      if (!response.ok) throw new Error("Errore nel recupero dei blocchi");
+      if (!response.ok) throw new Error("Errore nel recupero degli insiemi");
       const data = await response.json();
       const filteredData = data.filter(
         (block) => Array.isArray(block.prompt) && block.prompt.length > 0,
@@ -42,8 +42,8 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       setQuestionBlocks(filteredData);
       setError(null);
     } catch (error) {
-      console.error("Errore durante il recupero dei blocchi:", error);
-      setError("Impossibile caricare i blocchi di domande.");
+      console.error("Errore durante il recupero degli insiemi:", error);
+      setError("Impossibile caricare gli insiemi di domande.");
     } finally {
       setLoading(false);
     }
@@ -58,12 +58,12 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question_blocks/${id}/`,
       );
-      if (!response.ok) throw new Error("Errore nel recupero del blocco");
+      if (!response.ok) throw new Error("Errore nel recupero dell'insieme di domande");
       const data = await response.json();
       setSelectedBlocks((prev) => [...prev, data]);
       setError(null);
     } catch {
-      setError("Errore durante l'aggiunta del blocco.");
+      setError("Errore durante l'aggiunta dell'insieme di domande.");
     }
   }, []);
 
@@ -198,7 +198,7 @@ export const TestFormContextProvider = ({ children, sessionData }) => {
               },
             );
             if (!response.ok)
-              throw new Error("Errore nella creazione del blocco da JSON.");
+              throw new Error("Errore nella creazione dell'insieme di domande da JSON.");
             return await response.json();
           }),
         );

@@ -29,7 +29,7 @@ export default function TestForm() {
 
       {!isJSON && questionBlocks.length === 0 && (
         <p className="text-center fs-3">
-          È necessario creare dei blocchi di domande per eseguire un test.
+          È necessario creare degli insiemi di domande per eseguire un test.
         </p>
       )}
       <TestActions />

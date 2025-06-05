@@ -47,7 +47,13 @@ INSTALLED_APPS = [
     "API",
     "rest_framework",
     "corsheaders",
+    "drf_spectacular"
 ]
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

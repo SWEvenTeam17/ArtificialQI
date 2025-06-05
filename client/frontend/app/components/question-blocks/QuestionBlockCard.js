@@ -38,7 +38,7 @@ export default function QuestionBlockCard({ block, onDelete }) {
             onDelete(block.id);
           }}
         >
-          Elimina blocco
+          Elimina insieme
         </button>
       </div>
     </div>

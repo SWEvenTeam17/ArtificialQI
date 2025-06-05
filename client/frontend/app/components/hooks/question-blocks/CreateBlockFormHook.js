@@ -48,7 +48,7 @@ export const useCreateBlockFormHook = () => {
     const blockName = formData.get("block_name");
 
     if (!blockName) {
-      setFormErrors("Il nome del blocco è obbligatorio.");
+      setFormErrors("Il nome dell'insieme di domande è obbligatorio.");
       if (inputRefs.current["block_name"]) {
         inputRefs.current["block_name"].classList.add("is-invalid");
       }
@@ -125,17 +125,17 @@ export const useCreateBlockFormHook = () => {
       } else {
         const errorData = await response.json().catch(() => null);
         if (errorData?.error === "Nome duplicato") {
-          setFormErrors("Esiste già un blocco con questo nome.");
+          setFormErrors("Esiste già un insieme di domande con questo nome.");
           if (inputRefs.current["block_name"]) {
             inputRefs.current["block_name"].classList.add("is-invalid");
           }
         } else {
-          setFormErrors("Errore durante la creazione del blocco.");
+          setFormErrors("Errore durante la creazione dell'insieme di domande.");
         }
       }
     } catch (error) {
-      console.error("Errore durante la creazione del blocco:", error);
-      setFormErrors("Errore di rete durante la creazione del blocco.");
+      console.error("Errore durante la creazione dell'insieme di domande:", error);
+      setFormErrors("Errore di rete durante la creazione dell'insieme di domande.");
     }
   };
 
