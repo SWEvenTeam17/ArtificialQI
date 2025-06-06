@@ -1,19 +1,30 @@
 from django.urls import path
-from API import views
+
+from .views_def.block_view import BlockTestView, BlockView
+from .views_def.llm_view import LLMView, OllamaView
+from .views_def.prev_test_view import PrevTestView
+from .views_def.prompt_view import PromptView
+from .views_def.run_view import RunPromptView
+from .views_def.session_llm_view import SessionLLMView
+from .views_def.sessions_view import SessionsView
+from .views_def.run_block_test_view import RunBlockTestView
 
 urlpatterns = [
-    path("session_list/", views.session_list),
-    path("session_list/<int:pk>/", views.session_detail),
-    path("previous_tests/<int:pk>/", views.get_previous_tests),
-    path("prompt_list/", views.prompt_list),
-    path("prompt_list/<int:pk>/", views.prompt_detail),
-    path("answer_list/", views.answer_list),
-    path("answer_list/<int:pk>/", views.answer_detail),
-    path("llm_list/", views.llm_list),
-    path("llm_list/<int:pk>/", views.llm_detail),
-    path("llm_list/load_ollama/", views.load_ollama_llms),
-    path("llm_add/", views.add_llm_session),
-    path("llm_remaining/<int:pk>", views.get_llm_session),
-    path("llm_delete/<int:session_id>/<int:llm_id>", views.delete_llm_session),
-    path("runtest", views.runtest),
+    path("session_list/", SessionsView.as_view()),
+    path("session_list/<int:instance_id>/", SessionsView.as_view()),
+    path("previous_tests/<int:instance_id>/", PrevTestView.as_view()),
+    path("prompt_list/", PromptView.as_view()),
+    path("prompt_list/<int:instance_id>/", PromptView.as_view()),
+    path("question_blocks/", BlockView.as_view()),
+    path("question_blocks/<int:instance_id>/", BlockView.as_view()),
+    path("question_blocks/compare/", BlockTestView.as_view()),
+    path("llm_list/", LLMView.as_view()),
+    path("llm_list/<int:instance_id>/", LLMView.as_view()),
+    path("llm_list_by_session/<int:instance_id>/", SessionLLMView.as_view()),
+    path("llm_list/load_ollama/", OllamaView.as_view()),
+    path("llm_add/", SessionLLMView.as_view()),
+    path("llm_remaining/<int:instance_id>", SessionLLMView.as_view()),
+    path("llm_delete/<int:session_id>/<int:llm_id>", SessionLLMView.as_view()),
+    path("runtest/", RunBlockTestView.as_view()),
+    path("prompt_runs/", RunPromptView.as_view())
 ]

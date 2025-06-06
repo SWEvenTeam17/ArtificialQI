@@ -1,43 +1,17 @@
 "use client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import delteIcon from "/public/images/icon.png";
+import { SessionCardProvider } from "@/app/components/contexts/session/SessionCardContext";
+import SessionCardBody from "./SessionCardBody";
+import SessionCardActions from "./SessionCardActions";
 
-const SessionCard = ({ session, deleteSession }) => {
-  const router = useRouter();
-
+export default function SessionCard({ session }) {
   return (
-    <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">
-      <Link
-        href={`/sessions/${session.id}`}
-        onClick={() => router.push(`/sessions/${session.id}`)}
-        className="text-decoration-none text-dark"
-      >
+    <SessionCardProvider session={session}>
+      <div className="card text-center rounded-5 border-light shadow hover-grow p-3 mb-2 w-100">
         <div className="card-body">
-          <h4 className="card-title text-primary">{session.title}</h4>
-          <p className="card-text">{session.description}</p>
+          <SessionCardBody />
         </div>
-      </Link>
-      <div className="row justify-content-center">
-        <div className="col">
-          <button
-            className="btn btn-danger shadow-sm w-100 rounded-5"
-            onClick={() => {
-              deleteSession(session.id);
-            }}
-          >
-            <Image
-              alt={"Cancella sessione"}
-              width={32}
-              height={32}
-              src={delteIcon}
-            />
-          </button>
-        </div>
+        <SessionCardActions />
       </div>
-    </div>
+    </SessionCardProvider>
   );
-};
-
-export default SessionCard;
+}

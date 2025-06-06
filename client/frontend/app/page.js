@@ -1,10 +1,9 @@
 "use client";
-import { useContext } from "react";
-import { SessionContext } from "./components/contexts/SessionContext";
+import { useSessionContext } from "./components/contexts/session/SessionContext";
 import SessionCard from "./components/sessions/SessionCard";
 
 export default function Home() {
-  const { sessions, deleteSession } = useContext(SessionContext);
+  const { sessions, deleteSession, updateSession } = useSessionContext();
 
   return (
     <div className="container">
@@ -12,10 +11,10 @@ export default function Home() {
       <p className="text-center fs-5">
         Per cominciare, seleziona una sessione:
       </p>
-      <div className="row row-cols-lg-4 row-cols-md-2 row-cols-1 mt-5 g-2">
+      <div className="row row-cols-md-2 row-cols-1 mt-5 g-2">
         {sessions.map((session) => (
           <div className="col" key={session.id}>
-            <SessionCard session={session} deleteSession={deleteSession} />
+            <SessionCard session={session} />
           </div>
         ))}
       </div>

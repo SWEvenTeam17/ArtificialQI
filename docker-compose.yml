@@ -1,0 +1,69 @@
+services:
+  server:
+    container_name: server
+    build: ./server/
+    ports:
+      - "8000:8000"
+    networks:
+      - network
+    volumes:
+      - ./server/:/usr/src/app/ArtificialQI/server
+    depends_on:
+      - mysql
+
+  llm_service:
+    container_name: llm_service
+    build: ./microservices/
+    ports:
+      - "8001:8001"
+    networks:
+      - network
+    volumes:
+      - ./microservices/:/usr/src/app/ArtificialQI/microservices
+
+  frontend:
+    container_name: frontend
+    build: ./client/
+    ports:
+      - "3000:3000"
+    networks:
+      - network
+    volumes:
+      - ./client/:/usr/src/app/ArtificialQI/client
+    depends_on:
+      - server
+
+  ollama:
+    container_name: ollama
+    tty: true
+    restart: always
+    build: ./ollama/
+    ports:
+      - "5000:11434"
+    networks:
+      - network
+    depends_on:
+      - frontend
+      - server
+      - llm_service
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ArtificialQI
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - network
+
+volumes:
+  data:
+  mysql_data:
+
+networks:
+  network:
+    driver: bridge
