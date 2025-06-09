@@ -37,6 +37,7 @@ export default function QuestionBlockCard({ block, onDelete }) {
             e.preventDefault();
             onDelete(block.id);
           }}
+          data-cy={`delete-btn-${block.id}`}
         >
           Elimina insieme
         </button>

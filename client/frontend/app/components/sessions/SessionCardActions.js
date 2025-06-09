@@ -15,6 +15,7 @@ export default function SessionCardActions() {
         <button
           className="btn btn-danger shadow-sm w-100 rounded-5"
           onClick={isEditing ? cancelEditing : removeSession}
+          data-cy={isEditing ? "cancel-button" : "delete-button"}
         >
           <Image
             alt={isEditing ? "Annulla" : "Cancella sessione"}
@@ -28,6 +29,7 @@ export default function SessionCardActions() {
         <button
           className={`btn ${isEditing ? "btn-success" : "btn-primary"} shadow-sm w-100 rounded-5`}
           onClick={isEditing ? saveChanges : startEditing}
+          data-cy={isEditing ? "save-button" : "edit-button"}
         >
           <Image
             alt={isEditing ? "Salva" : "Modifica sessione"}

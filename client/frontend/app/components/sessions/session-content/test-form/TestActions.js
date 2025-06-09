@@ -11,6 +11,7 @@ export default function TestActions() {
         <div className="row row-cols-1 mt-5 g-0 justify-content-center text-center">
           <div className="col-md-6 col-12">
             <button
+              data-cy="run-test-button"
               onClick={(e) => {
                 e.preventDefault();
                 submitToBackend();
@@ -38,6 +39,7 @@ export default function TestActions() {
                 showPrevTests();
               }}
               className="btn btn-outline-primary w-50 rounded-5"
+              data-cy="view-previous-tests"
             >
               Visualizza test precedenti
             </button>

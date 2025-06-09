@@ -44,6 +44,7 @@ export default function SessionCardBody() {
           type="text"
           className="form-control rounded-5"
           placeholder="Descrizione"
+          data-cy="description-input"
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
         />
@@ -57,7 +58,7 @@ export default function SessionCardBody() {
       className="text-decoration-none text-dark"
       onClick={handleCardClick}
     >
-      <h4 className="card-title text-primary">{session.title}</h4>
+      <h4 className="card-title text-primary" data-cy="session-title">{session.title}</h4>
       <p className="card-text">{session.description}</p>
       <small className="text-muted">
         Ultimo accesso:{" "}

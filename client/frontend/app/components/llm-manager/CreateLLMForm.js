@@ -23,7 +23,7 @@ export default function CreateLLMForm() {
           {conflict}
         </div>
       )}
-      <Form onSubmit={createLLM}>
+      <Form data-cy="create-llm-form" onSubmit={createLLM}>
         <p className="text-center fs-5">Crea un LLM:</p>
         <div className="row row-cols-md-2 row-cols-1 g-2">
           <div className="col">
@@ -38,7 +38,7 @@ export default function CreateLLMForm() {
               />
               <label>Nome</label>
               {formErrors.name && (
-                <div className="invalid-feedback">{formErrors.name}</div>
+                <div data-cy="error-message" className="invalid-feedback">{formErrors.name}</div>
               )}
             </div>
           </div>
@@ -61,7 +61,7 @@ export default function CreateLLMForm() {
             </div>
           </div>
           <div className="col">
-            <button type="submit" className="btn btn-primary w-100 rounded-5">
+            <button data-cy="create-llm" type="submit" className="btn btn-primary w-100 rounded-5">
               Crea
             </button>
           </div>
@@ -69,6 +69,7 @@ export default function CreateLLMForm() {
             <button
               onClick={loadOllamaModels}
               className="btn btn-outline-success w-100 rounded-5"
+              data-cy="load-ollama-models"
             >
               Carica modelli di Ollama
             </button>

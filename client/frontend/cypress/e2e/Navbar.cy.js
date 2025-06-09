@@ -50,7 +50,7 @@ describe("Navbar", () => {
     cy.get(".navbar-nav").contains("Confronta risultati").click();
     cy.url().should("include", "/compare");
 
-    cy.get(".navbar-nav").contains("Blocchi di domande").click();
+    cy.get(".navbar-nav").contains("Insiemi di domande").click();
     cy.url().should("include", "/question-blocks");
   });
 });
