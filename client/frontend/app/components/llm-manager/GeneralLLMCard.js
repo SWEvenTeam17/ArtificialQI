@@ -6,7 +6,7 @@ export default function GeneralLLMCard({ llm }) {
   const { deleteLLM } = useLLMManagerContext();
 
   return (
-    <div className="card shadow-sm border-light rounded-5 h-100 justify-content-center text-center">
+    <div data-cy="general-llm-card" className="card shadow-sm border-light rounded-5 h-100 justify-content-center text-center">
       <div className="card-body">
         <h3 className="card-title text-primary">{llm.name}</h3>
         <p className="card-text text-muted">

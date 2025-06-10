@@ -48,7 +48,6 @@ describe('Create Block Form', () => {
     cy.visit('http://localhost:3000/question-blocks/create');
 
     cy.get('[data-cy="block-name-input"]').type('Blocco fallito');
-    cy.contains('Aggiungi una domanda').click();
     cy.get('input[name^="question"]').eq(0).type('Domanda?');
     cy.get('input[name^="answer"]').eq(0).type('Risposta');
 
@@ -56,6 +55,6 @@ describe('Create Block Form', () => {
 
     cy.get('.alert.alert-danger')
       .should('exist')
-      .and('contain.text', 'Errore durante la creazione del blocco');
+      .and('contain.text', "Errore durante la creazione dell'insieme di domande.");
   });
 });

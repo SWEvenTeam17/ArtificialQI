@@ -17,12 +17,16 @@ export default function QuestionBlocksSelector() {
             {questionBlocks.map((block, index) => (
               <li
                 key={index}
-                className="list-group-item list-group-item-action rounded-3"
+                data-cy={`block-${block.id}`}
+                className={`list-group-item list-group-item-action rounded-3 ${isSelected(block.id) ? "selected" : ""}`}
+                {...(isSelected(block.id)
+                  ? { "data-cy-selected": "true" }
+                  : {})}
               >
                 <div className="row">
                   <div className="col-9">
                     <p className="fw-bold mb-1">Nome</p>
-                    <p>{block.name}</p>
+                    <p data-cy={`block-${block.id}-name`}>{block.name}</p>
                   </div>
                   <div className="col-md-3 col-12">
                     {isSelected(block.id) ? (
@@ -33,6 +37,7 @@ export default function QuestionBlocksSelector() {
                           removeBlock(block.id);
                         }}
                         disabled={loading}
+                        data-cy="block-deselect-button"
                       >
                         Rimuovi
                       </button>
@@ -44,6 +49,7 @@ export default function QuestionBlocksSelector() {
                           addBlock(block.id);
                         }}
                         disabled={loading}
+                        data-cy="block-select-button"
                       >
                         Seleziona
                       </button>

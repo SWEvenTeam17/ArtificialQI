@@ -11,6 +11,7 @@ export default function SessionLLMCard({ llm, deleteLLM }) {
         <button
           className="btn btn-danger w-50 rounded-5"
           onClick={() => deleteLLM(llm.id)}
+          data-cy={`delete-llm-button`}
         >
           <Image width={32} height={32} alt="Elimina llm" src={delteIcon} />
         </button>

@@ -9,6 +9,7 @@ export function BlockNameInput({ inputRefs }) {
             name="block_name"
             className="form-control rounded-5"
             placeholder="Nome insieme"
+            data-cy="block-name-input"
           />
           <label htmlFor="block_name">Nome dell&apos;insieme di domande</label>
         </div>

@@ -33,6 +33,7 @@ export default function SessionLLMForm() {
           className="btn btn-primary rounded-5 w-100"
           type="submit"
           disabled={isLLMDataEmpty}
+          data-cy="add-llm-button"
         >
           Aggiungi
         </button>

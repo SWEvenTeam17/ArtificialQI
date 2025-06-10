@@ -26,6 +26,7 @@ export default function CreateBlockForm() {
           <Form
             onSubmit={handleSubmit}
             className="text-center justify-content-center"
+            data-cy="create-block-form"
           >
             {formErrors && (
               <div className="alert alert-danger" role="alert">
