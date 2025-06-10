@@ -3,11 +3,13 @@ describe("QuestionBlocksSelector - esecuzione test", () => {
     // Mock delle chiamate iniziali
     cy.intercept("GET", "**/session_list/**", {
       statusCode: 200,
-      body: [{
-        id: 42,
-        title: "Sessione di benchmark",
-        llm: [{ id: 1, name: "GPT-4", n_parameters: "175B" }],
-      }],
+      body: [
+        {
+          id: 42,
+          title: "Sessione di benchmark",
+          llm: [{ id: 1, name: "GPT-4", n_parameters: "175B" }],
+        },
+      ],
     }).as("getSession");
 
     cy.intercept("GET", "**/session_list/42", {
@@ -90,7 +92,9 @@ describe("QuestionBlocksSelector - esecuzione test", () => {
   it("Esegue il test e mostra i risultati", () => {
     cy.get('[data-cy="block-select-button"]').click();
     cy.get('[data-cy="run-test-button"]').click();
-    cy.wait("@postRunTest").its("request.body").should("have.property", "blocks");
+    cy.wait("@postRunTest")
+      .its("request.body")
+      .should("have.property", "blocks");
     cy.contains("Risposte dettagliate").should("exist");
     cy.contains("Qual è la capitale della Francia?").should("exist");
     cy.contains("Parigi").should("exist");

@@ -4,9 +4,8 @@ Repository che gestisce le istanze delle Sessioni in DB.
 
 from typing import ClassVar
 
-from django.db import models
-
 from API.models import LLM, BlockTest, Session
+from django.db import models
 
 from .abstract_repository import AbstractRepository
 

@@ -7,7 +7,6 @@ django.setup()
 from unittest.mock import MagicMock
 
 import pytest
-
 from API.services.abstract_service import AbstractService
 
 

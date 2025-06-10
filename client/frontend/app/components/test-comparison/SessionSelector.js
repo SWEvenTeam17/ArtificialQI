@@ -6,7 +6,8 @@ export default function SessionSelector() {
   const { setSelectedSessionData, fetchSessionData } =
     useTestComparatorContext();
   return (
-    <select data-cy="session-select"
+    <select
+      data-cy="session-select"
       onChange={(e) => {
         e.target.value === "0"
           ? setSelectedSessionData([])

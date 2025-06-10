@@ -2,10 +2,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
-from django.core.exceptions import ObjectDoesNotExist
-
 from API.services.llm_service import LLMService
 from API.tests.services.abstract_service_test import AbstractServiceTestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class TestLLMService(AbstractServiceTestCase):

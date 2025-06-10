@@ -6,10 +6,10 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
 import pytest
-
 from API.models import LLM, Evaluation, Prompt, Run, Session
 from API.repositories.run_repository import RunRepository
-from API.tests.repositories.abstract_repository_test import TestAbstractRepository
+from API.tests.repositories.abstract_repository_test import \
+    TestAbstractRepository
 
 
 @pytest.mark.django_db

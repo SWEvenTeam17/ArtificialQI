@@ -7,10 +7,9 @@ django.setup()
 from unittest.mock import patch
 
 import pytest
+from API.models import LLM, Session
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from API.models import LLM, Session
 
 
 @pytest.fixture

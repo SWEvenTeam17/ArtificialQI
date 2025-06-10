@@ -66,7 +66,7 @@ describe("SessionLLMPanel", () => {
 
   it("should show message when no LLM is selected", () => {
     cy.contains(
-      "Nessun LLM selezionato, aggiungi un LLM per cominciare."
+      "Nessun LLM selezionato, aggiungi un LLM per cominciare.",
     ).should("exist");
   });
 
@@ -81,8 +81,8 @@ describe("SessionLLMPanel", () => {
     cy.get('select[name="selectllm"]').select("LLM 1");
     cy.get('[data-cy="add-llm-button"]').click();
     cy.contains("LLM 1").should("exist");
-    cy.get('.row-cols-md-4 > .col > .card > .card-body').should("exist");
+    cy.get(".row-cols-md-4 > .col > .card > .card-body").should("exist");
     cy.get('[data-cy="delete-llm-button"]').click();
-    cy.get('.row-cols-md-4 > .col > .card > .card-body').should("not.exist");
+    cy.get(".row-cols-md-4 > .col > .card > .card-body").should("not.exist");
   });
 });

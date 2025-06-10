@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: ''
+  title: ""
   version: 0.0.0
 paths:
   /interrogate/:
@@ -8,38 +8,38 @@ paths:
       operationId: interrogate_retrieve
       description: Restituisce la lista degli LLM disponibili
       tags:
-      - interrogate
+        - interrogate
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LLMResponse'
-          description: ''
+                $ref: "#/components/schemas/LLMResponse"
+          description: ""
     post:
       operationId: interrogate_create
       description: Interroga un LLM specifico con un prompt
       tags:
-      - interrogate
+        - interrogate
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/LLMRequest'
+              $ref: "#/components/schemas/LLMRequest"
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LLMResponse'
-          description: ''
+                $ref: "#/components/schemas/LLMResponse"
+          description: ""
 components:
   schemas:
     LLMRequest:
@@ -50,8 +50,8 @@ components:
         prompt:
           type: string
       required:
-      - llm_name
-      - prompt
+        - llm_name
+        - prompt
     LLMResponse:
       type: object
       properties:
@@ -62,6 +62,6 @@ components:
         answer:
           type: string
       required:
-      - answer
-      - llm_name
-      - prompt
+        - answer
+        - llm_name
+        - prompt

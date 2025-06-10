@@ -2,10 +2,11 @@
 File che contiene la classe PromptView.
 """
 
+from API.services import RunService
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from API.services import RunService
+
 
 class RunPromptView(APIView):
     def get(self, request):

@@ -5,9 +5,8 @@ delle Run in DB.
 
 from typing import ClassVar, List
 
-from django.db import models
-
 from API.models import LLM, Run
+from django.db import models
 
 from .abstract_repository import AbstractRepository
 

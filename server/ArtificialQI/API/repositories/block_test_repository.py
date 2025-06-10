@@ -4,9 +4,8 @@ File che contiene il repository che gestisce le istanze dei Test in DB.
 
 from typing import ClassVar
 
-from django.db import models
-
 from API.models import BlockTest, Run
+from django.db import models
 
 from .abstract_repository import AbstractRepository
 

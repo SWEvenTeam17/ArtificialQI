@@ -7,9 +7,8 @@ l'input dell'utente e restituire errore
 se necessario.
 """
 
-from rest_framework import serializers
-
 from API.models import LLM, Block, BlockTest, Evaluation, Prompt, Run, Session
+from rest_framework import serializers
 
 
 class LLMSerializer(serializers.ModelSerializer):

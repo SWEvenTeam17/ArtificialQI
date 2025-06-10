@@ -58,7 +58,9 @@ export default function SessionCardBody() {
       className="text-decoration-none text-dark"
       onClick={handleCardClick}
     >
-      <h4 className="card-title text-primary" data-cy="session-title">{session.title}</h4>
+      <h4 className="card-title text-primary" data-cy="session-title">
+        {session.title}
+      </h4>
       <p className="card-text">{session.description}</p>
       <small className="text-muted">
         Ultimo accesso:{" "}

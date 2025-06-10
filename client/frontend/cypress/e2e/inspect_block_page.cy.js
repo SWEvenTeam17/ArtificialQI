@@ -1,15 +1,15 @@
 describe("InspectBlockPage", () => {
   beforeEach(() => {
-    cy.intercept('GET', '**/question_blocks/123', {
+    cy.intercept("GET", "**/question_blocks/123", {
       statusCode: 200,
       body: {
-        name: 'Blocco A',
+        name: "Blocco A",
         prompt: [
-          { id: 1, prompt_text: 'Domanda 1', expected_answer: 'Risposta 1' },
-          { id: 2, prompt_text: 'Domanda 2', expected_answer: 'Risposta 2' }
-        ]
-      }
-    }).as('getBlock');
+          { id: 1, prompt_text: "Domanda 1", expected_answer: "Risposta 1" },
+          { id: 2, prompt_text: "Domanda 2", expected_answer: "Risposta 2" },
+        ],
+      },
+    }).as("getBlock");
 
     cy.visit("http://localhost:3000/question-blocks/123");
   });
@@ -23,14 +23,17 @@ describe("InspectBlockPage", () => {
   });
 
   it("mostra un messaggio di errore se il blocco non esiste", () => {
-    cy.intercept('GET', '**/question_blocks/999', {
+    cy.intercept("GET", "**/question_blocks/999", {
       statusCode: 404,
-      body: { message: 'Blocco non trovato' }
-    }).as('getMissingBlock');
+      body: { message: "Blocco non trovato" },
+    }).as("getMissingBlock");
 
     cy.visit("http://localhost:3000/question-blocks/999");
 
-    cy.get('.alert-danger').should('contain.text', "Errore nel recupero dell'insieme di domande.");
+    cy.get(".alert-danger").should(
+      "contain.text",
+      "Errore nel recupero dell'insieme di domande.",
+    );
   });
 
   it("valida che la visualizzazione sia responsive su schermi piccoli", () => {

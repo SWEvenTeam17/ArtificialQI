@@ -52,7 +52,7 @@ describe("Home Page - Visualizzazione delle sessioni", () => {
     cy.get(".container").within(() => {
       cy.contains("h1", "ArtificialQI").should("be.visible");
       cy.contains("Per cominciare, seleziona una sessione:").should(
-        "be.visible"
+        "be.visible",
       );
       cy.contains("Benchmark GPT vs Claude").should("be.visible");
       cy.contains("Test LLM open-source").should("be.visible");
@@ -66,7 +66,7 @@ describe("Home Page - Visualizzazione delle sessioni", () => {
         .parents(".col")
         .within(() => {
           cy.contains("Sessione per confrontare GPT-4 e Claude 3").should(
-            "exist"
+            "exist",
           );
         });
 

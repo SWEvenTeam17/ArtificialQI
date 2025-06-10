@@ -5,12 +5,12 @@ richieste per effettuare operazioni sui Test.
 
 from typing import ClassVar, List
 
-from rest_framework import serializers, status
-from rest_framework.response import Response
-
 from API.models import Block
 from API.serializers import BlockTestSerializer
-from API.services import AbstractService, BlockService, BlockTestService, SessionService
+from API.services import (AbstractService, BlockService, BlockTestService,
+                          SessionService)
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from .abstract_view import AbstractView
 

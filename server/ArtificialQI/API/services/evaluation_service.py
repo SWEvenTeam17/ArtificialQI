@@ -7,12 +7,11 @@ import os
 import re
 from typing import ClassVar
 
+from API.repositories import AbstractRepository, EvaluationRepository
 from dotenv import load_dotenv
 from google.api_core.exceptions import GoogleAPICallError, InternalServerError
 from langchain_google_genai import ChatGoogleGenerativeAI
 from sentence_transformers import SentenceTransformer
-
-from API.repositories import AbstractRepository, EvaluationRepository
 
 from .abstract_service import AbstractService
 

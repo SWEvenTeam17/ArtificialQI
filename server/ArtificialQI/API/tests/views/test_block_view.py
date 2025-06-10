@@ -5,10 +5,9 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 import pytest
+from API.views_def.block_view import BlockTestView, BlockView
 from rest_framework import status
 from rest_framework.test import APIClient, APIRequestFactory
-
-from API.views_def.block_view import BlockTestView, BlockView
 
 
 @pytest.fixture
@@ -19,8 +18,6 @@ def client():
 @pytest.fixture
 def factory():
     return APIRequestFactory()
-
-
 
 
 @pytest.mark.django_db
@@ -71,8 +68,6 @@ def test_post_block_exception(monkeypatch, client):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
     assert response.data["error"] == "Errore finto"
-
-
 
 
 @pytest.mark.django_db

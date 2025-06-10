@@ -45,7 +45,7 @@ def test_get_all_prompts_success(
             "id": prompt.id,
             "prompt_text": "Test?",
             "expected_answer": "42",
-            "timestamp": str(prompt.timestamp), 
+            "timestamp": str(prompt.timestamp),
             "evaluation_set": [],
         }
     ]

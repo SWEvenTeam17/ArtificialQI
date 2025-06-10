@@ -5,7 +5,8 @@ File che contiene i servizi riguardanti i prompt.
 from typing import ClassVar
 
 from API.models import Prompt
-from API.repositories import AbstractRepository, PromptRepository, RunRepository
+from API.repositories import (AbstractRepository, PromptRepository,
+                              RunRepository)
 
 from .abstract_service import AbstractService
 

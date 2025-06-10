@@ -15,7 +15,9 @@ export default function LLMComparisonChart() {
   const { chartData, llmNames, selectedLLMS } = useTestComparatorContext();
   return (
     <div data-cy="comparison-chart" className="container-fluid">
-      <h4 className="text-center">Valutazione per insieme di domande - Semantica</h4>
+      <h4 className="text-center">
+        Valutazione per insieme di domande - Semantica
+      </h4>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
           layout="vertical"
@@ -42,7 +44,9 @@ export default function LLMComparisonChart() {
         </BarChart>
       </ResponsiveContainer>
 
-      <h4 className="mt-5 text-center">Valutazione per insieme di domande - Esterna</h4>
+      <h4 className="mt-5 text-center">
+        Valutazione per insieme di domande - Esterna
+      </h4>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
           layout="vertical"

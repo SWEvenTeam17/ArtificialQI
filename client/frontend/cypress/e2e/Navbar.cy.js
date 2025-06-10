@@ -39,8 +39,7 @@ describe("Navbar", () => {
     cy.wait("@createSession");
     cy.wait("@getSessionsAfterCreate");
 
-    cy.get(".list-group")
-      .should("contain.text", "Titolo test")
+    cy.get(".list-group").should("contain.text", "Titolo test");
   });
 
   it("naviga ai link della navbar", () => {

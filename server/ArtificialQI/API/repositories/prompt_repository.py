@@ -4,9 +4,8 @@ Repository che gestisce le istanze dei Prompt in DB.
 
 from typing import ClassVar
 
-from django.db import models
-
 from API.models import Prompt, Session
+from django.db import models
 
 from .abstract_repository import AbstractRepository
 

@@ -7,10 +7,9 @@ django.setup()
 import sys
 
 import pytest
+from API.views_def.abstract_view import AbstractView
 from rest_framework import serializers, status
 from rest_framework.test import APIRequestFactory
-
-from API.views_def.abstract_view import AbstractView
 
 
 class DummySerializer(serializers.Serializer):
@@ -29,7 +28,6 @@ class DummySerializer(serializers.Serializer):
         return getattr(self, "_validated_data", self.initial_data)
 
 
-
 class DummyService:
     @staticmethod
     def read_all():
@@ -38,7 +36,7 @@ class DummyService:
     @staticmethod
     def read(instance_id):
         if instance_id is None:
-            return None  
+            return None
         return {"value": f"data{instance_id}"}
 
     @staticmethod
@@ -54,7 +52,6 @@ class DummyService:
         if instance_id is None:
             return None
         return True
-
 
 
 class DummyView(AbstractView):
@@ -126,8 +123,6 @@ def test_delete_without_instance_id():
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
-
-
 class InvalidSerializer(DummySerializer):
     def is_valid(self, raise_exception=False):
         return False
@@ -156,7 +151,6 @@ def test_put_invalid_serializer():
     response = view(request, instance_id=1)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "error" in response.data
-
 
 
 class FailingService(DummyService):

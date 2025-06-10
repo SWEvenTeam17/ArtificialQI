@@ -6,12 +6,12 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ArtificialQI.settings")
 django.setup()
 
 import pytest
-
 from API.models import LLM, Block, BlockTest, Evaluation, Prompt, Run, Session
 from API.repositories.block_repository import BlockRepository
 from API.repositories.block_test_repository import BlockTestRepository
 from API.repositories.llm_repository import LLMRepository
-from API.tests.repositories.abstract_repository_test import TestAbstractRepository
+from API.tests.repositories.abstract_repository_test import \
+    TestAbstractRepository
 
 
 class TestLLMRepository(TestAbstractRepository):

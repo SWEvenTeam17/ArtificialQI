@@ -38,7 +38,9 @@ export default function CreateLLMForm() {
               />
               <label>Nome</label>
               {formErrors.name && (
-                <div data-cy="error-message" className="invalid-feedback">{formErrors.name}</div>
+                <div data-cy="error-message" className="invalid-feedback">
+                  {formErrors.name}
+                </div>
               )}
             </div>
           </div>
@@ -61,7 +63,11 @@ export default function CreateLLMForm() {
             </div>
           </div>
           <div className="col">
-            <button data-cy="create-llm" type="submit" className="btn btn-primary w-100 rounded-5">
+            <button
+              data-cy="create-llm"
+              type="submit"
+              className="btn btn-primary w-100 rounded-5"
+            >
               Crea
             </button>
           </div>

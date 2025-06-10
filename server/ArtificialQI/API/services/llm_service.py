@@ -6,9 +6,8 @@ import os
 from typing import ClassVar
 
 import requests
-from dotenv import load_dotenv
-
 from API.repositories import AbstractRepository, LLMRepository
+from dotenv import load_dotenv
 
 from .abstract_service import AbstractService
 

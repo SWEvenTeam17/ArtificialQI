@@ -5,7 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 from unittest.mock import MagicMock, patch
 
 import pytest
-from api.services.ollama_llm_integration_service import OllamaLLMIntegrationService
+from api.services.ollama_llm_integration_service import \
+    OllamaLLMIntegrationService
 from requests.exceptions import RequestException
 
 # --- Test get_llm ---

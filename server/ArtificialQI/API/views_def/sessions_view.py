@@ -5,10 +5,9 @@ richieste per effettuare operazioni sulle Sessioni.
 
 from typing import ClassVar
 
-from rest_framework import serializers
-
 from API.serializers import SessionSerializer
 from API.services import AbstractService, SessionService
+from rest_framework import serializers
 
 from .abstract_view import AbstractView
 

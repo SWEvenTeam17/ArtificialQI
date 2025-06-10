@@ -4,10 +4,9 @@ File che contiene la classe PromptView.
 
 from typing import ClassVar
 
-from rest_framework import serializers
-
 from API.serializers import PromptSerializer
 from API.services import AbstractService, PromptService
+from rest_framework import serializers
 
 from .abstract_view import AbstractView
 

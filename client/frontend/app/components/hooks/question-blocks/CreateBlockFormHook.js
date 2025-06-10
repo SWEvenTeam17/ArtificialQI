@@ -134,8 +134,13 @@ export const useCreateBlockFormHook = () => {
         }
       }
     } catch (error) {
-      console.error("Errore durante la creazione dell'insieme di domande:", error);
-      setFormErrors("Errore di rete durante la creazione dell'insieme di domande.");
+      console.error(
+        "Errore durante la creazione dell'insieme di domande:",
+        error,
+      );
+      setFormErrors(
+        "Errore di rete durante la creazione dell'insieme di domande.",
+      );
     }
   };
 

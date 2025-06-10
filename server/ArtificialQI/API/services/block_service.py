@@ -5,7 +5,8 @@ File che contiene i servizi riguardanti i blocchi.
 from typing import ClassVar, List
 
 from API.models import LLM, Block
-from API.repositories import AbstractRepository, BlockRepository, PromptRepository
+from API.repositories import (AbstractRepository, BlockRepository,
+                              PromptRepository)
 
 from .abstract_service import AbstractService
 

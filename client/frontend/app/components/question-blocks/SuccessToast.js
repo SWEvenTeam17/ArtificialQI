@@ -9,7 +9,9 @@ export function SuccessToast({ toastRef }) {
         aria-atomic="true"
       >
         <div className="d-flex">
-          <div className="toast-body">Insieme di domande creato con successo!</div>
+          <div className="toast-body">
+            Insieme di domande creato con successo!
+          </div>
           <button
             type="button"
             className="btn-close btn-close-white me-2 m-auto"

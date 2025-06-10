@@ -8,15 +8,10 @@ from collections import defaultdict
 from typing import ClassVar, Dict, List
 
 import requests
-from dotenv import load_dotenv
-
 from API.models import Block, BlockTest, Session
-from API.repositories import (
-    AbstractRepository,
-    BlockRepository,
-    BlockTestRepository,
-    SessionRepository,
-)
+from API.repositories import (AbstractRepository, BlockRepository,
+                              BlockTestRepository, SessionRepository)
+from dotenv import load_dotenv
 
 from .abstract_service import AbstractService
 from .evaluation_service import EvaluationService

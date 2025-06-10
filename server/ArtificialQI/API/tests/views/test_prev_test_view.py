@@ -28,7 +28,7 @@ def test_get_previous_tests_with_test_id(mock_read, mock_format_results, client,
     response = client.get(f"{url}1/?test_id=5")
     assert response.status_code == 200
     assert response.json() == {"result": "ok"}
-    mock_read.assert_called_once_with(instance_id="5")  
+    mock_read.assert_called_once_with(instance_id="5")
     mock_format_results.assert_called_once()
 
 

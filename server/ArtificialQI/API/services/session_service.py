@@ -5,7 +5,8 @@ File che contiene i servizi riguardanti le sessioni.
 from typing import ClassVar
 
 from API.models import LLM
-from API.repositories import AbstractRepository, LLMRepository, SessionRepository
+from API.repositories import (AbstractRepository, LLMRepository,
+                              SessionRepository)
 
 from .abstract_service import AbstractService
 

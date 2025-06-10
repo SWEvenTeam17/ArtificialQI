@@ -5,10 +5,9 @@ che gestisce le istanze dei blocchi in DB.
 
 from typing import ClassVar, List
 
+from API.models import LLM, Block, Prompt
 from django.db import models
 from django.db.models import Count, Q
-
-from API.models import LLM, Block, Prompt
 
 from .abstract_repository import AbstractRepository
 

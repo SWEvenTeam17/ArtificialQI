@@ -4,13 +4,12 @@ File che contiene la classe SessionLLMView.
 
 from typing import ClassVar
 
-from rest_framework import serializers, status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from API.models import LLM, Session
 from API.serializers import LLMSerializer
 from API.services import AbstractService, SessionService
+from rest_framework import serializers, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class SessionLLMView(APIView):

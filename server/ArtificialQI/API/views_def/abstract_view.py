@@ -7,11 +7,10 @@ eseguire operazioni CRUD su istanze di modelli in DB.
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
+from API.services import AbstractService
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from API.services import AbstractService
 
 
 class AbstractView(APIView, ABC):

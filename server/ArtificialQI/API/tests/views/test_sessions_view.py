@@ -64,7 +64,7 @@ def test_post_valid_session(client, base_url):
 
 
 def test_post_invalid_session(client, base_url):
-    data = {}  
+    data = {}
     response = client.post(base_url, data, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "title" in response.data
@@ -93,7 +93,7 @@ def test_put_valid_session(client, detail_url, session):
 
 
 def test_put_invalid_session(client, detail_url):
-    updated_data = {}  
+    updated_data = {}
     response = client.put(detail_url, updated_data, format="json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "title" in response.data
